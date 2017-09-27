@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>This process is mandatory to check and correct for diffusion gradient orientation in the bvecs file ! It ensures that X,Y,Z axes are identically defined in the bvecs and the diffusion images.</p>
+<p>A visual check is done with FSLview to verify the orientation of the principal diffusion direction. <b>This step should be done for ONE subject, then the same parameters can be apply to the other subjects without visual check.</b></p></xhtml>
+    <d name="parameters">
+      <xhtml name="reoriented_bvecs"/>
+      <xhtml name="bvecs"/>
+      <xhtml name="visual_check"/>
+      <xhtml name="flip_axis">Will reverse the orientation of the axis selected (ex: X changed into -X)</xhtml>
+      <xhtml name="bvals"/>
+      <xhtml name="swap_axes">Will reverse two axes</xhtml>
+      <xhtml name="dwi_data"/>
+    </d>
+    <xhtml name="long">First run with default parameters (swap_axes and flip_axes empty). The FA map and the principale diffusion direction (tensor's 1st eigenvector) are loaded in FSLview.
+<p>Select the "V1" file, click on <img src="../../images/diffuse/info_button.png"/> and display as <b>RGB</b>, modulation by the "FA" file. Check the colors of bundles running on the three axes: <font color="red">corpus callosum</font>, <font color="blue">cortico-spinal</font>, <font color="green">anterior corona radiata</font>.  </p> <img src="../../images/diffuse/Capt1.png"/>
+<p>Wrong colors indicate that two axes have been swapped. Hereafter is an example of wrong colors with X/Y swap. Tip: only bundles along Z axis look good !</p> <img src="../../images/diffuse/Capt4.png"/>
+<p>Select again the "V1" file, click on <img src="../../images/diffuse/info_button.png"/> and display as <b>Lines</b>. Select the "FA" file and click on <img src="../../images/icons/eye.png"/> to display it. Check the orientation of the principal diffusion direction (small red vectors), they should run parallel along bundles. Wrong orientations indicate that one axis is flipped.</p> <img src="../../images/diffuse/Capt3.png"/>
+<p>Here is an example of wrong vectors with a flip on Y. Tip: only vectors in the Y slice look good !</p> <img src="../../images/diffuse/Capt5.png"/>
+<p>To correct diffusion gradient orientations and axes, run the process again using the swap_axes or flip_axis parameters. These parameters should be the same for all subjects having a similar acquisition. The visual check is then optional.</p>
+</xhtml>
+  </d>
+</d>
+</minf>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>This process is optional (to run after <i>Correct gradient orientation</i>). It performs DWI data denoising using the Denoising Matlab Software of Pierrick Coupe (documentation and download link <a href="https://sites.google.com/site/pierrickcoupe/softwares/denoising-for-medical-imaging/dwi-denoising/dwi-denoising-software">here</a>).</p>
+<p>Six denoising filters are available. We recommand using the <b>LPCA</b> which takes into account the multicomponent nature of multi-directional DWI data.</p>
+<p>Requires SPM8 or SPM12</p>
+<p>Processing time estimated: 0.1 ms / voxel</p></xhtml>
+    <d name="parameters">
+      <xhtml name="rician"/>
+      <xhtml name="bvecs"/>
+      <xhtml name="denoisingPackage">Please indicate here the directory of the Denoising Package installed on your system ("DWIDenoisingPackage" folder).</xhtml>
+      <xhtml name="denoised_dwi_data"/>
+      <xhtml name="method"/>
+      <xhtml name="dwi_data"/>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>

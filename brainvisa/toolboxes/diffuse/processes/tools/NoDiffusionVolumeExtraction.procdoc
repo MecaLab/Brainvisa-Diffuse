@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>Use this process to extract the b0 volume from your DWI data.</p></xhtml>
+    <d name="parameters">
+      <xhtml name="b0_volume"/>
+      <xhtml name="bvals"/>
+      <xhtml name="data_are_distortion_corrected"/>
+      <xhtml name="dwi_data"/>
+    </d>
+    <xhtml name="long"><p>If data have been preprocessed, all the b0 volumes contained in the data might be aligned. The process do a simple average of these volumes to obtain a high-SNR b0 image.</p>
+<p>Else, the process first performs a linear alignment of all b0 volumes and then do the average.</p></xhtml>
+  </d>
+</d>
+</minf>

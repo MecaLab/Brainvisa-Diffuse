@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Use this process in replacement of the <i>Brain extraction using T1 mask</i> process, in case T1 MRI data are not available.</xhtml>
+    <d name="parameters">
+      <xhtml name="b0_volume"/>
+      <xhtml name="b0_brain"/>
+    </d>
+    <xhtml name="long"><p>The <b>FSL-bet</b> tool is powerful but the parameters may change from one brain to another and can be sensitive to geometric distortions, such that the results must be checked separatly for every subject. To do that, this process includes a graphical interaction with the user to check the result and adjust the parameters accordingly.</p>
+<p>First, the brain extraction is performed with default parameters (-R ; -f 0.3). If some parts of the brain are excluded, "-f" must be reduced at 0.2 or less. The center of the (growing) seed can also be changed if the FOV is large (including brain stem) or if the brain has an atypical shape with an extended frontal lobe for instance.</p>
+<p>The process runs iteratively until the brain mask is deemed good.</p></xhtml>
+  </d>
+</d>
+</minf>

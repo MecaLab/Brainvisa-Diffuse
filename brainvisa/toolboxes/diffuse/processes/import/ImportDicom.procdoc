@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>This process imports DWI data into a BrainVISA database.</p>
+<p>Use the file browser icon <img src="../../images/icons/browse_read.png"/> to select Dicom directories. Enter the database attributes of the data with the red database button. If a database already exists with the T1 data, use it !</p>
+<p>Data are converted into the Nifti format using either <b>dcm2nii</b> or <b>dcm2niix</b> from Mricron (compiled versions can be found <a href="https://github.com/rordenlab/dcm2niix">here</a>). </p>
+<p>Data are automatically stored in the <b>RAS</b> orientation.</p>
+<p>After importation, run <b>Correct gradient orientation</b> process for one subject.</p></xhtml>
+    <d name="parameters">
+      <xhtml name="output_magnitude"/>
+      <xhtml name="output_dwi_data"/>
+      <xhtml name="mricron_program"/>
+      <xhtml name="output_fieldmap"/>
+      <xhtml name="additional_acquisition">In case an additional acquisition is available to correct for EPI distortions.
+It can be 
+<ul>
+	<li>Fieldmap: a B0 field map with phase and magnitude images</li>
+	<li>Blip-reversed images: at least one  non-diffusion weighted volume or the entire sequence with reversed-phase-encoding direction</li>
+</ul></xhtml>
+      <xhtml name="magnitude_directory">Contains at least one magnitude image.</xhtml>
+      <xhtml name="output_blip_reversed_data"/>
+      <xhtml name="output_bvecs"/>
+      <xhtml name="fieldmap_directory">Contains the fieldmap image in <i>rad/s</i>. Before importation, please follow the instructions here: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FUGUE/Guide#SIEMENS_data</xhtml>
+      <xhtml name="blip_reversed_directory">Contains the diffusion images with opposite phase-encoding direction (example: for AP/PA acquisitions, dwi_directory contains AP images and blip_reversed_directory contains PA images). If the entire sequence is available, make sure that it has been acquired with the same diffusion gradient sampling scheme (i.e. same bval and bvec).</xhtml>
+      <xhtml name="output_bvals"/>
+      <xhtml name="dwi_directory">Directory containing the diffusion images to import. Should include b0 volumes. Can be multishell but single phase-encoding direction.</xhtml>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>

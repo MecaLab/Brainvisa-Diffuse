@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf version="1.0">
+
+  <xhtml name="en">
+    <h1>Viewers: A easy look inside diffusion </h1>
+    <p>
+     Viewers allows the user to check data in a Brainvisa way. We tried to develop as many viewers as possible in
+      order to ease the user take-in of Diffuse toolbox. Viewers from others toolboxes can also be used for
+      specific modalities such as T1 or meshes.
+      Here is a list of viewers available in Diffuse:<ul>
+      <li> <a href="bvprocess://AnatomistShowAcquisitionInfo"><bvProcessName name="AnatomistShowAcquisitionInfo"/></a> </li>
+      <li> <a href="bvprocess://AnatomistShowQspaceSampling"><bvProcessName name="AnatomistShowQspaceSampling"/></a></li>
+      <li> <a href="bvprocess://AnatomistShowSeeds"><bvProcessName name="Seeds Viewer"/></a></li>
+      <li> <a href="bvprocess://AnatomistShowSphericalFunction"><bvProcessName name="Spherical Function Viewer"/></a></li>
+      <li> <a href="bvprocess://AnatomistShowWhiteMeshWithMRI"><bvProcessName name="AnatomistShowWhiteMeshWithMRI"/></a> </li>
+    </ul>
+      More to come !
+    </p>
+  </xhtml>
+</minf>

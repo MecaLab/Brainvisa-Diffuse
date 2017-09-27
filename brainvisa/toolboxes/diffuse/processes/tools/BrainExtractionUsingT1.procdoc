@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>This process uses the registered T1 brain mask to extract the brain in the b0 image.</p>
+<p>The segmented T1 MRI data must be placed in the same database. The T1 brain masks must also be registered into the DWI space with one of the <i>Diffusion to T1</i> processes.</p></xhtml>
+    <d name="parameters">
+      <xhtml name="b0_volume"/>
+      <xhtml name="b0_brain_mask"/>
+      <xhtml name="T1_to_b0_mask"/>
+      <xhtml name="b0_brain"/>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>
