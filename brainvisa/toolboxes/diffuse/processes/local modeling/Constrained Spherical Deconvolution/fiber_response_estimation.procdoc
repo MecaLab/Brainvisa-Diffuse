@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Estimate impulsionnal response (signal domain) of single fiber population for <a href="bvprocess://csd_model"><bvProcessName name="csd_model"/></a></xhtml>
+    <d name="parameters">
+      <xhtml name="diffusion_data">Preprocessed Diffusion MRI data volume. </xhtml>
+      <xhtml name="gradient_table">Acquisition scheme basic informations</xhtml>
+      <xhtml name="mask">Region of interest for response estimation </xhtml>
+      <xhtml name="method">Methods to estimate single impulsionnal response of single fiber population.
+Available methods are:
+          <ul>
+            <li>mean tensor from mask: impusionnal response as the mean tensor on a given region of interest. See <a href="bvprocess://default_model"><bvProcessName name="default_response"/></a> for details.</li>
+            <li>recursive: recursive estimation of impulsional response based on reference. See <a href="bvprocess://from_mask_dti_estimation"><bvProcessName name="from_mask_dti_estimation"/></a>  for details.</li>
+            <li> default: impulsionnal response has a fixed prolate tensor as in several publications. See <a href="bvprocess://recursive_estimation"><bvProcessName name="recursive_estimation"/></a> documentation for details.</li>
+          </ul>
+      </xhtml>
+      <xhtml name="response">Impulsionnal response of a single fiber population.</xhtml>
+    </d>
+      <xhtml name="long">Selection Pipeline to estimate mpulsionnal response (signal domain) of single fiber population for <a href="bvprocess://csd_model"><bvProcessName name="csd_model"/></a></xhtml>
+  </d>
+</d>
+</minf>

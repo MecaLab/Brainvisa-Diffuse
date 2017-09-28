@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">
+        Tractography pipeline: regroups in one windows the whole dipy tractography machinery and seeds creation. The user can access both deterministic and probabilistic alogrithms
+        and customize most commonly used tractography parameters. Predefined sets of parameters allows the user to access different tractography sets.
+    </xhtml>
+    <d name="parameters">
+      <xhtml name="sh_coefficients">Spherical harmonics coefficients of an Orientation Distribution Function (ODF) </xhtml>
+      <xhtml name="type">Kind of performed tractography: either Deterministic or Probabilistic</xhtml>
+      <xhtml name="seeding_mesh"> Grey/white matter interface mesh whose vertices are used as seeds (works also with subcortical structures)</xhtml>
+      <xhtml name="seeding_mask"> Region of interest from which seeds will be generated</xhtml>
+      <xhtml name="constraint">The kind of constraint imposed to stop the tractography. Tractography is stopped using the selected type of classifier. </xhtml>
+      <xhtml name="mask">A binary mask to constraint tractography. Binary classifier will proceeds as follow:
+     <ul>
+         <li>ENDPOINT: mask = 0</li>
+         <li>OUTSIDEIMAGE: tracking point outside of mask</li>
+         <li>TRACKPOINT: no direction is available</li>
+         <li>INVALIDPOINT: N/A</li>
+     </ul>
+</xhtml>
+      <xhtml name="scalar_volume">Scalar index such as Fractionnal Anisotropy (FA) to be used in a classifier. Classifier will proceeds as follow:
+      <ul>
+         <li>ENDPOINT: metric_map inferior to threshold</li>
+         <li>OUTSIDEIMAGE: tracking point outside of mask</li>
+         <li>TRACKPOINT: no direction is available</li>
+         <li>INVALIDPOINT: N/A</li>
+      </ul>
+      </xhtml>
+        <xhtml name="include_pve_map">Partial Volume Estimation map: values between 0 and 1. This volume is used in a classifier. Classifier will proceed
+        as follow:
+            <ul>
+         <li>ENDPOINT: include_pve_map superior to 0.5</li>
+         <li>OUTSIDEIMAGE: tracking point outside of mask</li>
+         <li>TRACKPOINT: no direction is available</li>
+         <li>INVALIDPOINT: exclude_pve_map superior to 0.5</li>
+      </ul>
+        </xhtml>
+       <xhtml name="exclude_pve_map">Partial Volume Estimation map: values between 0 and 1. This volume is used in a classifier. Classifier will proceed
+        as follow:
+            <ul>
+         <li>ENDPOINT: include_pve_map superior to 0.5</li>
+         <li>OUTSIDEIMAGE: tracking point outside of mask</li>
+         <li>TRACKPOINT: no direction is available</li>
+         <li>INVALIDPOINT: exclude_pve_map superior to 0.5</li>
+      </ul></xhtml>
+        <xhtml name="threshold">Threshold value used in the threshold classifier. see scalar_volume parameter documentation for precisions</xhtml>
+        <xhtml name="sphere">Sample sphere used to project spherical harmonics coefficient. For linear findings of the peaks, the precision of the sphere might influence the tractography.
+        </xhtml>
+        <xhtml name="tracking_quality"> Three differents categories corresponding to different tracking parameters (step_size and angle essentially). Categories take into account
+        the nature of selected tractography (deterministic or probabilistic) </xhtml>
+        <xhtml name="seeds"> Seeds coordinates in Aims voxel system </xhtml>
+        <xhtml name="streamlines'">Generated streamlines (coordinates in diskstorage space)</xhtml>
+    </d>
+    <xhtml name="long">
+
+    </xhtml>
+  </d>
+</d>
+</minf>

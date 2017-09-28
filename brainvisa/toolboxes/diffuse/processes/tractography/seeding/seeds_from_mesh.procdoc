@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">
+        Extract seeds as vertices of a grey/white interface mesh. One can also extract only a subpart using a ROI texture.
+    </xhtml>
+    <d name="parameters">
+      <xhtml name="white_mesh">Grey/white interface mesh: either cortical or subcortical mesh is allowed</xhtml>
+      <xhtml name="roi_texture"> ROI texture to restrain region of sampling</xhtml>
+      <xhtml name="reference_volume">Reference diffusion volume: should not be necessary thanks to Brainvisa transformation system.</xhtml>
+      <xhtml name="seeds">Coordinates of the seeds in the Aims <br>voxel</br> space (no mm)</xhtml>
+    </d>
+    <xhtml name="long">
+    Extract seeds as vertices of a grey/white interface mesh. One can also extract only a subpart using a ROI texture.
+    </xhtml>
+  </d>
+</d>
+</minf>

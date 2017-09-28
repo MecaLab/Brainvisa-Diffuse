@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Visualize seeds as a set of spheres.</xhtml>
+    <d name="parameters">
+        <xhtml name="seeds">Voxel cordinates of the seeds in the 3D Aims system of coordinates </xhtml>
+      <xhtml name="reference_volume"> Reference volume to retrieve voxel size and referential information </xhtml>
+    </d>
+    <xhtml name="long">Visualize seeds as a set of spheres. This viewer is a specialization of the general 3D point viewer as spheres
+        . Diameter of the spheres is automatically estimated on a subset of points as the minimum distance between two points divided by three.
+        <div class="warning">
+      This viewer is based on numpy broadcasting technique: it is very efficient but can lead to Memory Error if one tries to visualizea very large amount of seeds (more than 5000). As a matter of consequence, only a subset will be displayed.
+        </div>
+    </xhtml>
+  </d>
+</d>
+</minf>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="brainvisa-tree_2.0">
+<l length="1">
+  <f type="ProcessTree">
+    <s name="name">Diffuse</s>
+    <true name="editable"/>
+    <true name="user"/>
+    <s name="id">Diffuse</s>
+  </f>
+</l>
+<s>all processes</s>
+</minf>

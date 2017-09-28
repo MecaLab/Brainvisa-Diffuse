@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Assume the impulsionnal response of the single fiber type voxels is a prolate tensor as used in
+      [ref Catani] e.g. (0.0015, 0.0003, 0.0003)</xhtml>
+    <d name="parameters">
+      <xhtml name="diffusion_data"> Preprocessed diffusion data </xhtml>
+      <xhtml name="response"> Predefined impusionnal response: a prolate tensor whose eigen values are (0.0015, 0.0003, 0.0003) </xhtml>
+    </d>
+    <xhtml name="long">
+       Assume the impulsionnal response of the single fiber type voxels is a prolate tensor  whose eigenvalues (0.0015, 0.0003, 0.0003). This kind of impulsionnal response
+      has also been used in [ref Catani].
+      This suggest that all fiber bundles should merely have the same impusionnal response and that the prolate tensor has a shape adapted to the fibers. In particular, it implies that
+      detected peaks from deconvolution should be fibers and not artefacts because of the shape of the peaks.
+    </xhtml>
+  </d>
+</d>
+</minf>
+

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Susceptibility-induced distortion correction using a <b>B0 magnetic field map image.</b>
+The fieldmap image must be prepared as explained <a href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FUGUE/Guide#Making_Fieldmap_Images_for_FEAT">here</a>. </xhtml>
+    <d name="parameters">
+      <xhtml name="echo_spacing">Echo-spacing can be found in the header, or via the following formula:
+<p>EffectiveES (s) = 1/(BandwidthPerPixelPhaseEncode * Nb of echoes)</p>
+<p><i>Nb of echoes is equal to the number of voxels along the phase-encoding axis</i></p>
+<p><i>BandwidthPerPixelPhaseEncode usually correspond to the header flag ['0019','1028']</i></p></xhtml>
+      <xhtml name="fieldmap_to_dwi_mat"/>
+      <xhtml name="dwi_unwarped"/>
+      <xhtml name="fieldmap_to_dwi"/>
+      <xhtml name="brain_extraction_factor"/>
+      <xhtml name="data_are_eddy_current_corrected">Check it if eddy-currents have already been corrected using one of the available processes</xhtml>
+      <xhtml name="bvals"/>
+      <xhtml name="magnitude_brain"/>
+      <xhtml name="fieldmap">For Siemens scanner, use the following command:
+fsl_prepare_fieldmap 'scanner' 'phase_image' 'magnitude_image' 'out_image' 'deltate (in ms)'</xhtml>
+      <xhtml name="magnitude">A single volume with one or both magnitude images acquires for each echo time</xhtml>
+      <xhtml name="fieldmap_brain"/>
+      <xhtml name="phase_encoding_direction">AP: Antero-posterior (Y+)
+<p>LR: Left-right (X+)</p></xhtml>
+      <xhtml name="magnitude_brain_mask"/>
+      <xhtml name="fieldmap_smoothing"/>
+      <xhtml name="magnitude_warped"/>
+      <xhtml name="magnitude_warped_to_dwi"/>
+      <xhtml name="dwi_data"/>
+    </d>
+    <xhtml name="long">The B0 field map is used to estimate the non-linear voxel-wise shift and the signal loss. The procedure implemented in this process retrospectively correct the data using the workflow described in <i>(R. Cusack, et al. An Evaluation of the Use of Magnetic Field Maps to Undistort Echo-Planar Images, 2003)</i> involving the <b>fugue</b> command from FSL. This method, however, is not sufficent to properly recover the signal intensity in compressed areas.</xhtml>
+  </d>
+</d>
+</minf>

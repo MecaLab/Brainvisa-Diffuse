@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">
+       Pipeline regrouping the different seeding methods available in Diffuse.
+    </xhtml>
+    <d name="parameters">
+    </d>
+    <xhtml name="long">
+        Pipeline regrouping the different seeding methods available in Diffuse.
+
+    </xhtml>
+  </d>
+</d>
+</minf>

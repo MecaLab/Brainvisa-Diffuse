@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>This process correct for motion and eddy-currents using the <b>eddy</b> tool in FSL. </p>
+<p>It requires that either <b>diffusion gradients cover the entire q-sphere</b> or <b>at least 60 directions</b>.</p>
+<p>Must be used before the <b>Fieldmap-based correction</b> process.</p></xhtml>
+    <d name="parameters">
+      <xhtml name="niter"/>
+      <xhtml name="bvecs"/>
+      <xhtml name="dwi_eddy_corrected"/>
+      <xhtml name="eddy_b0_volumes"/>
+      <xhtml name="brain_extraction_factor"/>
+      <xhtml name="phase_encoding_direction">AP: Antero-posterior (Y+)
+<p>LR: Left-right (X+)</p></xhtml>
+      <xhtml name="eddy_parameters"/>
+      <xhtml name="bvals"/>
+      <xhtml name="nvoxhp"/>
+      <xhtml name="readout_time">Readout Time (s) = (Nb of echoes - 1) * Echo-spacing
+<p>Readout Time (s) = 1/BandwidthPerPixelPhaseEncode </p>
+<p><i>Nb of echoes is equal to the number of voxels along the phase-encoding axis</i></p>
+<p><i>BandwidthPerPixelPhaseEncode usually correspond to the header flag ['0019','1028']</i></p></xhtml>
+      <xhtml name="flm"/>
+      <xhtml name="eddy_index"/>
+      <xhtml name="eddy_b0_mean"/>
+      <xhtml name="corrected_bvecs"/>
+      <xhtml name="eddy_b0_mean_brain_mask"/>
+      <xhtml name="eddy_b0_mean_brain"/>
+      <xhtml name="multi_shell"/>
+      <xhtml name="fwhm"/>
+      <xhtml name="entire_sphere_sampling"/>
+      <xhtml name="dwi_data"/>
+    </d>
+    <xhtml name="long">Using pairs of volumes with reversed gradient directions, the algorithm applies a non-parametric Gaussian Process to estimate a higher order distortion field caused by both eddy-currents and motion, and recover the midway geometry in the image. During the final resampling step, spline interpolation is combined with a Jacobian modulation to account for signal dilution in areas with stretching.
+<p>The reorientation of gradients vectors in the bvec file is included in eddy</p>
+<p>Further information about the algorithm and the optional parameters can be found <a href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/eddy">here</a></p></xhtml>
+  </d>
+</d>
+</minf>

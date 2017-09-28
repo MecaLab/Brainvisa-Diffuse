@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf version="1.0">
+
+  <xhtml name="en">
+    <h1>Miscellaneous Diffusion processing tools</h1>
+    <h2>What does this module contain ?</h2>
+
+    <p> The tools module of Diffuse regroups processes that ease Diffusion MRI processing or visualization but that are not of first importance
+    The following processes are currently available:
+        <ul>
+            <il> Brain Extraction based on T1 scan: <a href="bvshowprocess://BrainExtractionUsingT1"><img src="../../images/icons/icon_process.png" border="0"/></a> </il>
+            <il> Interactive Brain Extraction<a href="bvshowprocess://InteractiveBrainExtraction"><img src="../../images/icons/icon_process.png" border="0"/></a></il>
+            <il> b0 (non diffusion weighted volumes) Extraction : <a href="bvshowprocess://NoDiffusionVolumeExtraction"><img src="../../images/icons/icon_process.png" border="0"/></a></il>
+            <il> Representation of ODF as meshes: <a href="bvshowprocess://Odf2Mesh"><img src="../../images/icons/icon_process.png" border="0"/></a></il>
+            <il> Spheres handling processes : <a href="bv_category://diffuse/tools/sphere_creation"> Spheres module </a> </il>
+
+
+        </ul>
+    </p>
+
+  </xhtml>
+</minf>

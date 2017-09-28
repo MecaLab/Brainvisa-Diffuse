@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Visualise a spherical function as an mesh whose intensity represents value and a colormap also
+    scaling for intensities. Mesh and corresponding texture must have been previously computed.</xhtml>
+    <d name="parameters">
+      <xhtml name="'spherical_function_texture"> Texture whose values correpond to normalized values of the spherical function. </xhtml>
+      <xhtml name="'spherical_function_mesh"> Mesh  whose vertices values correpond to normalized values of the spherical function </xhtml>
+    </d>
+    <xhtml name="long">Visualise a spherical function as an mesh whose intensity represents value and a colormap also
+    scaling for intensities. Mesh and corresponding texture must have been previously computed.
+    </xhtml>
+  </d>
+</d>
+</minf>

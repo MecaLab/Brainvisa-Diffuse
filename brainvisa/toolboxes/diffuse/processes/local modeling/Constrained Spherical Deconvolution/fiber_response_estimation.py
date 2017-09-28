@@ -1,0 +1,80 @@
+
+from brainvisa.processes import *
+
+
+userLevel = 0
+
+name = 'Single Fiber Response Estimation'
+category = 'Local_modeling'
+
+signature = Signature(
+    'diffusion_data', ReadDiskItem(
+        'Corrected DW Diffusion MR',
+        'Aims readable volume formats'
+    ),
+    'mask', ReadDiskItem(
+        'Diffusion MR Mask',
+        'Aims readable volume formats'),
+    'sphere', ReadDiskItem(
+        'Sphere Template',
+        'Gifti File'
+    ),
+    'response', WriteDiskItem(
+        'Single Fiber Response',
+        'Joblib Pickle File'
+    ),
+)
+
+
+
+
+def initialization ( self ):
+
+    eNode = SelectionExecutionNode(self.name, parameterized=self)
+    eNode.addChild('Default',
+                   ProcessExecutionNode('Fiber Impulsionnal Response: Default Prolate Response', optional=True,selected=True))
+    eNode.addChild('FromDTI',
+                   ProcessExecutionNode('Fiber Impulsionnal Response DTI Estimation', optional=True,selected=False))
+    eNode.addChild('Recursive',
+                   ProcessExecutionNode('Fiber Impulsionnal Response Recursive Estimation', optional=True,selected=False))
+    #Linking
+    # self.addLink(['mask','sphere'],None,self.switch_pipeline_signature)
+    self.addLink('mask','diffusion_data')
+    self.addLink('response','diffusion_data')
+    #Default
+    eNode.removeLink('Default.response','Default.diffusion_data')
+    eNode.addLink('Default.diffusion_data','diffusion_data')
+    eNode.addLink('Default.response','response')
+    #DTI
+    eNode.removeLink('FromDTI.response', 'FromDTI.diffusion_data')
+    eNode.addLink('FromDTI.diffusion_data', 'diffusion_data')
+    eNode.addLink('FromDTI.response', 'response')
+    eNode.addLink('FromDTI.mask', 'mask')
+    #Recursive
+    eNode.removeLink('Recursive.response', 'Recursive.diffusion_data')
+    eNode.addLink('Recursive.diffusion_data', 'diffusion_data')
+    eNode.addLink('Recursive.response', 'response')
+    eNode.addLink('Recursive.mask','mask')
+    eNode.addLink('Recursive.sphere','sphere')
+
+    self.setOptional('mask')
+    self.setOptional('sphere')
+
+
+
+
+    self.setExecutionNode(eNode)
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+

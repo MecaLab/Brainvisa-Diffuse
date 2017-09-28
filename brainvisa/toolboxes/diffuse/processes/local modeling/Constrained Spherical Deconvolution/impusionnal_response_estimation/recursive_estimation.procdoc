@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"> Recursive estimation of the impusionnal response based on [ref method]</xhtml>
+    <d name="parameters">
+      <xhtml name="peak_threshold">Number betwwen 0 and 1 below which a peak is discarded (relative value to the maximum peak intensity)</xhtml>
+      <xhtml name="mask">Region of interest where to limit the recursive optimisation process (e.g. white matter)</xhtml>
+      <xhtml name="initial_trace">Trace (3 * Mean Diffusivity) of the initial tensor used for spherical deconvolutions. The sharper, the less the signal is deconvolved</xhtml>
+      <xhtml name="sh_order">Maximum even harmonic order used in the harmonic decomposition</xhtml>
+      <xhtml name="initial_fa">Fractionnal Anisotropy of the initial tensor used for spherical deconvolution. The sharper, the less the signal is deconvolved</xhtml>
+      <xhtml name="convergence_rate">Convergence rate between two estimation step. Act like a stopping criterion for optimisation of the impusionnal response</xhtml>
+      <xhtml name="sphere">Sphere on which the directions are sampled. </xhtml>
+      <xhtml name="diffusion_data"> Corrected Diffsion Volume used to estimate the impulsionnal response </xhtml>
+      <xhtml name="gradient_table"> Acquisition Scheme informations </xhtml>
+      <xhtml name="nb_iter"> Number of iterations of optimisation process </xhtml>
+      <xhtml name="response"> Estimated Impulsionnal Response </xhtml>
+    </d>
+    <xhtml name="long"> Recursive estimation of the impusionnal response based on [ref method]. The principle of the method is as follows: Data are first deconvolved using an initial coarse tensor.
+     Single direction voxels obtained from this first deconvolution are then used to estimate a sharper impulsionnal response. This scheme is continued till difference between two steps is below convergence rate or the number of iteration set is reached.
+     Impusionnal response is thus obtained in a data driven manner. However, it does not account for tissues properties (differences between grey and white matter) and multishell data.
+        For more details about process and parameters dont hesitate to check <a href="http://nipy.org/dipy/reference/dipy.reconst.html#recursive-response"> Dipy documentation </a>
+        </xhtml>
+  </d>
+</d>
+</minf>

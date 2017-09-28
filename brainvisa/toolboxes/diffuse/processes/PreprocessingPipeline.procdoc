@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">This pipeline performs distortion correction, b0 extraction and registration with structural space.
+<p>Before running this pipeline, you must run the following processes:</p>
+<ul>
+	<li>Import data</li>
+	<li>Correct gradient orientation (for on subject of the group). Report the chosen parameters in the process of this pipeline, so that the same orientation is applied to the whole group.</li>
+	<li>Denoising (optional)</li>
+</ul>
+Depending on the additional acquisition available (None, fieldmap or blip-reversed), the adapted distortion correction method will be automatically selected.
+The 4 last processes are only checked if a <i>T1_volume</i> is selected.
+</xhtml>
+    <d name="parameters">
+      <xhtml name="T1_to_b0"/>
+      <xhtml name="echo_spacing">Echo-spacing can be found in the header, or via the following formula:
+<p>EffectiveES (s) = 1/(BandwidthPerPixelPhaseEncode * Nb of echoes)</p>
+<p><i>Nb of echoes is equal to the number of voxels along the phase-encoding axis</i></p>
+<p><i>BandwidthPerPixelPhaseEncode usually correspond to the header flag ['0019','1028']</i></p></xhtml>
+      <xhtml name="dwi_eddy_corrected"/>
+      <xhtml name="b0_brain"/>
+      <xhtml name="phase_encoding_direction">AP: Antero-posterior (Y+)
+<p>LR: Left-right (X+)</p></xhtml>
+      <xhtml name="dwi_unwarped"/>
+      <xhtml name="additional_acquisition">In case an additional acquisition is available to correct for EPI distortions.
+It can be 
+<ul>
+	<li>Fieldmap: a B0 field map with phase and magnitude images</li>
+	<li>Blip-reversed images: at least one  non-diffusion weighted volume or the entire sequence with reversed-phase-encoding direction</li>
+</ul></xhtml>
+      <xhtml name="readout_time">Readout Time (s) = (Nb of echoes - 1) * Echo-spacing
+<p>Readout Time (s) = 1/BandwidthPerPixelPhaseEncode </p>
+<p><i>Nb of echoes is equal to the number of voxels along the phase-encoding axis</i></p>
+<p><i>BandwidthPerPixelPhaseEncode usually correspond to the header flag ['0019','1028']</i></p></xhtml>
+      <xhtml name="b0_volume"/>
+      <xhtml name="T1_volume"/>
+      <xhtml name="multi_shell"/>
+      <xhtml name="T1_to_b0_registration_method"/>
+      <xhtml name="entire_sphere_sampling"/>
+      <xhtml name="dwi_data">Raw data or denoised data</xhtml>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>

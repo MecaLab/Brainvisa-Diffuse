@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"> Place randomly seeds (points) based on a given mask. Number of seeds placed can either be total of by voxel
+    </xhtml>
+    <d name="parameters">
+      <xhtml name="mask">Seeds will be drawned into all non zero voxels of the region of interest.</xhtml>
+      <xhtml name="seed_number">Number of seeds to be drawn. If number_per_voxel option is set to True, represents the number of seeds to place per voxel.  </xhtml>
+      <xhtml name="number_per_voxel">Indicate wether the seed number  set per voxel or in total.</xhtml>
+      <xhtml name="seeds">Coordinates of the seeds in the Aims <br>voxel</br> space (no mm)</xhtml>
+    </d>
+    <xhtml name="long">
+    Place randomly seeds (points) based on a given mask. Number of seeds placed can either be total of by voxel.
+    </xhtml>
+  </d>
+</d>
+</minf>

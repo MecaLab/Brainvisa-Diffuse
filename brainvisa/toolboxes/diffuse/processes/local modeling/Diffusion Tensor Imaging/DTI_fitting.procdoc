@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"> Estimate the tensor coefficients from preprocessed diffusion MRI data </xhtml>
+    <d name="parameters">
+      <xhtml name="tensor_model">Diffusion Tensor Model generated using <a href="bvprocess://DTI_tensor_model">Diffusion Tensor Imaging (DTI) Model</a>
+<a href="bvshowprocess://DTI_tensor_model"><img src="../../images/icons/icon_process.png" border="0"/></a>
+</xhtml>
+      <xhtml name="diffusion_data">Preprocessed diffusion MRI data volume.</xhtml>
+      <xhtml name="mask">Diffusion MRI volume mask. Does not require to be binary can also be an interpolated mask.</xhtml>
+        <xhtml name="tensor_coefficients">Estimated tensor coeffficients</xhtml>
+    </d>
+      <xhtml name="long">Estimate the tensor coefficients from diffusion MRI data </xhtml>
+  </d>
+</d>
+</minf>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf version="1.0">
+
+<xhtml name="en">
+  <h1>Diffuse toolbox</h1>
+    <h2>Presentation</h2>
+    <p>
+    Diffuse regroups processes to handle properly and in a user-friendly way the processing of diffusion weighted MRI (DWI) scans.
+    Diffuse is developped  by the <a href="http://www.meca-brain.org/">Methods and Computational Anatomy (MeCA)
+    research group</a> of <a href="http://www.int.univ-amu.fr/">Institut de Neurosciences de la Timone (INT) </a> .
+    </p>
+   This toolbox mostly relies on the <a href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/">FSL</a> algorithms and on <a href="http://nipy.org/dipy/">Dipy</a> library.
+  <h2>The Diffuse toolbox organization</h2>
+ <p> Methods in Diffuse are organized by functionnality and diffusion processing steps in order to be more intuitive:
+  <ul>
+    <li><b>import:</b>  regroups processes allowing the user to properly import diffusion data in the Brainvisa machinery. In particular, it assures the consistency between diffusion MRIs scans and diffusion scheme information.</li>
+    <li><b>distorsion correction:</b>  regroups several processes to correction geometrical distorsions affecting diffusion weighted MRI scans. </li>
+    <li><b>registration:</b>  regroups  processes to register T1 anatomical scans and DWI space properly. It allows the user to transport T1 anatomical features into the diffusion space (parcellation, region of interest, masks, meshes)</li>
+    <li><b>local modeling:</b> allows the user to select different models to describe diffusion at voxel scale.</li>
+    <li><b>tractography:</b>  provides two main algorithms to reconstruct estimates of the white matter fibers bundles of the brain. </li>
+    <li><b>viewers:</b> allows the user to have a look at the data in an efficient way.</li>
+    <li><b>tools:</b> processes of no direct importance but that can be useful</li>
+  </ul>
+ </p>
+  <h2>How to use Diffuse? </h2>
+  <p> We highly recommend you to use dedicated pipelines.
+    Most of the time, you will just have to fill a few parameters and remaining fields should auto-complete automatically.
+    You can, then change the default parameters but keep in mind that it can affect the quality of the processing. </p>
+
+  <div class="warning">
+       <h5>IMPORTANT:</h5>  Some processes  are computationnaly intensive especially in RAM (up  to 30Gb  on distorsion correction step on Human Connectome Project data)
+. Thus some steps implemented in Diffuse may not work on a "average" desktop computer.
+  </div>
+
+  <div class="warning">
+      <h5>IMPORTANT:</h5> Diffuse is a very new toolbox. Despite our will to correct as many bugs as possible
+    some certainly remain. Do not hesitate to contact us for any suggestions, improvements or bugs you may find at:
+    <a href="http://www.meca-brain.org/contact/">http://www.meca-brain
+    .org/contact</a>
+  </div>
+
+
+
+
+</xhtml>
+</minf>

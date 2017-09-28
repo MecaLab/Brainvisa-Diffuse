@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>Performs linear registration between T1 image and non-diffusion weighted (b0) image, using <b>boundary-based registration</b> (FSL-epi_reg).</p>
+<p>WARNING: This process is faster, but a non-linear registration is highly recommended to account for residual geometric distorsions.</p></xhtml>
+    <d name="parameters">
+      <xhtml name="b0_to_T1"/>
+      <xhtml name="T1_to_b0"/>
+      <xhtml name="T1_skeleton_left"/>
+      <xhtml name="T1_to_b0_resampling"/>
+      <xhtml name="diff_to_T1_linear_xfm"/>
+      <xhtml name="T1_to_diff_linear_xfm"/>
+      <xhtml name="T1_mask"/>
+      <xhtml name="T1_to_b0_interpolation"/>
+      <xhtml name="T1_skeleton_right"/>
+      <xhtml name="T1_to_b0_WM"/>
+      <xhtml name="T1_to_b0_GM"/>
+      <xhtml name="b0_volume"/>
+      <xhtml name="T1_to_b0_skeleton"/>
+      <xhtml name="T1_volume"/>
+      <xhtml name="T1_grey_white_right"/>
+      <xhtml name="T1_to_b0_mask"/>
+      <xhtml name="T1_grey_white_left"/>
+    </d>
+    <xhtml name="long">Processing steps:
+<ol type="1">
+<li>White-matter segmentation in the T1 image</li>
+<li>3DOF pre-alignement of b0 and T1 images</li>
+<li>6DOF affine registration of b0 image into T1 space, using "bbr" cost function and segmented white-matter</li>
+<li>Inversion of affine matrix</li>
+<li>Application of T1 to b0 transformation to T1 image, brain mask, WM/GM and skeleton masks</li>
+</ol>
+<p>For each mask, left/right hemispheres are recombined into a single mask in the diffusion space.</p></xhtml>
+  </d>
+</d>
+</minf>

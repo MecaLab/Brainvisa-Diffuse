@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+      <xhtml name="short">
+          Calculate scalar derived indices from Orientation Distribution Function (ODF) such as Generalized Fractionnal Anisotropy (GFA) the extension of Fractionnal Anisotropy (FA) to higher order models.
+      </xhtml>
+    <d name="parameters">
+      <xhtml name="fibre_od_sh_coeff">
+          Spherical Harmonic representation of an Orientation Distribution Function (ODF). These coefficients stem from the fit process.
+      </xhtml>
+        <xhtml name="csd_model">Constrained Spherical Deconvolution model used to fit the sh coefficients.</xhtml>
+        <xhtml name="mask">Region of interest on which to restrain the computation. Typical mask are the brain, white matter or grey matter.</xhtml>
+        <xhtml name="generalized_fractionnal_anisotropy">Scalar index derived from Orientation Distribution function. Its mathematical expression is:
+It corresponds to the natural extension of DTI Fractionnal Anisotropy for higher order models. </xhtml>
+    </d>
+    <xhtml name="long">
+        Calculate scalar derived indices from Orientation Distribution Function (ODF) such as Generalized Fractionnal Anisotropy (GFA) the extension of Fractionnal Anisotropy (FA) to higher order models. More information about such derived indices can be found in [Ozarslan], [Ragini et Caru
+    </xhtml>
+  </d>
+</d>
+</minf>

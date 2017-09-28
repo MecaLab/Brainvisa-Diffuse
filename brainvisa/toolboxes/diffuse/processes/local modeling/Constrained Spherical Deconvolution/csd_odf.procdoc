@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Compute Fiber Orientation Distribution (FOD) on a sampling sphere based on its spherical harmonics coefficients </xhtml>
+    <d name="parameters">
+      <xhtml name="fibre_odf_sh_coeff">Spherical harmonic coefficients of a Fiber Orientations Distribution (FOD)</xhtml>
+      <xhtml name="csd_model">Parameters of the CSD model used in the deconvolution</xhtml>
+      <xhtml name="mask">Region of interest on which to restraint the computation. Mask does not need to be binary.</xhtml>
+      <xhtml name="sphere">Sampling sphere.The finest the sphere used the better. For visualisation recommended sphere is symmetric362 or icosadric sphere</xhtml>
+      <xhtml name="fibre_odf">Fiber Orientation Distribution evaluated on the sphere.</xhtml>
+    </d>
+    <xhtml name="long">
+      For visualisation purpose or finding of directions of interest, it might be useful to compute Fiber Orientation Distribution (FOD) on a sampling sphere based on its spherical harmonics coefficients.
+      This process allows the user to select a projection sphere and select a subset of existing spherical harmonics FOD representation to compute it on small region of interest.
+      Depending on how fine the selected sphere is and the amount of data selected resulting FOD can be very heavy (several gygabyte).
+    </xhtml>
+  </d>
+</d>
+</minf>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Constrained Spherical Deconvolution (CSD) pipeline. Goes from preprocessed diffusion MRI data to spherical harmonics coefficients required for tractography and Orientation Distribution Function (ODF) for visualization.</xhtml>
+    <d name="parameters">
+      <xhtml name="diffusion_data">Preprocessed diffusion data  for more details on correction applyied on the data see <a href="bvprocess://PreprocessingPipeline"><bvProcessName name="Preprocessing Pipeline"/></a> documentation</xhtml>
+      <xhtml name="impulsional_fiber_response"> Impulsionnal response estimated from the data. By default named default_response but
+      the user can and should modify the name (response attribute) in order to be sure not to erase an existing one. </xhtml>
+      <xhtml name="mask">Diffusion MRI volume mask. Does not require to be binary can also be an interpolated mask</xhtml>
+      <xhtml name=" FOD_sh_coeff">Spherical harmonics coefficients of the Fiber Orientation Distribution (FOD)</xhtml>
+      <xhtml name=" FOD">Fiber Orientation Distribution (FOD) sampled on a sphere </xhtml>
+    </d>
+    <xhtml name="long"><p>Constrained Spherical Deconvolution (CSD) pipeline allows the user to go from preprocessed diffusion MRI data to derived indices and spherical harmonics coefficients required for tractography.</p>
+
+<p>This pipeline is composed of five distinct steps:
+  <ul>
+  <li> Instanciation of the CSD Model and its fitting method: <a href="bvprocess://csd_model"><bvProcessName name="CSD Model"/></a> <a href="bvshowprocess://csd_model"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+  <li> Fitting on a dataset the instanciated Tensor Model: <a href="bvprocess://csd_fitting"><bvProcessName name="CSD Fitting"/></a><a href="bvshowprocess://csd_fitting"><img src="../../images/icons/icon_process.png" border="0"/></a> </li>
+  <li> Computation of CSD model derived scalar <a href="bvprocess://csd_derived_indices"><bvProcessName name="CSD Derived Indices"/></a><a href="bvshowprocess://csd_derived_indices"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+  <li>Computation of  Fiber Orientation Distribution Function <a href="bvprocess://csd_odf"><bvProcessName name="CSD FOD"/></a><a href="bvshowprocess://csd_odf"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+  <li>Computation of DWI signal from estimated CSD model <a href="bvprocess://csd_signal_prediction"><bvProcessName name="CSD Signal Prediction"/></a><a href="bvshowprocess://csd_signal_prediction"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+</ul>
+</p>
+</xhtml>
+  </d>
+</d>
+</minf>
+

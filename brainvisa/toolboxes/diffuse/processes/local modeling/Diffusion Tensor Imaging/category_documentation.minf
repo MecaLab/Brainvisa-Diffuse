@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf version="1.0">
+
+  <xhtml name="en">
+    <h1>Diffusion Tensor Imaging (DTI) </h1>
+    <h2>Introduction</h2>
+    <p>
+    The isotropic free diffusion model proposed by Fick and later Einstein, is not accurate to model water diffusion through complex biological structures in the brain. Diffusion Tensor Model proposed by [ref author] is a direct
+        extension of the (scalar) isotropic model : Diffusion is considered anisotropic; three orthogonal diffusion directions are selected, diffusion in other directions are obtained as a trilinear combination
+        of these three orthogonal directions. The mathematical object used to describe this behaviour is a 2 order-rank tensor (in this case a covariance matrix) thus Diffusion Tensor Imaging (DTI).
+      </p>
+      <p> There is a abundant methodological litterature about DTI, whether it is about robust estimation of the tensor coefficients,
+          interpolation, calculation and interpretation of derived parameters. See Emsell, L., Van Hecke, W., and Tournier, J. D. (2016). Introduction to diffusion tensor imaging. In Diffusion Tensor Imaging (pp. 7-19). Springer New York. for an up to date review.</p>
+      <h2> DTI in Diffuse </h2>
+      <p>Diffuse allows the user to:<ul>
+          <li><i>estimate diffusion tensor coefficients</i> using several methods <a href="bvprocess://DTI_tensor_model"><bvProcessName name="DTI_tensor_model"/></a> <a href="bvshowprocess://DTI_tensor_model"><img src="../../images/icons/icon_process.png" border="0"/></a></li>,
+          <li> <i>calculate derived indices</i> such as Fractionnal Anisotropy <a href="bvprocess://DTI_derived_indices"><bvProcessName name="DTI_derived_indices"/></a> <a href="bvshowprocess://DTI_derived_indices"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+          <li> compute <i>diffusion Orientation Distribution</i> <a href="bvprocess://DTI_ODF"><bvProcessName name="DTI_ODF"/></a> <a href="bvshowprocess://DTI_ODF"><img src="../../images/icons/icon_process.png" border="0"/></a></li>.
+      </ul>
+      </p>.
+  </xhtml>
+</minf>

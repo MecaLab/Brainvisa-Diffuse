@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>Handy tool to visualize the diffusion gradients sampling on the sphere. In particular, to verify if the acquisition has been done over the half-sphere or the entire sphere.</p>
+<p>Example for an acquisition with a multi-shell full-sphere sampling scheme: </p> <img src="../../images/diffuse/Qspace.png"/></xhtml>
+    <d name="parameters">
+      <xhtml name="bvecs"/>
+      <xhtml name="bvals"/>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">
+    </xhtml>
+    <d name="parameters">
+      <xhtml name="nb_points"> Number of vertices of the sphere. </xhtml>
+        <xhtml name="nb_iterations"> Number of iterations till the end of the energy optimisation process </xhtml>
+      <xhtml name="sphere"> Mesh of the generated sphere in Aims mesh coordinates system (mm) </xhtml>
+    </d>
+      <xhtml name="long">
+          Compute a sphere by optimising an energy function: each vertex on the sphere is set an repulsive electric
+        potential. Vertices are allowed to move on the sphere. Resulting vertices are used to create a sphere.
+      </xhtml>
+  </d>
+</d>
+</minf>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Simulate the signal obtained from a given Diffusion Tensor Model </xhtml>
+    <d name="parameters">
+      <xhtml name="tensor_coefficients"> Coefficients of the tensor whose signal is simulated (eigen values and eigen vectors)</xhtml>
+      <xhtml name="tensor_model"> Instanciated Diffusion Tensor Model</xhtml>
+      <xhtml name="S0_signal"> Non diffusion weighted signal. Act like a "baseline" to simulate signal attenuation due to diffusion weighting. If not provided the baseline is assumed to be 1 in every voxel.</xhtml>
+      <xhtml name="predicted_signal">Signal simulated using a Diffusion Tensor Model.
+
+      </xhtml>
+    </d>
+      <xhtml name="long">Simulate the signal obtained from a given Diffusion Tensor Model. </xhtml>
+  </d>
+</d>
+</minf>

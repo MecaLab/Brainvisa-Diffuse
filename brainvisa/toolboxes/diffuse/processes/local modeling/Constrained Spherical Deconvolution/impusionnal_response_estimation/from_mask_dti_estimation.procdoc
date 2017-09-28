@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Assume the impulsionnal response of the single fiber type voxels is a prolate tensor as used in
+      [ref Catani] e.g. (0.0015, 0.0003, 0.0003)</xhtml>
+    <d name="parameters">
+      <xhtml name="diffusion_data"> Preprocessed diffusion data </xhtml>
+      <xhtml name="gradient_table"> Acquisition scheme informations </xhtml>
+      <xhtml name="mask"> Region where the impusionnal response will be estimated</xhtml>
+      <xhtml name="response"> Estimated impusionnal response</xhtml>
+    </d>
+    <xhtml name="long">
+       A diffusion  tensor model is fitted in every voxel belonging to the given mask. Obtained tensors are then reoriented so that their main axis is coherent and the impulsionnal response
+is obtained as the mean of the reoriented tensors. It implies that the region where the tensor is fitted must correspond to single fiber voxels (no crossing fibers). As an example one can generate such mask by slecting high Fractionnal Anisotropy Voxels (>0.7)
+        or use anatomical priors (corpus callosum from the JHU atlas [ref JHU]. To know more about implementation and details please refer to  <a href = "http://nipy.org/dipy/reference/dipy.reconst.html#dipy.reconst.csdeconv.estimate_response">Dipy documentation</a>
+    </xhtml>
+  </d>
+</d>
+</minf>
+

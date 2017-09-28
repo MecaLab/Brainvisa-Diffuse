@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf version="1.0">
+
+  <xhtml name="en">
+    <h1>Reconstruction fibers and diffusion displacement trajectories: tractography</h1>
+    <h2>Introduction</h2>
+  <p>
+  Diffusion MRI is a unique modality to perform 'in-vivo dissection' of the brain. The reconstructed streamlines are estimates of plausible trajectories from the diffusion signal point of view.
+  The underlying assuption is that diffusion signal is somehow dependent of  both the geometry and  the microstructure of the fibers.
+  Several ways are available to reconstruct the geometry of these "virtual fibers":
+  </p>
+  <ul>
+    <li>local tractography: see <a href="bvprocess://tractography"><bvProcessName name="tractography"/></a> <a href="bvshowprocess://tractography"><img src="../../images/icons/icon_process.png" border="0"/></a> </li>
+    <li>global tractography: incoming ! </li>
+  </ul>
+    <h2>How to use the tractography module?</h2>
+    <h3>Local tractography</h3>
+    <ul>
+      <li> Get spherical harmonics representation of an ODF using local model pipelines:<a href="bvshowprocess://CSDReconstructionPipeline"><img src="../../images/icons/icon_process.png" border="0"/></a> </li>
+      <li> Generate seeds using one of the seeding processes see <a href="bvcategory://diffuse/tractography/seeding"><bvProcessName name="seeding"/></a></li>
+      <li> Go for either deterministic or probabilistic local tracking using <a href="bvshowprocess://tractography"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+    </ul>
+  </xhtml>
+</minf>

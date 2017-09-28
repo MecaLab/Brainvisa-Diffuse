@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf version="1.0">
+
+  <xhtml name="en">
+    <h1>Seeding strategies : the starting point of the so-called local tractography</h1>
+      <h2>What is seeding ?</h2>
+    <p>
+      Once the diffusion in a voxel has been modeled, the next step toward the estimation of white matter fiber trajectories is to integrate
+      the resulting discrete field of displacement. In order to do so one requires several things:
+      <ul>
+        <li>an interpolation method to estimate displcement at any point from discrete desplacement mesures such as FOD</li>
+        <li>an integration method (simple Euler, Runge Kutta 2,4  etc.)</li>
+        <li> conditions to stop the tracking </li>
+        <li> starting points (the seeds) </li>
+      </ul>
+      As a parameter, the seeds and so the seeding strategies may have a strong influence on obtained tracks.
+      Please note that it is only important for what was called local tractography, the global tractography algorithms are not affected by seeding strategies.
+    </p>
+    <h2>The different seeding strategies</h2>
+    The principle of every seeding strategy is the same. Place seed in the space so that most of the signal based tracts are captured.
+    In fact, an efficient seeding strategy can be seen as  an efficient way to sample the space of white matter signal tracts from a sparse number
+    of seeds. If we forget about the biological meaning of the tracs, it means we seek to reach the whole streamlines p
+    <ul>
+      <li><i>whole brain volumic seeding</i>: seeds are placed on the whole white matter (or white + grey matter) volume. They can be place either in a deterministic fashion or in the random one</li>
+      <li><i>region of interest volumic seeding</i>: for studies focused on particular regions of the brain, one can try to retrieve fibers going through the region by putting volumic seeds in this region</li>
+      <li><i>grey/white matter interface seeding</i>: seeds are placed at the grey/white interface using either a grey/white volumic or surfacic segmentation</li>
+    </ul>
+    <h2>Pro and cons of the different seeding strategies</h2>
+
+
+
+    <h2>Which seeding strategies are available in Diffuse?</h2>
+    Diffuse provides the user with the three main main strategies detailled above. Seeds can be placed in a volume (ROI, mask, full brain)
+    or on a surface (grey/white mesh, subcorticals structure meshes) either in a deterministic fashion (equal repartition, custom repartition) or randomly (uniform).
+    To more details please refer to the documentation of the following processes :
+    <ul>
+      <li>random volumic seeding: <a href="bvprocess://random_seeds_from_mask"><bvProcessName name="random_seeds_from_mask"/></a><a href="bvshowprocess://random_seeds_from_mask"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+      <li>deterministic volumic seeding: <a href="bvprocess://seeds_from_mask"><bvProcessName name="seeds_from_mask"/></a><a href="bvshowprocess://seeds_from_mask"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+      <li>seeding from grey/white interfaces: <a href="bvprocess://seeds_from_mesh"><bvProcessName name="seeds_from_mesh"/></a><a href="bvshowprocess://seeds_from_mesh"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+    </ul>
+
+    <div class="warning">
+      <h5>IMPORTANT:</h5> Seeds are points or areas in a given space. To insure that obtained tractography is coherent with diffusion volumes
+      seeds must be in the same space that diffusion volume in the end. It means that a transformation between the seeding space and diffusion space must be provided
+      or that seeding space must be the diffusion space. In Diffuse, since we rely on Aims library for i/o calculation must be done in aims space.
+      As a matter of consequence, we impose the seeds to be in the Aims diffusion voxel space !
+  </div>
+  </xhtml>
+</minf>
+
+
+
+
+
+
+

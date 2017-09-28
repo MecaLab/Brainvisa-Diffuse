@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">
+    </xhtml>
+    <d name="parameters">
+      <xhtml name="spherical_function">File containing scanning directions in the Q space i.e.  bvectors (bvecs)</xhtml>
+      <xhtml name="sphere">If True, round the  bvalues to the hundred closer. </xhtml>
+      <xhtml name="mesh">Value under which bvalues are considered to represent B0 volumes i.e. non-weighted diffusion scans</xhtml>
+      <xhtml name="texture">File containing scanning intensities in the Q space, i.e. bvalues (bvals)</xhtml>
+      <xhtml name="scaling_factor">reference volume to retrieve the transformation between input storage convention and aims coordinate system. It assumes the orientation of this reference volume and the bvecs file s the same which is the case if this toolbox was used to import the data.</xhtml>
+    </d>
+    <xhtml name="long"> Build a gradient table object that contains  main information about the acquisition scheme used for the data.
+        Futhermore, this process handles bvalues (gradient intensities) rounding and bvectors (gradient directions) reorientation in Aims space so that
+        data and gradient directions are coherent.
+        B Values obtained from raw DICOM either represents ideal bvalues programmed into the machiner for acquisition or the actual bvalues used in the sequence.
+        There might be a slight difference on bvalues that sould a priori be on the same shell (e.g 1990 and 2010 for a 2000 asked bvalue). Some algorithms may not be able to handle
+        properly this king of values and that is why rounding the bvalues is highly recommended.
+        The coherence of the BVectors orientation must have been checked before using   . However, computation are performed in the Aims coordinate system. To be sure the BVectors are still coherent with he diffusion data
+        the transform between storage space and Aims space is retrieved and applyied to the Bvectors.
+
+    </xhtml>
+  </d>
+</d>
+</minf>

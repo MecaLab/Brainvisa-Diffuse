@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">
+    </xhtml>
+    <d name="parameters">
+      <xhtml name="nb_points"> Number of vertices of the sphere. </xhtml>
+        <xhtml name="nb_iterations"> Number of optimization steps till end of </xhtml>
+      <xhtml name="sphere"> Mesh of the generated sphere in Aims mesh coordinates system (mm) </xhtml>
+    </d>
+      <xhtml name="long">
+        Compute a sphere by optimising an energy function: each vertex on the sphere is set an repulsive electric
+        potential. Vertices are allowed to move on the sphere. Resulting vertices are used to create a sphere.
+        Obtained vertices are then antipodally symmetrized to obtain a fully antipodally symmetric sphere. This kind of
+        sphere is particulary adapted for diffusion because due to MRI measurement process, MRI signal is positive and
+        antipodally symmetric.
+      </xhtml>
+  </d>
+</d>
+</minf>

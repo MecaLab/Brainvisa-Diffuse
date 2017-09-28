@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Simulate diffusion signal using a CSD model</xhtml>
+    <d name="parameters">
+      <xhtml name="fibre_odf_sh_coeff">Spherical harmonic coefficients of a Fiber Orientations Distribution (FOD)</xhtml>
+      <xhtml name="csd_model">Parameters of the CSD model used in the deconvolution</xhtml>
+      <xhtml name="mask">Region of interest on which to restraint the computation. Mask does not need to be binary.</xhtml>
+      <xhtml name="S0">Non diffusion weighted signal. Act like a base coefficient for simulation. If non provided, S0 is assumed to be 1 and the simulated signal will reflect diffusion wrighting directly.</xhtml>
+      <xhtml name="predicted_signal">Simulated signal according to CSD model passed as parameter</xhtml>
+    </d>
+    <xhtml name="long">Simulate the diffusion signal that would be obtained given a Fiber Orienation Distribution(FOD). Allows to compute fitting error of a CSD model. WARNING: this function only accept one S0 . If u want to use this algorithm to calculate fitting error with multiple b0s it might not be accurate.
+        You could use mean registered B0 instead but there still will be some differences with the signal.
+    </xhtml>
+  </d>
+</d>
+</minf>

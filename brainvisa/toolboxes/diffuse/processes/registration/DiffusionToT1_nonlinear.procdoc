@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>Performs non-linear registration between T1 image and non-diffusion weighted (b0) image, using <b>FSL-FNIRT</b>. Transformation is estimated between segmented white-matter and FA map.</p>
+<p>NOTE: FNIRT showed lower performance than Niftyreg to estimate this transformation. If available, it is highly recommended to use Niftyreg instead !</p></xhtml>
+    <d name="parameters">
+      <xhtml name="b0_to_T1"/>
+      <xhtml name="T1_skeleton_right"/>
+      <xhtml name="bvecs"/>
+      <xhtml name="T1_grey_white_right"/>
+      <xhtml name="diff_to_T1_linear_xfm">Transformation matrix of the affine pre-alignement (required for Anatomist).</xhtml>
+      <xhtml name="T1_to_diff_linear_xfm">Transformation matrix of the affine pre-alignement (required for Anatomist).</xhtml>
+      <xhtml name="T1_mask"/>
+      <xhtml name="T1_to_b0_interpolation"/>
+      <xhtml name="bvals"/>
+      <xhtml name="diff_to_T1_nonlinear_dfm">Contains both affine pre-alignement and non-linear deformation field</xhtml>
+      <xhtml name="T1_to_b0_WM"/>
+      <xhtml name="T1_to_b0_GM"/>
+      <xhtml name="b0_volume"/>
+      <xhtml name="T1_skeleton_left"/>
+      <xhtml name="T1_to_b0"/>
+      <xhtml name="T1_to_b0_skeleton"/>
+      <xhtml name="T1_volume"/>
+      <xhtml name="T1_to_diff_nonlinear_dfm">Contains both affine pre-alignement and non-linear deformation field</xhtml>
+      <xhtml name="T1_grey_white_left"/>
+      <xhtml name="T1_to_b0_mask"/>
+      <xhtml name="dwi_data"/>
+    </d>
+    <xhtml name="long">Processing steps:
+<ol type="1">
+<li>White-matter segmentation in the T1 image using <i>fast</i></li>
+<li>Temporary estimation of fractional anisotropy map using <i>dtifit</i> and bias correction using <i>fsl_anat</i></li>
+<li>6DOF affine pre-alignement of FA and WM images using <i>flirt</i></li>
+<li>Non-linear registration of FA into WM image using <i>fnirt</i> (spline interpolation)</li>
+<li>Inversion of transformation</li>
+<li>Application of T1 to b0 transformation to T1 image (chose T1_to_b0 interpolation), brain mask, WM/GM and skeleton masks, using <i>applywarp</i></li>
+</ol>
+<p>For each mask, left/right hemispheres are recombined into a single mask in the diffusion space.</p>
+</xhtml>
+  </d>
+</d>
+</minf>

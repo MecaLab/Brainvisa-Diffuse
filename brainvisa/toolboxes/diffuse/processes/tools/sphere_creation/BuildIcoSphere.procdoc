@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">
+    </xhtml>
+    <d name="parameters">
+      <xhtml name="nb_points"> Number of vertices of the sphere. </xhtml>
+      <xhtml name="sphere"> Mesh of the generated sphere in Aims mesh coordinates system (mm) </xhtml>
+    </d>
+      <xhtml name="long"> An icosphere is a sphere obtained by refinement of an icosaehdron. Icospheres are particulary useful for visualisation purpose. Unlike the so called UV spheres, icospheres are centraly symmetric hence does not introduces
+          poles in the sphere. It is appropriate when no direction is particular. However, icosphere are not antipodally symetric and thus could introduce bias if used in tractography.
+      </xhtml>
+  </d>
+</d>
+</minf>

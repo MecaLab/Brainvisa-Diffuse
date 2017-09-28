@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>Gives the following information:</p>
+<ul>
+<li>Total number of volumes</li>
+<li>Number of non-diffusion weighted (b0) volumes</li>
+<li>Number of shells and b-values</li>
+</ul></xhtml>
+    <d name="parameters">
+      <xhtml name="bvals"/>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Place equidistant seeds (points) of every voxels of a given mask. Number of seeds is controlled along each direction.
+    </xhtml>
+    <d name="parameters">
+      <xhtml name="mask"></xhtml>
+      <xhtml name="nb_seeds_x">Number of seeds along the first axis </xhtml>
+      <xhtml name="nb_seeds_y">Number of seeds along the second axis</xhtml>
+      <xhtml name="nb_seeds_z">Number of seeds along the third axis</xhtml>
+      <xhtml name="seeds">Coordinates of the nb_seeds_x * nb_seeds_y* nb_seeds_z seeds in the Aims <br>voxel</br> space (no mm)</xhtml>
+    </d>
+    <xhtml name="long"> Place equidistant seeds (points) of every voxels of a given mask. Number of seeds is controlled along each direction.
+    </xhtml>
+  </d>
+</d>
+</minf>

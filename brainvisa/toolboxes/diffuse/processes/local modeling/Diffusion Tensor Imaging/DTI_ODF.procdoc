@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Compute (diffusion) Orientation Distribution (ODF) from a diffusion tensor model</xhtml>
+    <d name="parameters">
+        <xhtml name="tensor_coefficients">Estimated coefficients of a diffusion tensor. If no instance already exist and that you want to generate an ODF from tensor
+        please use <a href="bvprocess://DTI_fitting"><bvProcessName name="DTI_fitting"/></a> or <a href="bvprocess://DTIReconstructionPipeline"><bvProcessName name="DTIReconstructionPipeline"/></a></xhtml>
+        <xhtml name="tensor_model">Diffusion tensor model parameters</xhtml>
+        <xhtml name="sphere">Sample sphere where to evaluate the ODF. For visualisation purpose, the finer the better but may create memory problem.</xhtml>
+        <xhtml name="mask"> Region of interest to restrain the ODF computation. Does not have to be a binary volume</xhtml>
+        <xhtml name="d-odf"> Diffusion Orientation Distribution on the sphere: radial probability of diffusion.</xhtml>
+    </d>
+      <xhtml name="long"> Compute (diffusion) Orientation Distribution (ODF) from a diffusion tensor model.</xhtml>
+  </d>
+</d>
+</minf>

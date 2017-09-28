@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Instanciate a TensorModel. It allows the user to choose among several classical fitting methods detailled below. </xhtml>
+    <d name="parameters">
+      <xhtml name="model"> Diffusion Tensor Model parameters (fitting method used, related data)</xhtml>
+      <xhtml name="gradient_table"> Basic diffusion acquisition scheme informations sum-up. If no gradient table is available, a new one can be generated using:
+<a href="bvprocess://GradientTableConstruction">Gradient Table Construction</a>
+<a href="bvshowprocess://GradientTableConstruction"><img src="../../images/icons/icon_process.png" border="0"/></a>
+</xhtml>
+      <xhtml name="method">Model Fitting method to the data.
+Available method are : <ul>
+<li><i>WLS</i>: Weighted Least Square (default)</li>
+<li><i>LS</i>: Least Square, classical regression estimation, does not handle outliers and heteroscedasticity </li>
+<li><i>NLLS</i>: Non Linear Least Square, non linear method using Jacobian to fit tensor parameters</li>
+</ul></xhtml>
+    </d>
+      <xhtml name="long">Instanciate a TensorModel. It allows the user to choose among several classical fitting methods.
+      Depending on fitting method used resulting tensor might change a little bit. Please note that all estimation method used implicitly assumed
+      that data is not affected by noise (previously denoised) or by gaussian noise only. If signal to noise ratio is low, noise can not be supposed to be gaussian and obtained tensor migh be not consistent.</xhtml>
+  </d>
+</d>
+</minf>

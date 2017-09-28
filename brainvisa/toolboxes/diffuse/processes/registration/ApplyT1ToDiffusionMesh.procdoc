@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>This process can be used to register the cortical (GM_mesh) and grey-white interface (WM_mesh) meshes from the T1 space into the diffusion space, using the <b>non-linear transformation</b> estimated with NIFTYREG only !</p></xhtml>
+    <d name="parameters">
+      <xhtml name="diff_to_T1_nonlinear_dfm"/>
+      <xhtml name="GM_mesh_in_DWI"/>
+      <xhtml name="T1_to_diff_linear_xfm"/>
+      <xhtml name="GM_mesh_in_T1"/>
+      <xhtml name="side"/>
+      <xhtml name="b0_volume"/>
+      <xhtml name="WM_mesh_in_DWI"/>
+      <xhtml name="T1_volume"/>
+      <xhtml name="WM_mesh_in_T1"/>
+      <xhtml name="registration_method"/>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>

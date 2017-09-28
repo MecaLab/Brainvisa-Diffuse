@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>In this process is implemented the method called ECCAR (Eddy-Currents Correction by Affine Registration) to align all diffusion-weighted images to the first b0 volume.</p>
+<p>Can be used with any diffusion data.</p>
+<p>Must be used before the <b>Fieldmap-based correction</b> process.</p></xhtml>
+    <d name="parameters">
+      <xhtml name="corrected_bvecs"/>
+      <xhtml name="bvecs"/>
+      <xhtml name="bvals"/>
+      <xhtml name="dwi_eddy_corrected"/>
+      <xhtml name="dwi_data"/>
+    </d>
+    <xhtml name="long">To ensure minimal error due to intensity differences, volumes are first aligned to the closest interspersed b0 volumes, which are in turn aligned to the first one. For the same reason, we used the mutual information cost function, rather than the correlation-ratio used in the <i>eddy_correct</i> command of FSL. The two transformations are combined to apply a single resampling to each volume, with a spline interpolation. This method does not require any specific acquisition, but is <b>less appropriate for high b-value</b> associated to signal attenuation and increased contrast between images where the affine registration fails to correct the eddy-currents completely. Moreover, distortions are increased by stronger gradients and higher b-values typically encountered in research contexts with recent scanners, such that the linear model becomes less accurate.
+<p>The reorientation of gradients vectors in the bvec file is performed at the end of the process</p></xhtml>
+  </d>
+</d>
+</minf>

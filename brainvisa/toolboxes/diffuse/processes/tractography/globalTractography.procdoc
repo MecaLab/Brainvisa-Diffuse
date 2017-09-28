@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Global Gibbs tracker proposed by M. Reisert,et al., (Neuroimage 2011) and implemented in Matlab (documentation and download link: <a href="https://www.uniklinik-freiburg.de/mr-en/research-groups/diffperf/fibertools.html">here</a>).
+<p>This process has been tested on Matlab 2006b, 2007a, 2007b, 2014a (does not work on 2015b) and requires SPM8</p>
+<p>Only applicable on single-shell sequences</p>
+</xhtml>
+    <d name="parameters">
+      <xhtml name="bvecs"/>
+      <xhtml name="data_source">For now, correct orientation of the output tractogram is only garantied with HCP data. For other datasets, the right affine transform still has to be defined manually.</xhtml>
+      <xhtml name="density_map">3D volume chowing in each voxel the number of fibers crossing it</xhtml>
+      <xhtml name="bvals"/>
+      <xhtml name="streamlines"/>
+      <xhtml name="reconstruction_density">Select the predefined set of parameters (see documentation)</xhtml>
+      <xhtml name="binary_mask">Tractography will be performed within this mask</xhtml>
+      <xhtml name="tractographyPackage"/>
+      <xhtml name="dwi_data"/>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>

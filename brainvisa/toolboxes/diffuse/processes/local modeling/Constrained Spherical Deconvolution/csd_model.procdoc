@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Instantiate a ConstrainedSpherical Deconvolution Model taking into account related dwi data and fitting paremeters. Result is stored as a single object that can be reused.</xhtml>
+    <d name="parameters">
+      <xhtml name="regularization_weight">Weight given to the constrained-positivity regularization part of the deconvolution equation
+Default: 1 
+Rem: regularization_weight must be positive</xhtml>
+      <xhtml name="positivity_threshold">Threshold controlling the amplitude below which the amplitude of spherical function( here f-ODF) is assumed to be equal to zero. If the system was well constrained, positivity_threshold should be equal to zero. However, in order to increase stability of the solving, positivity_threshold is set as a percentage of max_value ie 10%=0.1 for example.
+Default: 0.1</xhtml>
+      <xhtml name="sphere">Points representing the sphere on which  the spherical function is sampled.
+dipy pre defined sphere: <ul>
+<li>symmetric362</li>
+<li>symmetric724</li>
+<li> custom allowing user defined sphere through vertices coordinates</li>
+</ul></xhtml>
+      <xhtml name="gradient_table"> Essential diffusion acquisition scheme informations. If no gradient table is found for your data you can generate one on using <a href="bv_process://GradientTableConstruction"><bvProcessName name="GradientTableCOnstruction"/></a> </xhtml>
+      <xhtml name="single_fiber_response">Impulsionnal response of a single fiber population. If no  impusionnal response is found four your data you can generate one using one of the process in <a href="bv_category://diffuse/local_modeling/constrained_spherical_deconvolution/impusionnal_response_estimation"><_t_>impusionnal_response_estimation</_t_></a> </xhtml>
+      <xhtml name="regularization_sphere">Sphere used to regularize the deconvolution. Positivity constraint will be imposed on sphere vertices. </xhtml>
+      <xhtml name="model">Constrained Spherical Deconvolution Model (data used plus fitting parameters)</xhtml>
+      <xhtml name="spherical_harmonic_order">Max order of the spherical harmonic decomposition. sh_order has to be an even positive integer.
+Considering the sh_order as n_max,spherical harmonic decomposition will lead to (n_max+1)(n_max+2)/2 coefficients.
+Please note that without any additional constraint this decomposition is not unique.</xhtml>
+    </d>
+    <xhtml name="long">Instantiate a ConstrainedSpherical Deconvolution Model taking into account related dwi data and fitting paremeters. Result is stored as a single object that can be reused.</xhtml>
+  </d>
+</d>
+</minf>

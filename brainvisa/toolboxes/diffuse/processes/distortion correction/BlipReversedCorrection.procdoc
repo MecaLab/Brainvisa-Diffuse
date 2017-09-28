@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Eddy-current AND susceptibility-induced distortion correction using reversed phase encoding acquisition.
+<p>It requires at least <b>one or several non-diffusion weighted (b0) volumes acquired with two opposite phase encoding directions</b> (for instance one b0 in AP and one in PA). The best correction is obtained when using the <b>full sequence with opposed phase encoding</b>.</p></xhtml>
+    <d name="parameters">
+      <xhtml name="topup_index"/>
+      <xhtml name="topup_b0_mean_brain"/>
+      <xhtml name="corrected_bvecs"/>
+      <xhtml name="topup_parameters"/>
+      <xhtml name="fwhm"/>
+      <xhtml name="multi_shell"/>
+      <xhtml name="dwi_data"/>
+      <xhtml name="brain_extraction_factor"/>
+      <xhtml name="bvecs"/>
+      <xhtml name="topup_b0_mean"/>
+      <xhtml name="entire_sphere_sampling"/>
+      <xhtml name="readout_time">Readout Time (s) = (Nb of echoes - 1) * Echo-spacing
+<p>Readout Time (s) = 1/BandwidthPerPixelPhaseEncode </p>
+<p><i>Nb of echoes is equal to the number of voxels along the phase-encoding axis</i></p>
+<p><i>BandwidthPerPixelPhaseEncode usually correspond to the header flag ['0019','1028']</i></p></xhtml>
+      <xhtml name="topup_b0_volumes"/>
+      <xhtml name="b0_bias_correction">This option must be used when the signal intensity is different between the b0 volumes of the dwi_data and the b0 volumes of the blip_reversed_data</xhtml>
+      <xhtml name="blip_reversed_data">All volumes acquired with reversed phase encoding direction (they must be in a 4D volume separated from the dwi_data)
+<p>In case the entire sequence have been repeated with reversed phase encoding, make sure that the volumes are in the same order as the dwi_data, and that the bvalues are identical !</p></xhtml>
+      <xhtml name="topup_bvals"/>
+      <xhtml name="dwi_unwarped"/>
+      <xhtml name="nvoxhp"/>
+      <xhtml name="topup_data"/>
+      <xhtml name="topup_b0_mean_brain_mask"/>
+      <xhtml name="niter"/>
+      <xhtml name="topup_b0_volumes_unwarped"/>
+      <xhtml name="phase_encoding_direction">AP: Antero-posterior (Y+)
+<p>LR: Left-right (X+)</p></xhtml>
+      <xhtml name="bvals"/>
+      <xhtml name="topup_bvecs"/>
+      <xhtml name="flm"/>
+    </d>
+    <xhtml name="long">In this process, the <b>topup</b> tool combines pairs of b0 volumes with opposed distortions to estimate the susceptibility-induced off-resonance field. This distortion field is then used as input in the <b>eddy</b> tool to correct simultaneously for susceptibility, eddy-current distortions and movements. If the entire sequence have been repeated with opposed phase encoding, <b>eddy</b> is able to properly recover the signal intensity in compressed areas using least-squares reconstruction.
+<p>The reorientation of gradients vectors in the bvec file is included in eddy</p>
+<p>Further information about the algorithm and the optional parameters can be found <a href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/eddy">here</a></p></xhtml>
+  </d>
+</d>
+</minf>

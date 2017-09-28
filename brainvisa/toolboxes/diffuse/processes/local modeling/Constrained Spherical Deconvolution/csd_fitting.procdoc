@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Estimate Fiber Orientation Distribution (FOD) from preprocessed diffusion data</xhtml>
+    <d name="parameters">
+      <xhtml name="diffusion_data">Preprocessed diffusion data (at least reoriented) on which to estimate the Fiber Orientation Distribution (FOD).</xhtml>
+        <xhtml name="csd_model">Parameters of the CSD model used in the deconvolution</xhtml>
+      <xhtml name="mask">Region of interest on which to restraint the computation. Does not require to be binary can also be an interpolated mask.</xhtml>
+      <xhtml name="fibre_odf_sh_coeff">Spherical Harmonic  decomposition of the estimated FOD. </xhtml>
+    </d>
+    <xhtml name="long">
+        Estimate Fiber Orientation Distribution (FOD) from preprocessed diffusion data.
+    </xhtml>
+  </d>
+</d>
+</minf>

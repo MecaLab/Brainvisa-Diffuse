@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">
+        Tractography pipeline: regroups in one windows the whole dipy tractography machinery. The user can access both deterministic and probabilistic alogrithms
+        and customize most commonly used tractography parameters. Predefined sets of parameters allows the user to access different tractography sets.
+    </xhtml>
+    <d name="parameters">
+      <xhtml name="sh_coefficients">Spherical harmonics coefficients of an Orientation Distribution Function (ODF) </xhtml>
+      <xhtml name="type">Kind of performed tractography: either Deterministic or Probabilistic</xhtml>
+      <xhtml name="constraint">The kind of constraint imposed to stop the tractography. Tractography is stopped using the selected type of classifier. </xhtml>
+      <xhtml name="mask">A binary mask to constraint tractography. Binary classifier will proceeds as follow:
+     <ul>
+         <li>ENDPOINT: mask = 0</li>
+         <li>OUTSIDEIMAGE: tracking point outside of mask</li>
+         <li>TRACKPOINT: no direction is available</li>
+         <li>INVALIDPOINT: N/A</li>
+     </ul>
+</xhtml>
+      <xhtml name="scalar_volume">Scalar index such as Fractionnal Anisotropy (FA) to be used in a classifier. Classifier will proceeds as follow:
+      <ul>
+         <li>ENDPOINT: metric_map inferior to threshold</li>
+         <li>OUTSIDEIMAGE: tracking point outside of mask</li>
+         <li>TRACKPOINT: no direction is available</li>
+         <li>INVALIDPOINT: N/A</li>
+      </ul>
+      </xhtml>
+        <xhtml name="include_pve_map">Partial Volume Estimation map: values between 0 and 1. This volume is used in a classifier. Classifier will proceed
+        as follow:
+            <ul>
+         <li>ENDPOINT: include_pve_map superior to 0.5</li>
+         <li>OUTSIDEIMAGE: tracking point outside of mask</li>
+         <li>TRACKPOINT: no direction is available</li>
+         <li>INVALIDPOINT: exclude_pve_map superior to 0.5</li>
+      </ul>
+        </xhtml>
+       <xhtml name="exclude_pve_map">Partial Volume Estimation map: values between 0 and 1. This volume is used in a classifier. Classifier will proceed
+        as follow:
+            <ul>
+         <li>ENDPOINT: include_pve_map superior to 0.5</li>
+         <li>OUTSIDEIMAGE: tracking point outside of mask</li>
+         <li>TRACKPOINT: no direction is available</li>
+         <li>INVALIDPOINT: exclude_pve_map superior to 0.5</li>
+      </ul></xhtml>
+        <xhtml name="threshold">Threshold value used in the threshold classifier. see scalar_volume parameter documentation for precisions</xhtml>
+        <xhtml name="sphere">Sample sphere used to project spherical harmonics coefficient. For linear findings of the peaks, the precision of the sphere might influence the tractography.
+        </xhtml>
+        <xhtml name="max_angle">maximum angle allowed between two steps. For a given step size relates to curvature by :</xhtml>
+        <xhtml name="relative_peak_threshold">value between 0 and 1. Peaks whose intensity is below relative_peak_threshold * max_peak will be discarded from tracking.
+        Prevent spurious little peaks to be trackeg and reduce tracking time</xhtml>
+        <xhtml name="min_separation_angle'">minimum angle between two directions for these directions to be considered different.
+        If two peaks are separeted by a angle inferior to min_separation_angle they will be fused and their intensities summed up.</xhtml>
+        <xhtml name="crossing_max'">Maximum number of crossing in each voxel. None stand for infinity.</xhtml>
+        <xhtml name="step_size'">size of the integration step. A step to important might cause the tractography algorithm to "overshoot". On the contrary, an integration step too small
+        will propagate eventual errors. Recommended value is between 0.1 and 0.5</xhtml>
+        <xhtml name="fixed_step'">wether integration step has fixed size or not.</xhtml>
+        <xhtml name="nb_iter_max'">maximum number of integration step for a trajectory. Is related to the maximum length of a fiber and the step_size. Need to be changed for atypical data (HCP, clinical)</xhtml>
+        <xhtml name="return_all'"> wether all fibers are returned or only the valid(according o classifier) </xhtml>
+        <xhtml name="nb_samples'">Number of samples to draw from seed. Valid for probabilistic tractography only.</xhtml>
+        <xhtml name="visu_streamlines'">Generated streamlines as a trk file for visualisation in Anatomist</xhtml>
+        <xhtml name="working_streamlines'">Generated streamlines (coordinates in diskstorage space)</xhtml>
+
+    </d>
+    <xhtml name="long">
+
+    </xhtml>
+  </d>
+</d>
+</minf>

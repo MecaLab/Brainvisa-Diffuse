@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf version="1.0">
+
+<xhtml name="en">
+    <h1>CSD impulsionnal response estimation </h1>
+    <h2> Introduction </h2>
+    <p>
+    Constrained Spherical Deconvolution (CSD) is a particular version of Spherical Deconvolution (SD) proposed by Tournier and al in
+    Robust determination of the fibre orientation distribution in diffusion MRI: Non-negativity constrained super-resolved spherical deconvolution. At voxel level, SD algorithms assume that MRI signal acquired on a Q space shell (spherical function)
+    results from the convolution of an impulsionnal response and a repartition function.
+    </p>
+    <p>
+    Thus, to retrieve the repartition function, an impusionnal response must first be estimated. At a given scale,
+    impulsionnal response would correspond to the diffusion signal of a population fiber. It supposes that a this scale
+    all fibers have the same diffusion profile.
+    </p>
+
+    <h2> Methods to estimate the impusionnal response </h2>
+    <p>
+        To estimate the impulsionnal response, three methods are currently available in Diffuse:
+    </p>
+    <ul>
+        <li> <i>default</i>: use a fixed prolate tensor as done in [ref Catani]. See <a href="bvprocess://default_response"><bvProcessName name="Default Prolate Response"/></a></li>
+        <li> estimate a mean tensor on presupposed single fibersvoxels. See <a href="bvprocess://from_mask_dti_estimation"><bvProcessName name="Mean DTI Response"/></a></li>
+        <li> recursively estimate a mean response from the diffusion data. See <a href="bvprocess://recursive_estimation"><bvProcessName name="Recursive Response Estimation"/></a></li>
+    </ul>
+
+</xhtml>
+</minf>

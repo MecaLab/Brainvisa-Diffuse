@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf version="1.0">
+
+  <xhtml name="en">
+    <h1>Sphere manipulation module</h1>
+      <h2>Sphere creation</h2>
+        <p> When dealing with spherical functions/distributions such as Orientation Distribution Function is becomes important
+        to have appropriate spheres whether is is for visualisation or computation purpose.
+        This module regroups several process to build visualisation spheres (icosphere) and spheres used specially in MRI (symmetric spheress) to take into account
+        signal antipodal symmetry.</p>
+        Please report to the documentation of each process for more details:
+        <ul>
+          <li><a href="bvrocess://BuildIcoSphere"><bvProcessName name="BuildIcosphere"/></a></li>
+          <li><a href="bvrocess://BuildRepulsionSphere"><bvProcessName name="BuildRepulsionSphere"/></a></li>
+          <li><a href="bvrocess://BuildSymmetricRepulsionSphere"><bvProcessName name="BuildSymmetricRepulsionSphere"/></a></li>
+        </ul>
+  </xhtml>
+</minf>

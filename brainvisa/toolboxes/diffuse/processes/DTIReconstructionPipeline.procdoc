@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Diffusion Tensor Imaging (DTI) pipeline. Goes from preprocessed diffusion MRI data to spherical harmonics coefficients required for tractography and Orientation Distribution Function (ODF) for visualization.</xhtml>
+    <d name="parameters">
+      <xhtml name="d-odf"/>
+      <xhtml name="tensor_model"/>
+      <xhtml name="mask">Diffusion MRI volume mask. Does not require to be binary can also be an interpolated mask</xhtml>
+      <xhtml name="tensor_coefficients"/>
+      <xhtml name="diffusion_data">Preprocessed diffusion data  for more details on correction applyied on the data see <a href="bvprocess://PreprocessingPipeline"><bvProcessName name="Preprocessing Pipeline"/></a> documentation</xhtml>
+      <xhtml name="fitting_method">Method used to estimate Tensor coefficients.
+Available method are : <ul>
+<li><i>WLS</i>: Weighted Least Square (default)</li>
+<li><i>LS</i>: Least Square, classical regression estimation, does not take into account outliers</li>
+<li><i>NLLS</i>: Non Linear Least Square </li>
+</ul></xhtml>
+    </d>
+    <xhtml name="long"><p>Diffusion Tensor Imaging (DTI) pipeline allows the user to go from preprocessed diffusion MRI data to derived indices and spherical harmonics coefficients required for tractography.</p>
+
+<p>This pipeline is composed of four distinct step:
+  <ul>
+  <li> Instanciation of the Tensor Model and its fitting method: <a href="bvprocess://DTI_tensor_model"><bvProcessName name="Diffusion Tensor Imaging (DTI) Model"/></a><a href="bvshowprocess://DTI_tensor_model"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+  <li> Fitting on a dataset the instanciated Tensor Model: <a href="bvprocess://DTI_fitting"><bvProcessName name="Diffusion Tensor Imaging (DTI) Fitting"/></a> <a href="bvshowprocess://DTI_fitting"><img src="../../images/icons/icon_process.png" border="0"/></a> </li>
+  <li> Computation of Tensor model derived scalar <a href="bvprocess://DTI_derived_indices"><bvProcessName name="Diffusion Tensor Imaging (DTI) Derived Indices"/></a><a href="bvshowprocess://DTI_derived_indices"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+    <li>Computation of Orientation Distribution Function <a href="bvprocess://DTI_ODF"><bvProcessName name="Diffusion Tensor Imaging (DTI) ODF"/></a><a href="bvshowprocess://DTI_ODF"><img src="../../images/icons/icon_process.png" border="0"/></a></li>
+</ul>
+</p>
+      <h2>How to use the Diffusion Tensor Imaging (DTI) pipeline ?</h2>
+      <ol>
+        <li> Select a prepocessed diffusion volume </li>
+        <li>
+          <div class="warning">
+      <h5>Check for the main auto-completed fields !</h5> Given a <i>diffusion_data</i> volume other fields such as <i>tensor_model</i> and <i>tensor_coefficients</i> are completed automatically with default values.
+            If you changed some parameters such as fitting method you may want to change the output (name of the tensor model for example) in order not to mix things.
+    </div>
+        </li>
+        <li> Check out for steps parameters, (un)select steps at your convenance (additional)</li>
+      </ol>
+
+
+</xhtml>
+  </d>
+</d>
+</minf>

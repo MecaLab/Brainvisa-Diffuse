@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p>Performs non-linear registration between T1 image and non-diffusion weighted (b0) image, using <b>Niftyreg</b>. Transformation is estimated between FA and T1 images using the algorithm of Marc Modat (download link and installation <a href="https://sourceforge.net/projects/niftyreg/">here</a>).</p></xhtml>
+    <d name="parameters">
+      <xhtml name="T1_to_b0_WM"/>
+      <xhtml name="T1_to_b0"/>
+      <xhtml name="T1_to_b0_resampling"/>
+      <xhtml name="T1_to_b0_interpolation"/>
+      <xhtml name="b0_volume"/>
+      <xhtml name="T1_volume"/>
+      <xhtml name="test_lucile"/>
+      <xhtml name="T1_grey_white_right"/>
+      <xhtml name="T1_to_b0_mask"/>
+      <xhtml name="dwi_data"/>
+      <xhtml name="b0_to_T1"/>
+      <xhtml name="bvecs"/>
+      <xhtml name="T1_skeleton_right"/>
+      <xhtml name="T1_to_b0_GM"/>
+      <xhtml name="diff_to_T1_linear_xfm">Transformation matrix of the affine pre-alignement (required for Anatomist).</xhtml>
+      <xhtml name="T1_mask"/>
+      <xhtml name="T1_to_b0_skeleton"/>
+      <xhtml name="diff_to_T1_nonlinear_dfm">Does NOT contain affine pre-alignement matrix. ONLY non-linear deformation field.</xhtml>
+      <xhtml name="T1_to_diff_linear_xfm">Transformation matrix of the affine pre-alignement (required for Anatomist).</xhtml>
+      <xhtml name="bvals"/>
+      <xhtml name="T1_to_diff_nonlinear_dfm">Does NOT contain affine pre-alignement matrix. ONLY non-linear deformation field.</xhtml>
+      <xhtml name="T1_skeleton_left"/>
+      <xhtml name="T1_grey_white_left"/>
+    </d>
+    <xhtml name="long">Processing steps:
+<ol type="1">
+<li>Temporary estimation of fractional anisotropy map using <i>dtifit</i></li>
+<li>6DOF affine pre-alignement of FA and T1 images using <i>flirt</i></li>
+<li>Non-linear registration of FA into T1 image using <i>reg_f3d</i></li>
+<li>Inversion of transformation using <i>reg_transform</i></li>
+<li>Application of T1 to b0 transformation to T1 image (chose T1_TO_b0_resampling), brain mask, WM/GM and skeleton masks, using <i>reg_resample</i> for the nonlinear step and <i>AimsResample</i> for the linear step</li>
+</ol>
+<p>For each mask, left/right hemispheres are recombined into a single mask in the diffusion space.</p>
+</xhtml>
+  </d>
+</d>
+</minf>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Color encoded by the mean direction of the fiber</xhtml>
+    <d name="parameters">
+      <xhtml name="width"/>
+      <xhtml name="streamlines"/>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>

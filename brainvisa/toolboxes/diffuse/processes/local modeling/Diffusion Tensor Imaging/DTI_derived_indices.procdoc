@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Calculate usual and advanced derived indices from  Diffusion Tensor Model.
+As an example, one can compute clinical indices such as <i> Fractional Anisotropy (FA)</i>, <i>Mean Diffusivity (MD)</i> but also advanced indices such as <i>Geodesic Diffusivity</i></xhtml>
+    <d name="parameters">
+        <xhtml name="tensor_coefficients"> Estimated coefficients of the tensor model either the tree eigen values and corresponding eigen vectors or the six coefficients of the quadratic form.</xhtml>
+        <xhtml name="tensor_model">Parameters used to instantiate the DTI model</xhtml>
+        <xhtml name="fractionnal_anisotropy"> Normalized scalar value (between 0 and 1) that characterise how far a tensor is far from isotropic tensor (0) and cigar like tensor(1)</xhtml>
+        <xhtml name="colored_fractionnal_anisotropy"> Visualisation volume to encode first eigen vector ponderated by FA.</xhtml>
+        <xhtml name="mean_diffusivity">Mean of the three eigen values. Also corresponds to the mean of diffusivity along all directions.</xhtml>
+        <xhtml name="first_eigen_vector"> Direction that correspond to the maximum diffusivity of the tensor</xhtml>
+        <xhtml name="second_eigen_vector">Direction orthogonal to the first eigen vector and that correspond to the second most important direction of diffusion.</xhtml>
+        <xhtml name="third_eigen_vector">Last direction of diffusion orthogonal to the two fist ones.</xhtml>
+        <xhtml name="evals">The three diffusivities along three drections obtained after diagonalisation process. Sorted by descending magnitude</xhtml>
+        <xhtml name="planarity">See Chung, SW., Lu, Y., Henry, R.G., 2006. Comparison of bootstrap approaches for estimation of uncertainties of DTI parameters. NeuroImage 33, 531-541.</xhtml>
+        <xhtml name="sphericity">See Chung, SW., Lu, Y., Henry, R.G., 2006. Comparison of bootstrap approaches for estimation of uncertainties of DTI parameters. NeuroImage 33, 531-541.</xhtml>
+        <xhtml name="linearity">See Chung, SW., Lu, Y., Henry, R.G., 2006. Comparison of bootstrap approaches for estimation of uncertainties of DTI parameters. NeuroImage 33, 531-541.</xhtml>
+        <xhtml name="mode">Direction of maximum amplitude. Equivalent to first eigenvalue.</xhtml>
+    </d>
+    <xhtml name="long"> The Diffusion Tensor Model is the straightforward generalization of the isotropic case. Even if the model is simple
+    to understand it is useful to have simple and meaninful derived indices to interpret diffusion and try to interpret hidden geometrical fiber structure.
+    Some scalar indices such as Mean Diffusivity (MD) and Fractionnal Anisotropy (FA) are used to characterize diffusion and might be considered as biomarkers
+    of several pathologies. Other indices such as geodesic diffusivity are less used. Diffuse relies on <a href="htpp://www.nipy/dipy">Dipy</a> implementation of DTI model  for the calculation of derived indices,
+    </xhtml>
+  </d>
+</d>
+</minf>
