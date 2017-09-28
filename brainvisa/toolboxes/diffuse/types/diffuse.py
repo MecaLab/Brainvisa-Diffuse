@@ -35,13 +35,13 @@ include( 'anatomy' )
 include( 'registration' )
 
 
-#--------------------------------Acquisition Scheme Informations: Gradient Directions and Intensities-------------------|
+#--------------------------------Acquisition Scheme Informations: B Vectors and Intensities-------------------|
 
 Format( 'BValues format', 'f|*.bval' )
 Format( 'BVectors format', 'f|*.bvec' )
 
 createFormatList(
-  'Bvalues',
+  'BValues',
   (
     'BValues format',
     'Text File',
@@ -118,7 +118,7 @@ FileType( 'Blip Reversed Parameters', 'Text file' )
 FileType( 'Blip Reversed Index', 'Text file' )
 FileType( 'Blip Reversed Data', '4D Volume' )
 FileType( 'Blip Reversed Bvalues', 'B values' )
-FileType( 'Blip Reversed Gradient Directions', 'Gradient Directions' )
+FileType( 'Blip Reversed B Vectors', 'B Vectors' )
 
 #----------------- Registration -------------------------
 FileType( 'Referential of Raw DW Diffusion MR', 'Referential' )
@@ -165,7 +165,7 @@ FileType('Numpy Array','Any Type',['Numpy Array','Compressed Numpy Array'])
 Format('Joblib Pickle file', 'f|*.pkl')
 FileType('Joblib Pickle file', 'Any Type', 'Joblib Pickle file')
 
-#-----------------------------------------Acquisition Scheme: Gradient Directions and Intensities----------------------|
+#-----------------------------------------Acquisition Scheme: B Vectors and Intensities----------------------|
 
 #Fixme: these filetype only mirror bvecs and bvals in preprocessing part are they necessary? no, commented at the moment
 #  suppress them later
