@@ -158,7 +158,7 @@ FileType( 'WM Partial Volume Estimation', 'Tissue Partial Volume Estimation')
 
 ###########################################LOCAL MODELING TYPES AND FORMATS ############################################
 
-
+Format('Numpy Array','f|*.npy')
 Format('Compressed Numpy Array','f|*.npz')
 FileType('Numpy Array','Any Type',['Numpy Array','Compressed Numpy Array'])
 
