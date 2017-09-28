@@ -43,8 +43,8 @@ def validation():
   anatomist.validation()
   
 signature=Signature(
-  'bvecs', ReadDiskItem('Gradient Directions', 'Text file' ),
-  'bvals', ReadDiskItem( 'B values', 'Text file' ),
+  'bvecs', ReadDiskItem('B Vectors', 'Text file' ),
+  'bvals', ReadDiskItem( 'B Values', 'Text file' ),
 )
 
 def initialization( self ):
