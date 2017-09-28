@@ -238,8 +238,10 @@ FileType('Spherical Function Texture', 'Texture')
 
 FileType('Seeds', 'Text File')
 FileType('Raw Streamlines','Numpy Array')
+#Streamlines bundle in trackvis file: in a near future nibabel will be able to handle it correctly
 Format( 'Trackvis tracts', 'f|*.trk' )
-FileType('Global Streamlines', 'Any Type', 'Trackvis tracts')
+FileType( 'Trackvis Streamlines','Any Type', 'Trackvis tracts' )
+FileType('Global Streamlines', 'Trackvis Streamlines')
 FileType('Streamlines Density Map', 'Diffusion MR Mask')
 
 

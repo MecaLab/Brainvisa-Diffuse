@@ -156,7 +156,7 @@ insert('{center}/{subject}/dmri/{acquisition}/{analysis}/dti/{model}',
         'diffusion_odf', SetContent(
             'sh_coefficients',SetType('Spherical Harmonics Coefficients'),
             '{tracking_session}',SetContent(
-                    'visu_streamlines', SetType('Trackvis tracts'),
+                    'visu_streamlines', SetType('Trackvis Streamlines'),
                     'raw_streamlines', SetType('Raw Streamlines'),
             ),
             '{odf_instance}', SetContent(
