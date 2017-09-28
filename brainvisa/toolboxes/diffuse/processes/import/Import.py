@@ -41,15 +41,15 @@ roles = ( 'importer' )
 
 signature=Signature(
   'dwi_data', ReadDiskItem( 'Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
-  'bvals', ReadDiskItem( 'Gradient Info', [ 'BValues format', 'Text File' ] ),
-  'bvecs', ReadDiskItem( 'Gradient Info', [ 'BVectors format', 'Text File' ] ),
+  'bvals', ReadDiskItem( 'B Values', 'BValues' ),
+  'bvecs', ReadDiskItem( 'B Vectors', 'BVectors' ),
   'additional_acquisition', Choice("None", "Fieldmap", "Blip-reversed images", "Both"),
   'blip_reversed_data', ReadDiskItem( 'Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'fieldmap', ReadDiskItem( 'Fieldmap', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'magnitude', ReadDiskItem( 'Fieldmap', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
 
   'output_dwi_data', WriteDiskItem( 'Raw Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
-  'output_bvals', WriteDiskItem( 'Raw B values', 'Text file' ),
+  'output_bvals', WriteDiskItem( 'Raw B Values', 'Text file' ),
   'output_bvecs', WriteDiskItem( 'Raw B Vectors', 'Text file' ),
   'output_blip_reversed_data', WriteDiskItem( 'Blip Reversed DW Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'output_fieldmap', WriteDiskItem( 'Fieldmap Phase', 'gz compressed NIFTI-1 image' ),
