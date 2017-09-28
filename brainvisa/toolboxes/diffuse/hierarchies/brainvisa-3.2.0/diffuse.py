@@ -192,7 +192,7 @@ insert('{center}/{subject}/dmri/{acquisition}/{analysis}/csd/{fiber_response}',
                         'odf_texture', SetType('Spherical Function Texture'),
                             ),
                     '{tracking_session}',SetContent(
-                        'visu_streamlines', SetType('Trackvis Bundles'),
+                        'visu_streamlines', SetType('Trackvis Streamlines'),
                         'raw_streamlines', SetType('Raw Streamlines')
                 ),
                         ),
