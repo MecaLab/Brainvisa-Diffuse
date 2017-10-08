@@ -5,67 +5,66 @@
 ------------
 Presentation
 ------------
-Diffuse is a Brainvisa toolbox designed to process diffusion weighted MRI (DWI) scans with state-of-the-art algorithms in an
-user friendly way. Diffuse is developped  by the MeCA_. research group.
+Diffuse is a BrainVISA toolbox designed to process diffusion-weighted MRI (DWI) data with state-of-the-art algorithms in a
+user-friendly way. Diffuse is developed by the MeCA_. research group.
     .. _Meca: https://meca-brain.org/
 
-Diffuse mostly relies on both FSL_.  and Dipy_. algorithms for DWI processing.
+Diffuse mostly relies on FSL_.  and Dipy_. algorithms for DWI processing.
 
 .. _FSL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/
 .. _Dipy: https://nipy.org/dipy
 
 -------------------------------------------
-Check your Brainvisa installation encoding
+Check your BrainVISA installation encoding
 -------------------------------------------
 
 Dipy modules are not compatible with the ``UCS-2 encoding`` used
-in some released version of Brainvisa.
-To be sure your Brainvisa distribution is compatible with diffuse
-test the brainvisa python of your distribution as follow::
+in some released version of BrainVISA.
+To check whether your BrainVISA distribution is compatible with Diffuse,
+use the following lines in the python installed with BrainVISA::
 
 >> import sys
 >> print sys.maxunicode()
 
-Should be equal to ``1114111`` not 65535
+Should be equal to ``1114111`` (not 65535)
 
 
 
 -------------------------------------------
-How to get  Diffuse installed in Brainvisa?
+Installation
 -------------------------------------------
 
 1. Click on ``Download ZIP`` on github.
 
-2. Extract the obtained archive with your favorite archive manager
-   Here is a example in  a terminal with ``tar`` bash command ::
+2. Unpack the archive into any desired location with your favorite archive manager
+   Here is an example using ``tar``::
 
-    tar xvf Brainvisa-Diffuse.zip
+    tar xvf Brainvisa-Diffuse.zip -C <desired_location>
 
-3. In the Brainvisa-Diffuse directory, the setup.sh script will handle the copy of Diffuse directories in the correct
-   location automatically
+3. Switch to the Brainvisa-Diffuse directory::
 
-4. First change the permissions of setup.sh so that you can execute it ::
+    cd <desired_location>/Brainvisa-Diffuse
 
-   chmod u+rwx setup.
+4. Change the permissions of setup.sh so that you can execute it ::
 
-5. Lauch the setup.sh script ::
+   chmod u+rwx setup.sh
+
+5. Run the setup.sh script ::
 
     ./setup.sh
 
-6. You will be asked by the installation script the location of your Brainvisa install directory
-enter it manually.
+6. During the installation, you will be asked to enter manually the location of your BrainVISA directory
 
-7. At this stage, the script will manage the installation on its own. If you are getting an error it might be due either
-to wrong brainvisa location or insufficient permissions access on the brainvisa directory.
+7. At this stage, the setup.sh script will automatically handle the copy of Diffuse directories in the correct
+   location. If any error occurs, please check that you specified the right brainVISA location or the access permissions into the brainVISA directory.
 
-8. Lauch brainvisa and update Diffuse documentation::
+8. Run brainVISA and update Diffuse documentation::
 
  brainvisa --updateDocumentation
 
-if brainvisa is the name of your brainvisa installation (sometimes if might be BrainVISA)
-you can check using the bash command which.
 
 
+=======
 Licence
 =======
 
@@ -75,8 +74,8 @@ The source code of this work is placed under the CeCILL licence (see `<License.t
 .. _BrainVISA download page: http://brainvisa.info/web/download.html
 
 
-   Authors: Brun Lucile  <lucile.brun@univ-amu.fr>.
-          : Pron Alexandre <alexandre.pron@univ-amu.fr>.
+   Authors: Lucile BRUN  <lucile.brun@univ-amu.fr>.
+          : Alexandre PRON <alexandre.pron@univ-amu.fr>.
 
    Copying and distribution of this file, with or without modification, are permitted in any medium without royalty provided the copyright notice and this notice are preserved. This file is offered as-is, without any warranty.
 
