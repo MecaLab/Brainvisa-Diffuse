@@ -21,12 +21,13 @@ Check your BrainVISA installation encoding
 Dipy modules are not compatible with the ``UCS-2 encoding`` used
 in some released version of BrainVISA.
 To check whether your BrainVISA distribution is compatible with Diffuse,
-use the following lines in the python installed with BrainVISA::
+launch brainvisa and click on Brainvisa then  Start shell. It should launch an Ipython shell where you can type the f
+following lines::
 
 >> import sys
->> print sys.maxunicode()
+>> print sys.maxunicode
 
-Should be equal to ``1114111`` (not 65535)
+Should be equal to ``1114111`` (not 65535).
 
 
 
