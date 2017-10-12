@@ -40,11 +40,23 @@ https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation
 Adding FSL path into Brainvisa suite:
 Once FSL is installed you should precise to Brainvisa where it is. To do so:
 1. Launch Brainvisa
-2. Click on preferences and  
+2. Click on preferences and
 
 * Dipy_ python package must be installed in your operating system.
 For informations about Dipy_ installation please look at Dipy installation instructions here:
 http://nipy.org/dipy/installation.html
+
+To check that Brainvisa's python know where Dipy is launch Brainvisa's shell through graphical user interface and type ::
+import dipy
+
+If you get an error, it means that you need to tell Brainvisa's python where dipy package is installed.
+To do so:
+1. Locate where Dipy is installed
+2. Add this location to your `PYTHONPATH` environnement variable:
+export PYTHONPATH="your_dipy_location":$PYTHONPATH
+3. Resart Brainvisa and type the import code in the shell, it should work now.
+
+
 
 
 
