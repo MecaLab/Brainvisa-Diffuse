@@ -21,13 +21,41 @@ Check your BrainVISA installation encoding
 Dipy modules are not compatible with the ``UCS-2 encoding`` used
 in some released version of BrainVISA.
 To check whether your BrainVISA distribution is compatible with Diffuse,
-launch brainvisa and click on Brainvisa then  Start shell. It should launch an Ipython shell where you can type the f
+launch Brainvisa and click on Brainvisa then  Start shell. It should launch an Ipython shell where you can type the
 following lines::
 
 >> import sys
 >> print sys.maxunicode
 
 Should be equal to ``1114111`` (not 65535).
+
+-------------------------------------------
+Prerequisites
+-------------------------------------------
+
+* FSL_ must be installed in your operating system.
+For informations about FSL_ installation please look at FSL_ installation instructions here:
+https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation
+
+Adding FSL path into Brainvisa suite:
+Once FSL is installed you should precise to Brainvisa where it is. To do so:
+1. Launch Brainvisa
+2. Click on preferences and  
+
+* Dipy_ python package must be installed in your operating system.
+For informations about Dipy_ installation please look at Dipy installation instructions here:
+http://nipy.org/dipy/installation.html
+
+
+
+
+
+
+
+
+
+
+
 
 
 
