@@ -6,8 +6,11 @@
 Presentation
 ------------
 Diffuse is a BrainVISA toolbox designed to process diffusion-weighted MRI (DWI) data with state-of-the-art algorithms in a
-user-friendly way. Diffuse is developed by the MeCA_ research group.
+user-friendly way. Diffuse is currently developed  at the Institut de Neurosciences de la Timone (INT_), Marseille, France by the MeCA_ and
+ SCaLP_  research teams.
+    .. _INT: http://www.int.univ-amu.fr/
     .. _Meca: https://meca-brain.org/
+    .. _SCaLP: http://www.int.univ-amu.fr/spip.php?page=equipe&equipe=SCaLP&lang=en
 
 Diffuse mostly relies on FSL_  and Dipy_ algorithms for DWI processing.
 
@@ -42,9 +45,11 @@ Once FSL is installed you should precise to Brainvisa where it is. To do so:
 1. Launch Brainvisa
 2. Click on preferences and
 
-* Dipy_ python package must be installed in your operating system.
+* Dipy_ python package must be installed in the Brainvisa distribution.
 For informations about Dipy_ installation please look at Dipy installation instructions here:
 http://nipy.org/dipy/installation.html
+
+* Joblib python package must be installed in the Brainvisa distribution
 
 To check that Brainvisa's python know where Dipy is launch Brainvisa's shell through graphical user interface and type ::
 import dipy
