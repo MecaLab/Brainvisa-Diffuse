@@ -6,15 +6,24 @@
 Presentation
 ------------
 Diffuse is a BrainVISA toolbox designed to process diffusion-weighted MRI (DWI) data with state-of-the-art algorithms in a
-user-friendly way. Diffuse is currently developed  at the Institut de Neurosciences de la Timone (INT_), Marseille, France by the MeCA_ and the SCaLP_  research teams.
+user-friendly way. Diffuse is currently developed  at the Institut de Neurosciences de la Timone (INT_), Marseille,
+France by both MeCA_ and  SCaLP_  research teams.
     .. _INT: http://www.int.univ-amu.fr/
     .. _Meca: https://meca-brain.org/
     .. _SCaLP: http://www.int.univ-amu.fr/spip.php?page=equipe&equipe=SCaLP&lang=en
 
-Diffuse mostly relies on FSL_  and Dipy_ algorithms for DWI processing.
+Diffuse mostly relies on FSL_  and Dipy_ for  DWI processing.
+    .. _FSL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/
+    .. _Dipy: https://nipy.org/dipy
 
-.. _FSL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/
-.. _Dipy: https://nipy.org/dipy
+
+-------------------------------------------
+How to install Diffuse ?
+-------------------------------------------
+
+
+
+
 
 -------------------------------------------
 Check your BrainVISA installation encoding
@@ -26,8 +35,9 @@ To check whether your BrainVISA distribution is compatible with Diffuse,
 launch Brainvisa and click on Brainvisa then  Start shell. It should launch an Ipython shell where you can type the
 following lines::
 
->> import sys
->> print sys.maxunicode
+    >> import sys
+    >> print sys.maxunicode
+    >> 1114111
 
 Should be equal to ``1114111`` (not 65535).
 
@@ -58,7 +68,7 @@ To do so:
 1. Locate where Dipy is installed
 2. Add this location to your `PYTHONPATH` environnement variable:
 export PYTHONPATH="your_dipy_location":$PYTHONPATH
-3. Resart Brainvisa and type the import code in the shell, it should work now.
+3. Restart Brainvisa and type the import code in the shell, it should work now.
 
 
 
@@ -101,7 +111,7 @@ Installation
 6. During the installation, you will be asked to enter manually the location of your BrainVISA directory
 
 7. At this stage, the setup.sh script will automatically handle the copy of Diffuse directories in the correct
-   location. If any error occurs, please check that you specified the right BrainVISA location or the access permissions into the BrainVISA directory.
+   location. If any error occurs, please check that you specified the correct BrainVISA location or the access permissions into the BrainVISA directory.
 
 8. Run BrainVISA and update Diffuse documentation::
 
