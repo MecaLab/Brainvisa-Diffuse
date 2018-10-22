@@ -71,9 +71,9 @@ Installation
 
 
 
--------------------------
-Installation from sources
--------------------------
+---------------------------------------
+Alternative : installation from sources
+---------------------------------------
 
 For users already familiar with the BrainVISA compilation from source machinery, aka ``bv_maker`` , Diffuse can be included in the compilation process by adding the following lines to the ``bv_maker.cfg``
 file used::
@@ -83,6 +83,14 @@ file used::
 
     [ build <build_directory> ]
        + <source_directory>/diffuse
+
+---------------------------------------
+Install NLSAM python package (Optional)
+---------------------------------------
+
+
+
+
 
 =======
 Licence
