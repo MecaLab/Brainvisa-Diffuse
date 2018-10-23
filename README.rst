@@ -30,9 +30,16 @@ Prerequisites
 
 * The latest BrainVISA_ distribution must be installed on your operating system. Download the latest BrainVISA distribution available here: https://brainvisa.info/web/download
 
-    BrainVISA distributions under the version 4.6.1 are not immediately compatible with Diffuse. We warmly recommend users having an old  BrainVISA distribution (e.g. 4.5.xx) and wanting to use Diffuse to upgrade to the latest version.
+    BrainVISA distributions under  version 4.6.1 are not immediately compatible with Diffuse. We warmly recommend users having an old  BrainVISA distribution (e.g. 4.5.xx) and wanting to use Diffuse to upgrade to the latest version.
 
-*  Set-up the FSL directory location into BrainVISA. (add image)
+*  Set-up the FSL directory location into BrainVISA:
+
+   Brainvisa --> Preferences --> FSL --> fsldir <FSL location>
+
+.. image:: ../share/doc/axon-4.5/images/diffuse/Capt5.png
+   :width: 400
+   :alt: fsldir=<FSL location>
+
 
 
 
@@ -88,8 +95,10 @@ file used::
 Install NLSAM python package (Optional)
 ---------------------------------------
 
+By default, Diffuse integrates the denoising algorithms coming with Dipy (Local PCA, Non Local Means). However, the Non Local Spatial and Angular Matching (NLSAM) denoising algorithm is not yet part of Dipy and
+has to be installed from the NLSAM reference site https://github.com/samuelstjean/nlsam. Using the ``pip`` of the BrainVISA distribution do: ::
 
-
+    pip install https://github.com/samuelstjean/nlsam/archive/master.zip --user --process-dependency-links
 
 
 =======
