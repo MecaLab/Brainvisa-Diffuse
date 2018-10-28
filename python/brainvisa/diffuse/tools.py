@@ -32,7 +32,7 @@ def array_to_vol(array, header=None, dtype=np.float32):
 
 def vol_to_array(aimsvolume):
 	array = np.asarray(aimsvolume)
-	if array.shape[-1]==1:
+	if array.shape[-1] == 1:
 		array = array[..., 0]
 	return array
 
