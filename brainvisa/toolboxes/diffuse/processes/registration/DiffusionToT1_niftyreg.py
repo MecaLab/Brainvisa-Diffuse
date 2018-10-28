@@ -33,7 +33,7 @@
 from brainvisa.processes import *
 from soma.wip.application.api import Application
 from soma.aims import fslTransformation
-from registration import getTransformationManager
+from brainvisa.registration import getTransformationManager
 from distutils.spawn import find_executable
 import numpy
 import os

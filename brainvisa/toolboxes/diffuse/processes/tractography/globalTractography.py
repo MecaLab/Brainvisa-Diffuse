@@ -43,7 +43,7 @@
 # =======================================================================
 
 from brainvisa.processes import *
-from registration import getTransformationManager
+from brainvisa.registration import getTransformationManager
 from soma.wip.application.api import Application
 from brainvisa.diffuse import fibertool
 import shfjGlobals

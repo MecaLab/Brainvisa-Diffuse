@@ -31,7 +31,7 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 from brainvisa.processes import *
-from registration import getTransformationManager
+from brainvisa.registration import getTransformationManager
 import numpy
 from copy import copy
 

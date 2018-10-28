@@ -33,7 +33,7 @@
 from brainvisa.processes import *
 from soma.wip.application.api import Application
 from brainvisa.diffuse import BvecTransformation
-from registration import getTransformationManager
+from brainvisa.registration import getTransformationManager
 import numpy
 
 name = 'Motion and Eddy-current correction (ECCAR)'

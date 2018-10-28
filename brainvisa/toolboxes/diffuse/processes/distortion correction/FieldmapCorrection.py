@@ -30,14 +30,14 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
-from brainvisa.processes import *
 import numpy
+from copy import copy
+from brainvisa.processes import *
 from brainvisa.diffuse import BrainExtraction
 from soma.wip.application.api import Application
-from registration import getTransformationManager
+from brainvisa.registration import getTransformationManager
 from brainvisa.tools import aimsGlobals
-from copy import copy
-  
+
 name = 'Fieldmap-based correction'
 userLevel = 0
 

@@ -35,7 +35,7 @@ from brainvisa.processes import *
 from soma import aims
 import numpy as np
 
-from registration import getTransformationManager
+from brainvisa.registration import getTransformationManager
 from joblib import load, dump
 from brainvisa.diffuse.tools import array_to_vol
 from copy import copy

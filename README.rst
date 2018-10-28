@@ -32,13 +32,29 @@ Prerequisites
 
     BrainVISA distributions under  version 4.6.1 are not immediately compatible with Diffuse. We warmly recommend users having an old  BrainVISA distribution (e.g. 4.5.xx) and wanting to use Diffuse to upgrade to the latest version.
 
+
+* Install the joblib package into the BrainVISA python distribution. ::
+
+    <BrainVISA_location>/bin/python -m pip install joblib
+
+    #test joblib installation
+    <BrainVISA_location>/bin/python
+    >>> import joblib
+
+
+
 *  Set-up the FSL directory location into BrainVISA:
 
    Brainvisa --> Preferences --> FSL --> fsldir <FSL location>
 
-.. image:: ../share/doc/axon-4.5/images/diffuse/Capt5.png
+.. image:: ../set_FSL.png
    :width: 400
    :alt: fsldir=<FSL location>
+
+* ``dcm2niix`` may be installed if you need to handle dicom data. ``dcm2niix`` can be installed from reference site. For Linux systems, dcm2niix is installable as a package. ::
+
+    sudo apt-get install dcm2niix
+
 
 
 

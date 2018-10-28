@@ -38,7 +38,7 @@
 
 from brainvisa.processes import *
 from soma.wip.application.api import Application
-from registration import getTransformationManager
+from brainvisa.registration import getTransformationManager
 import numpy
 import os
 

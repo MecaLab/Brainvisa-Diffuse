@@ -33,7 +33,7 @@
 
 from brainvisa.processes import *
 from brainvisa.diffuse.tools import array_to_vol
-from registration import getTransformationManager
+from brainvisa.registration import getTransformationManager
 from soma import aims
 import numpy as np
 from joblib import load

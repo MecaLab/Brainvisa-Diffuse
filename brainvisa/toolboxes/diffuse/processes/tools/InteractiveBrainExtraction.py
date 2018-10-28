@@ -32,7 +32,7 @@
 
 from brainvisa.processes import *
 from brainvisa.diffuse import BrainExtraction
-from registration import getTransformationManager
+from brainvisa.registration import getTransformationManager
 
 name = 'Brain extraction using FSL-bet'
 userLevel = 0

@@ -32,7 +32,7 @@
 
 from brainvisa.processes import *
 from soma.wip.application.api import Application
-from registration import getTransformationManager
+from brainvisa.registration import getTransformationManager
 from brainvisa.diffuse import BrainExtraction
 from distutils.spawn import find_executable
 from copy import copy

@@ -31,7 +31,7 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 from brainvisa.processes import *
-from registration import getTransformationManager
+from brainvisa.registration import getTransformationManager
 from soma.wip.application.api import Application
 from distutils.spawn import find_executable
 import shfjGlobals
