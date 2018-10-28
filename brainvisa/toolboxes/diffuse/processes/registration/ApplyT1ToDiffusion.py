@@ -34,7 +34,7 @@ from brainvisa.processes import *
 from brainvisa.registration import getTransformationManager
 from soma.wip.application.api import Application
 from distutils.spawn import find_executable
-import shfjGlobals
+import brainvisa.tools.aimsGlobals as aimsGlobals
 import os
 
 name = 'Apply T1 to Diffusion transform to ROI'
@@ -43,7 +43,7 @@ userLevel = 0
 signature=Signature(
     'b0_volume', ReadDiskItem( 'B0 Volume', 'gz compressed NIFTI-1 image' ),
     'T1_volume', ReadDiskItem( 'T1 MRI Bias Corrected', 'Aims readable volume formats' ),
-    'ROI_in_T1', ReadDiskItem( '3D Volume', shfjGlobals.aimsVolumeFormats ),
+    'ROI_in_T1', ReadDiskItem( '3D Volume', aimsGlobals.aimsVolumeFormats ),
     'lower_thresh', Number(),
     'upper_thresh', Number(),
     'binarise', Boolean(),
@@ -52,7 +52,7 @@ signature=Signature(
     'T1_to_diff_linear_xfm', WriteDiskItem( 'Transform T1 MRI to Diffusion MR', 'Transformation matrix' ),
     'T1_to_diff_nonlinear_dfm', WriteDiskItem( 'NL Deform T1 MRI to Diffusion MR', 'NIFTI-1 image' ),
 
-    'ROI_in_DWI', WriteDiskItem('3D Volume' , shfjGlobals.aimsVolumeFormats ),
+    'ROI_in_DWI', WriteDiskItem('3D Volume' , aimsGlobals.aimsVolumeFormats ),
 )
 
 def initialization( self ):

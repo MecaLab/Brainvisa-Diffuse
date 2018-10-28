@@ -46,7 +46,7 @@ from brainvisa.processes import *
 from brainvisa.registration import getTransformationManager
 from soma.wip.application.api import Application
 from brainvisa.diffuse import fibertool
-import shfjGlobals
+import brainvisa.tools.aimsGlobals as aimsGlobals
 import numpy
 import time
 import os
