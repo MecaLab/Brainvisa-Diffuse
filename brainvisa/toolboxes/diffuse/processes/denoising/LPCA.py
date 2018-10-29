@@ -46,8 +46,8 @@ userLevel = 0
 
 signature = Signature(
     'dwi_data', ReadDiskItem('Raw Diffusion MR', 'Aims readable volume formats'),
-    'sigma', ReadDiskItem('Noise Sigma','Aims readable volume formats'),
-    'brain_mask', ReadDiskItem('toto', 'Aims readable volume formats'),
+    'sigma', ReadDiskItem('Noise Standard Deviation','Aims readable volume formats'),
+    'brain_mask', ReadDiskItem('T1 MRI to DW Diffusion MR Brain', 'Aims readable volume formats'),
     'method', Choice('eig', 'svd'),
     'patch_radius', Integer(),
     'tau_factor', Float(),

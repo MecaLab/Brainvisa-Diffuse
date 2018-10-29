@@ -32,12 +32,13 @@
 
 from brainvisa.processes import *
 
-name = 'Piesno'
+name = 'Denoising Pipeline'
 userLevel = 0
 
 signature = Signature(
     'dwi_data', ReadDiskItem('Raw Diffusion MR', 'Aims readable volume formats'),
     'coil_number', Integer(),
+    'denoising_algorithm', Choice('LPCA','NLMS'),
     'denoised_dwi_data', WriteDiskItem('Denoised Diffusion MR', 'gz compressed NIFTI-1 image'),
 )
 
@@ -49,9 +50,14 @@ def initialization(self):
 
     eNode.addChild('Piesno',
                    ProcessExecutionNode('Piesno', optional=False))
+    eNode.addChild('Selection',
+                   SelectionExecutionNode('Selection', optional=False))
+    eNode.Selection.addChild('LPCA',
+                   ProcessExecutionNode('LPCA', selected=True))
+    eNode.Selection.addChild('NLMS',
+                   ProcessExecutionNode('NLMS', selected=False))
 
-    eNode.addChild('LPCA',
-                   ProcessExecutionNode('LPCA', optional=False))
+
 
 
 

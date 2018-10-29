@@ -66,6 +66,9 @@ FileType( 'Blip Reversed B Vectors', 'B Vectors' )
 FileType( 'Reoriented B Vectors', 'B Vectors' )
 FileType( 'Corrected B Vectors', 'B Vectors' )
 
+#-----------------------------------------------------------------------------------------------------------------------|
+
+
 #--------------------------------------Diffusion Volume Preprocessing Stage --------------------------------------------|
 
 FileType( 'Preprocessing Directory', 'Directory' )
@@ -73,8 +76,10 @@ FileType( 'Preprocessing Directory', 'Directory' )
 FileType( 'Diffusion MR', '4D Volume' )
 FileType( 'Blip Reversed DW Diffusion MR', 'Diffusion MR' )
 FileType( 'Raw Denoised Diffusion MR', 'Diffusion MR' )
-FileType( 'Raw Diffusion MR', 'Raw Denoised Diffusion MR' )
-FileType( 'Denoised Diffusion MR', 'Raw Denoised Diffusion MR' )
+FileType( 'Raw Diffusion MR', 'Raw Denoised Diffusion MR')
+FileType( 'Denoised Diffusion MR', 'Raw Denoised Diffusion MR')
+
+FileType( 'Noise Standard Deviation', '3D Volume')
 
 FileType('Diffusion ROI', 'ROI')
 FileType('Diffusion MR Mask','Diffusion ROI')

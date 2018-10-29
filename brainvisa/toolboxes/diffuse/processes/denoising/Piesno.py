@@ -32,7 +32,7 @@
 
 from brainvisa.processes import *
 from brainvisa.registration import getTransformationManager
-from dipy.denoise.noise_estimate import piesno,estimate_sigma
+from dipy.denoise.noise_estimate import piesno
 from brainvisa.diffuse.tools import vol_to_array, array_to_vol
 from soma import aims
 import numpy as np
@@ -54,11 +54,15 @@ signature = Signature(
     'trials', Integer(),
     'itermax', Integer(),
     'eps', Float(),
-    'sigma', WriteDiskItem('Denoised Diffusion MR', 'gz compressed NIFTI-1 image'),
+    'sigma', WriteDiskItem('Noise Standard Deviation', 'gz compressed NIFTI-1 image'),
 )
 
 def initialization(self):
     self.linkParameters('sigma','dwi_data')
+    self.alpha = ALPHA
+    self.eps = EPS
+    self.trials = TRIALS
+    self.itermax = ITERMAX
 
 
 def execution(self, context):

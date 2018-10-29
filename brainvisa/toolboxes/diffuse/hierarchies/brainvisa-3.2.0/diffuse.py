@@ -41,6 +41,7 @@ insert( '{center}/{subject}',
     '{acquisition}', SetDefaultAttributeValue( 'acquisition', default_acquisition ), SetContent(
       'raw_dwi_referential_<subject>', SetType( 'Referential of Raw DW Diffusion MR' ),
       'raw_dwi_<subject>', SetType( 'Raw Diffusion MR' ),
+      'sigma_noise_<subject>', SetType( 'Noise Standard Deviation'),
       'denoised_dwi_<subject>', SetType( 'Denoised Diffusion MR' ),
       'raw_bvecs_<subject>', SetType( 'Raw B Vectors' ),
       'raw_bvals_<subject>', SetType( 'Raw B Values' ),
