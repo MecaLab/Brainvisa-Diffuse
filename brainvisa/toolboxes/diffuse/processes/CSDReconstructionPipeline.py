@@ -32,9 +32,7 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 from brainvisa.processes import *
-from copy import copy
-from soma import aims
-import numpy as np
+
 
 
 userLevel = 2
@@ -169,25 +167,6 @@ def initialization(self):
     eNode.addLink('Prediction.mask', 'mask')
     eNode.addLink('Prediction.S0_signal', 'FOD_sh_coeff')
     eNode.addLink('Prediction.predicted_signal', 'FOD_sh_coeff')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

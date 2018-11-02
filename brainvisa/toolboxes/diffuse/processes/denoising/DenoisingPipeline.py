@@ -38,12 +38,12 @@ userLevel = 0
 signature = Signature(
     'dwi_data', ReadDiskItem('Raw Diffusion MR', 'Aims readable volume formats'),
     'coil_number', Integer(),
-    'denoising_algorithm', Choice('LPCA','NLMS'),
+    'brain_mask', ReadDiskItem('T1 MRI to DW Diffusion MR Brain', 'Aims readable volume formats'),
     'denoised_dwi_data', WriteDiskItem('Denoised Diffusion MR', 'gz compressed NIFTI-1 image'),
 )
 
 def initialization(self):
-    self.linkParameters('denoised_dwi_data','dwi_data')
+
 
 
     eNode = SerialExecutionNode( self.name, parameterized=self )
@@ -51,11 +51,47 @@ def initialization(self):
     eNode.addChild('Piesno',
                    ProcessExecutionNode('Piesno', optional=False))
     eNode.addChild('Selection',
-                   SelectionExecutionNode('Selection', optional=False))
+                   SelectionExecutionNode('Denoising Algorithm', optional=False))
     eNode.Selection.addChild('LPCA',
                    ProcessExecutionNode('LPCA', selected=True))
     eNode.Selection.addChild('NLMS',
                    ProcessExecutionNode('NLMS', selected=False))
+
+    # processing links
+    #Pipeline Links
+    self.addLink('denoised_dwi_data', 'dwi_data')
+    self.addLink('brain_mask','dwi_data')
+    self.addLink('denoised_dwi_data','dwi_data')
+
+    #Piesno Links
+    eNode.Piesno.removeLink('sigma','dwi_data')
+    eNode.addLink('Piesno.dwi_data','dwi_data')
+    eNode.addLink('Piesno.sigma', 'dwi_data')
+    eNode.addDoubleLink('Piesno.coil_number','coil_number')
+
+    #LPCA links
+    eNode.Selection.LPCA.removeLink('sigma','dwi_data')
+    eNode.Selection.LPCA.removeLink('brain_mask','dwi_data')
+    eNode.Selection.LPCA.removeLink('denoised_dwi_data','dwi_data')
+
+    eNode.addLink('Selection.LPCA.dwi_data','dwi_data')
+    eNode.addLink('Selection.LPCA.brain_mask','dwi_data')
+    eNode.addLink('Selection.LPCA.sigma', 'Piesno.sigma')
+    eNode.addLink('Selection.LPCA.denoised_dwi_data','denoised_dwi_data')
+
+    #NLMS links
+    eNode.Selection.NLMS.removeLink('sigma', 'dwi_data')
+    eNode.Selection.NLMS.removeLink('brain_mask', 'dwi_data')
+    eNode.Selection.NLMS.removeLink('denoised_dwi_data', 'dwi_data')
+
+    eNode.addLink('Selection.NLMS.dwi_data', 'dwi_data')
+    eNode.addLink('Selection.NLMS.brain_mask', 'dwi_data')
+    eNode.addLink('Selection.NLMS.sigma', 'Piesno.sigma')
+    eNode.addLink('Selection.NLMS.denoised_dwi_data', 'denoised_dwi_data')
+
+    self.setOptional('brain_mask')
+
+    self.setExecutionNode(eNode)
 
 
 

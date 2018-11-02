@@ -7,7 +7,7 @@ Presentation
 ------------
 Diffuse is a BrainVISA toolbox designed to process diffusion-weighted MRI (DWI) data with state-of-the-art algorithms in a
 user-friendly way. Diffuse is currently developed  at the Institut de Neurosciences de la Timone (INT_), Marseille,
-France by both MeCA_ and  SCaLP_  research teams. Diffuse relies on  FSL_   and Dipy_ essentialy for  DWI processing.
+France by both MeCA_ and  SCaLP_  research teams. Diffuse mainly relies on  FSL_   and Dipy_ for  DWI processing.
 
 
     .. _INT: http://www.int.univ-amu.fr/
@@ -24,14 +24,20 @@ How to install Diffuse ?
 -------------------------------------------
 Prerequisites
 -------------------------------------------
+* Computer with Ubuntu 16.04 as operating system is mandatory !  Other Ubuntu version are not supported yet.
 
 * FSL_ must be installed on your operating system. For informations about FSL_ installation please look at FSL_ installation instructions https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation .
 
 
-* The latest BrainVISA_ distribution must be installed on your operating system. Download the latest BrainVISA distribution available here: https://brainvisa.info/web/download
 
-    BrainVISA distributions under  version 4.6.1 are not immediately compatible with Diffuse. We warmly recommend users having an old  BrainVISA distribution (e.g. 4.5.xx) and wanting to use Diffuse to upgrade to the latest version.
+* Version 4.6.1 of  BrainVISA_ distribution, compiled on Ubuntu 16.04  must be installed. It is available here http://brainvisa.info/web/download/go.php?url=http://brainvisa.info/packages/4.6.1/linux64-glibc-2.23/brainvisa-installer/brainvisa_installer-4.6.1-linux64-glibc-2.23-online .Clicking on the link should start downloading the BrainVSA installer. Once download is finished open a terminal and type: ::
 
+    cd <download_location>
+    chmod u+rwx brainvisa_installer-4.6.1-linux64-glibc-2.23-online
+    ./brainvisa_installer-4.6.1-linux64-glibc-2.23-online
+
+
+where <download_location> is the directory where is located the installer.
 
 * Install the joblib package into the BrainVISA python distribution. ::
 
@@ -43,8 +49,12 @@ Prerequisites
 
 
 
-*  Set-up the FSL directory location into BrainVISA:
+*  Set-up the FSL directory location into BrainVISA: ::
 
+   #launch BrainVISA
+   <BrainVISA_location>/BrainVISA
+
+   
    Brainvisa --> Preferences --> FSL --> fsldir <FSL location>
 
 .. image:: ../set_FSL.png

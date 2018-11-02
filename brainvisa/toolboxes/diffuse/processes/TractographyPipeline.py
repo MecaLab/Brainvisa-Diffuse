@@ -1,6 +1,6 @@
 
 from brainvisa.processes import *
-from copy import copy
+#from copy import copy
 
 
 
