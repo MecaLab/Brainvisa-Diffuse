@@ -11,7 +11,6 @@ from joblib import load, dump
 
 
 userLevel = 2
-#roles = ('',)
 name = 'Fiber Impulsionnal Response Recursive Estimation'
 category = 'Local_modeling'
 
@@ -46,10 +45,6 @@ signature = Signature(
 )
 
 
-
-
-
-
 def initialization ( self ):
 	#default dipy values
 	self.sh_order = 8
@@ -58,12 +53,12 @@ def initialization ( self ):
 	self.peak_threshold = 0.01
 	self.nb_iter = 8
 	self.convergence_rate = 0.001
+	self.setOptional('mask','sphere')
 
 	#linking
 	self.addLink('gradient_table','diffusion_data')
 	self.addLink('mask','diffusion_data')
 	self.addLink('response','diffusion_data')
-
 	pass
 
 
@@ -88,7 +83,7 @@ def execution( self , context ):
 		context.write("Initial diffusion data shape",data.shape)
 		data = data[:,:,:,index]
 		context.write("Diffusion data shape after outer shell selection",data.shape)
-		gtab=ngtab
+		gtab = ngtab
 	else:
 		vol = aims.read(self.diffusion_data.fullPath())
 		data = np.asarray(vol)

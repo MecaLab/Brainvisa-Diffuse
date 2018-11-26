@@ -1,15 +1,11 @@
 # coding: utf8
-
-from soma import aims
 import numpy as np
+from soma import aims
 from dipy.core.sphere import Sphere, HemiSphere
+from dipy.data import get_sphere
 from dipy.core.sphere import disperse_charges
 from nibabel.affines import apply_affine
-import os
-
-
-
-
+from brainvisa.diffuse.meshes import vertices_and_faces_to_mesh
 
 
 #####################################################################
@@ -68,12 +64,10 @@ def sphere_to_mesh(sphere):
 	:param sphere: Sphere object
 	:return: Aims Mesh object
 	'''
-	mesh = aims.TimeSurface()
+
 	vertices = sphere.vertices
 	faces = sphere.faces
-	mesh.vertex().assign([aims.Point3df(x) for x in vertices])
-	mesh.polygon().assign([aims.AimsVector(x, dtype='U32', dim=3) for x in faces])
-	mesh.updateNormals()
+	mesh = vertices_and_faces_to_mesh(vertices,faces)
 	return mesh
 
 def mesh_to_sphere(mesh):
@@ -91,11 +85,14 @@ def mesh_to_sphere(mesh):
 
 def read_sphere(path):
 	"""
-    Simple Wrapper for loading stored spheres as mesh and putting them into
-    Sphere Object
+    Load a sphere stored as an AimsTimeSurface and create a Dipy Sphere Object.
+    If no path is provided used the Dipy default sphere symmetric362
     """
-	sphere_mesh = aims.read(path)
-	sphere = mesh_to_sphere(sphere_mesh)
+	if path is not None:
+		sphere_mesh = aims.read(path)
+		sphere = mesh_to_sphere(sphere_mesh)
+	else:
+		sphere = get_sphere()
 	return sphere
 
 #######################################################################

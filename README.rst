@@ -14,16 +14,16 @@ France by both MeCA_ and  SCaLP_  research teams. Diffuse mainly relies on  FSL_
     .. _Dipy: https://nipy.org/dipy
 
 
--------------------------------------------
+=========================
 How to install Diffuse ?
--------------------------------------------
+=========================
 
-
+-------------
 Prerequisites
-=============
+-------------
 
 Mandatory
-----------
+=========
 * **UBUNTU 16.04** : Computer with Ubuntu 16.04 as operating system is mandatory !  Other Ubuntu version are not supported yet.
 
 * **BRAINVISA v4.6.1** : Version 4.6.1 of  BrainVISA_ distribution, compiled on Ubuntu 16.04  must be installed. It is available here http://brainvisa.info/web/download/go.php?url=http://brainvisa.info/packages/4.6.1/linux64-glibc-2.23/brainvisa-installer/brainvisa_installer-4.6.1-linux64-glibc-2.23-online .Clicking on the link should start downloading the BrainVSA installer. Once download is finished open a terminal and type the following code where ``<download_location>`` is the directory where the installer is located.: ::
@@ -56,6 +56,11 @@ Mandatory
 .. WARNING:: Sometimes the fslintaller script might failed to set up the environnement variables properly. If this occurs, BrainVISA will not be able to detect FSL.
 In that case report to these instructions https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation/ShellSetup
 
+.. WARNING:: Depending on packages installed on your Ubuntu system you migth have the following error when trying to launch process calling FSL commands:  ::
+
+                error while loading shared libraries: libopenblas.so.0: cannot open shared file.
+It is solved by installing the openblas-base package ::
+        sudo apt-get install libopenblas-base
 
 
 Optional
@@ -87,7 +92,7 @@ Installation
 1. Click on ``Download ZIP`` on github.
 
 2. Unpack the archive into any desired location with your favorite archive manager.
-   Here is an example using ``tar`` ::
+   Here is an example in command line using ``tar`` ::
 
     tar xvf Brainvisa-Diffuse.zip -C <desired_location>
 
@@ -131,7 +136,7 @@ file used::
 
 
 
-=======
+
 Licence
 =======
 
