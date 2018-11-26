@@ -32,28 +32,49 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 from brainvisa.processes import *
 from brainvisa import anatomist
-from brainvisa.diffuse.tools import
+from brainvisa.diffuse.streamlines import load_streamlines, bundle_to_mesh
 
 name = 'Anatomist Show Streamlines'
 roles = ( 'viewer', )
 userLevel = 0
 
 signature = Signature(
-  'streamlines', ReadDiskItem( 'Global Streamlines', 'Trackvis tracts' ),
+  'streamlines', ReadDiskItem( 'Streamlines', ['Trackvis streamlines', 'Mrtrix streamlines'] ),
+  'max_number', Integer()
 )
 
 def validation():
   anatomist.validation()
 
 def initialization( self ):
+  #self.setOptional('max_number')
+  self.max_number = 30000
   pass
 
 def execution( self, context ):
+
+  #lazy load just to estimate the number of streamlines
+  tractogram, header = load_streamlines(self.streamlines.fullPath(),lazy=True)
+  #streamlines are in the LPI mm space
+  nb_streamlines = header['nb_streamlines']
+  streamlines = tractogram.streamlines
+  if nb_streamlines > self.max_number:
+    message = "The tractogram you try to display contains" +  str(nb_streamlines) + "streamlines\n In order to avoid memory crash only the first " +  self.max_number ," streamlines will be displayed"
+    "If your computer crashes consider decreasing self.max_number value \n. On the contrary if you have enough memory to display the whole tractogram you may want to increase self.max_number value"
+    context.write(message)
+    bundle = [s for i, s in enumerate(streamlines) if i < self.max_number]
+  else:
+    bundle = list(streamlines)
+  bundle_aims = bundle_to_mesh(bundle)
+  del bundle
+
   a = anatomist.Anatomist()
-  win = a.createWindow( '3D' )
-  anamesh = a.loadObject(self.streamlines.fullPath())
-  win.addObjects(anamesh)
-  return [win, anamesh]
+  bundle_ana = a.toAObject(bundle_aims)
+
+  del bundle_aims
+  win = a.createWindow('3D')
+  win.addObjects(bundle_ana)
+  return [win, bundle_ana]
 
   
   

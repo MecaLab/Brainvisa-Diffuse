@@ -31,7 +31,7 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
-include( 'base' )
+include('base')
 default_response = 'default_response'
 default_model = 'default_model'
 default_fit = 'brain_fit'
@@ -45,10 +45,10 @@ insert( '{center}/{subject}',
       'denoised_dwi_<subject>', SetType( 'Denoised Diffusion MR' ),
       'raw_bvecs_<subject>', SetType( 'Raw B Vectors' ),
       'raw_bvals_<subject>', SetType( 'Raw B Values' ),
-      'reoriented_bvecs_<subject>', SetType( 'Reoriented B Vectors' ),
-      'blip_reversed_dwi_<subject>', SetType( 'Blip Reversed DW Diffusion MR' ),
-      'fieldmap_rads_<subject>', SetType( 'Fieldmap Phase' ),
-      'fieldmap_abs_<subject>', SetType( 'Fieldmap Magnitude' ),
+      'reoriented_bvecs_<subject>', SetType('Reoriented B Vectors'),
+      'blip_reversed_dwi_<subject>', SetType( 'Blip Reversed DW Diffusion MR'),
+      'fieldmap_rads_<subject>', SetType( 'Fieldmap Phase'),
+      'fieldmap_abs_<subject>', SetType('Fieldmap Magnitude'),
     ),
   ),
 )
@@ -157,8 +157,7 @@ insert('{center}/{subject}/dmri/{acquisition}/{analysis}/dti/{model}',
         'diffusion_odf', SetContent(
             'sh_coefficients',SetType('Spherical Harmonics Coefficients'),
             '{tracking_session}',SetContent(
-                    'visu_streamlines', SetType('Trackvis Streamlines'),
-                    'raw_streamlines', SetType('Raw Streamlines'),
+                    'streamlines', SetType('Streamlines'),
             ),
             '{odf_instance}', SetContent(
                 'odf', SetType('Orientation Distribution Function'),
@@ -193,14 +192,12 @@ insert('{center}/{subject}/dmri/{acquisition}/{analysis}/csd/{fiber_response}',
                         'odf_texture', SetType('Spherical Function Texture'),
                             ),
                     '{tracking_session}',SetContent(
-                        'visu_streamlines', SetType('Trackvis Streamlines'),
-                        'raw_streamlines', SetType('Raw Streamlines')
+                        'streamlines', SetType('Streamlines'),
                 ),
                         ),
                     ),
                 ),
             )
-
 
 insert('{center}/{subject}/dmri/{acquisition}/{analysis}/global_tracking',
     'gibbs_tracking', SetContent(

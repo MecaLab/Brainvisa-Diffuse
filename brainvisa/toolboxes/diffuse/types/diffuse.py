@@ -243,7 +243,7 @@ FileType('Spherical Function Texture', 'Texture')
 FileType('Seeds', 'Text File')
 Format( 'Trackvis streamlines', 'f|*.trk' )
 Format( 'Mrtrix streamlines', 'f|*.tck' )
-FileType( 'Streamlines','Any Type', ['Trackvis streamlines','Mrtrix streamlines'] )
+FileType( 'Streamlines','Any Type', ['Trackvis streamlines', 'Mrtrix streamlines'])
 FileType('Streamlines Density Map', 'Diffusion MR Mask')
 
 
