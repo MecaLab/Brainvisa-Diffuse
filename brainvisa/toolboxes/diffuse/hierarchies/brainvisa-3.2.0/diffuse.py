@@ -201,7 +201,7 @@ insert('{center}/{subject}/dmri/{acquisition}/{analysis}/csd/{fiber_response}',
 
 insert('{center}/{subject}/dmri/{acquisition}/{analysis}/global_tracking',
     'gibbs_tracking', SetContent(
-        '<subject>_global_streamlines', SetType('Global Streamlines'),
+        '<subject>_global_streamlines', SetType('Streamlines'),
         '<subject>_density_map', SetType('Streamlines Density Map'),
     ),
 )

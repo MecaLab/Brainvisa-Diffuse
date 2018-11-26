@@ -72,7 +72,7 @@ signature = Signature(
         'Diffusion MR Mask',
         'gz compressed NIFTI-1 image'
     ),
-    'threshold',Float(),
+    'threshold', Float(),
 
     'sphere', ReadDiskItem(
         'Sphere Template',
@@ -93,11 +93,11 @@ signature = Signature(
     'nb_samples',Integer(),
     'streamlines',WriteDiskItem(
         'Streamlines',
-        'Trackvis format'
+        'Trackvis streamlines'
     ),
 )
 
-DirectionGetter = {'DETERMINISTIC':DeterministicMaximumDirectionGetter,'PROBABILISTIC': ProbabilisticDirectionGetter}
+DirectionGetter = {'DETERMINISTIC': DeterministicMaximumDirectionGetter, 'PROBABILISTIC': ProbabilisticDirectionGetter}
 
 def switching_type(self,dumb):
     signature = copy(self.signature)

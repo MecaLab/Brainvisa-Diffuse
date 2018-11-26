@@ -78,7 +78,7 @@ signature = Signature(
     'nb_samples', Integer(),
     'streamlines', WriteDiskItem(
         'Streamlines',
-        'Trackvis format'
+        'Trackvis streamlines'
     ),
 )
 
