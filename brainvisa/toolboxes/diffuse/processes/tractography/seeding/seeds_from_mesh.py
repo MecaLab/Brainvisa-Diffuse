@@ -83,6 +83,7 @@ def execution(self,context):
 	minf = self.reference_volume.minf()
 	v_size = np.array(minf['voxel_size'][:-1])
 	v = v / v_size[np.newaxis,:]
+
 	np.savetxt(self.seeds.fullPath(), v)
 
 

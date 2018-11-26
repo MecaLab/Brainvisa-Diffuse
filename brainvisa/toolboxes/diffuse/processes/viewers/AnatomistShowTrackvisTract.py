@@ -70,6 +70,7 @@ def execution( self, context ):
 
   a = anatomist.Anatomist()
   bundle_ana = a.toAObject(bundle_aims)
+  bundle_ana.setMaterial(use_shader=1,shader_color_normals=1)
 
   del bundle_aims
   win = a.createWindow('3D')
