@@ -53,7 +53,7 @@ import os
 import shutil
 import nibabel
 import scipy
-from dipy.io.trackvis import save_trk
+from dipy.io.streamline import save_trk
 from dipy.tracking import utils
 
 name = 'Global Gibbs Tracking'
@@ -67,7 +67,7 @@ signature=Signature(
     'reconstruction_density', Choice("sparse", "dense"),
     'data_source', Choice("HCP", "CerimedMRI", "Other"), #
     'tractographyPackage', ReadDiskItem('Directory', 'Directory'),
-    'streamlines', WriteDiskItem( 'Streamlines', 'Trackvis streamlines'),
+    'streamlines', WriteDiskItem( 'Streamlines', 'Trackvis tracts'),
     'density_map', WriteDiskItem( 'Streamlines Density Map', 'Aims readable volume formats' ),
 )
 

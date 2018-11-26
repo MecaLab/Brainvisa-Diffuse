@@ -241,9 +241,10 @@ FileType('Spherical Function Texture', 'Texture')
 ############################################# TRACTOGRAPHY #############################################################
 
 FileType('Seeds', 'Text File')
-Format( 'Trackvis streamlines', 'f|*.trk' )
+#already defined in builtin file creates conflicts
+#Format( 'Trackvis tracts', 'f|*.trk' )
 Format( 'Mrtrix streamlines', 'f|*.tck' )
-FileType( 'Streamlines','Any Type', ['Trackvis streamlines', 'Mrtrix streamlines'])
+FileType( 'Streamlines','Any Type', ['Trackvis tracts', 'Mrtrix streamlines'])
 FileType('Streamlines Density Map', 'Diffusion MR Mask')
 
 

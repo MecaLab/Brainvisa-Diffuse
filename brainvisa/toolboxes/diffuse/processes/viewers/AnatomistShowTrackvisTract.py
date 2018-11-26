@@ -39,7 +39,7 @@ roles = ( 'viewer', )
 userLevel = 0
 
 signature = Signature(
-  'streamlines', ReadDiskItem( 'Streamlines', ['Trackvis streamlines', 'Mrtrix streamlines'] ),
+  'streamlines', ReadDiskItem( 'Streamlines', ['Trackvis tracts', 'Mrtrix streamlines'] ),
   'max_number', Integer()
 )
 

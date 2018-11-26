@@ -93,7 +93,7 @@ signature = Signature(
     'nb_samples',Integer(),
     'streamlines',WriteDiskItem(
         'Streamlines',
-        'Trackvis streamlines'
+        'Trackvis tracts'
     ),
 )
 
