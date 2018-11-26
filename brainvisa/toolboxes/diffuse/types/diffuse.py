@@ -234,19 +234,16 @@ FileType( 'Spherical Harmonics Coefficients','4D Volume','gz compressed NIFTI-1 
 FileType('Sphere Template', 'Mesh')
 FileType('Spherical Function Mesh', 'Mesh')
 FileType('Spherical Function Texture', 'Texture')
-#FileType('Mrtrix Sphere','Text File')
-#FileType('ROI Texture','Texture')
+
 
 
 
 ############################################# TRACTOGRAPHY #############################################################
 
 FileType('Seeds', 'Text File')
-FileType('Raw Streamlines','Numpy Array')
-#Streamlines bundle in trackvis file: in a near future nibabel will be able to handle it correctly
-Format( 'Trackvis tracts', 'f|*.trk' )
-FileType( 'Trackvis Streamlines','Any Type', 'Trackvis tracts' )
-FileType('Global Streamlines', 'Trackvis Streamlines')
+Format( 'Trackvis streamlines', 'f|*.trk' )
+Format( 'Mrtrix streamlines', 'f|*.tck' )
+FileType( 'Streamlines','Any Type', ['Trackvis streamlines','Mrtrix streamlines'] )
 FileType('Streamlines Density Map', 'Diffusion MR Mask')
 
 

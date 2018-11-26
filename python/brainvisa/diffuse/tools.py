@@ -1,7 +1,9 @@
 from soma import aims
 import numpy as np
-from copy import copy
+import nibabel as nib
 from dipy.core.gradients import gradient_table_from_bvals_bvecs
+
+from copy import copy
 
 ################################################################
 #I/O handling with AIMS library: simple wrappers
@@ -116,6 +118,17 @@ def voxels_to_mask(voxels,shape,size):
 		#mask[v_x_min[i]:v_x_max[i],v_y_min[j]:v_y_max[j],v_z_min[k]:v_z_max[k]] = True
 		mask[xmin:xmax,ymin:ymax,zmin:zmax] = True
 	return mask
+
+def load_streamlines(path_file):
+	"""
+	Load streamlines into the Aims mm LPI referential (Default Aims Referential) as opposed to RAS orientation.
+	:param path_file:
+	:return:
+	"""
+	tractogram_file = nib.streamlines.load(path_file)
+	#retrieve affine
+
+
 
 
 

@@ -46,7 +46,7 @@ userLevel = 0
 ##(see http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FUGUE/Guide for reconstruction of fieldmap image)
 ## echo-spacing (in sec)
 
-signature=Signature(
+signature = Signature(
   'data_are_eddy_current_corrected', Boolean(),
   'dwi_data', ReadDiskItem( 'Raw Denoised Diffusion MR', 'Aims readable volume formats' ),
   'bvals', ReadDiskItem( 'Raw B Values', 'Text file' ),
