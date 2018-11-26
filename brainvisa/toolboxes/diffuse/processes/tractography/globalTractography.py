@@ -67,7 +67,7 @@ signature=Signature(
     'reconstruction_density', Choice("sparse", "dense"),
     'data_source', Choice("HCP", "CerimedMRI", "Other"), #
     'tractographyPackage', ReadDiskItem('Directory', 'Directory'),
-    'streamlines', WriteDiskItem( 'Global Streamlines', 'Trackvis tracts'),
+    'streamlines', WriteDiskItem( 'Streamlines', 'Trackvis streamlines'),
     'density_map', WriteDiskItem( 'Streamlines Density Map', 'Aims readable volume formats' ),
 )
 
