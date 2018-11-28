@@ -35,7 +35,6 @@ from soma.wip.application.api import Application
 import numpy
 from dipy.core.gradients import gradient_table
 from dipy.reconst import dti
-#import anatomist.api as ana
 import nibabel
 
 name = 'Correct gradient orientation'
@@ -100,7 +99,8 @@ def tensorFitting(context, dwi_path, gtab):
     context.write('If orientation of principal diffusion direction does not look right, flip the axis along which slices look good')
     configuration = Application().configuration
     fsldir = configuration.FSL.fsldir
-    cmd = [ '/usr/bin/fslview', tensor_fa.fullPath()+'_FA.nii.gz', tensor_evecs.fullPath()+'_V1.nii.gz' ]
+    #display principal tensor direction weighted by FA
+    cmd = [ configuration.FSL.fsl_commands_prefix + 'fsleyes', tensor_fa.fullPath()+'_FA.nii.gz', tensor_evecs.fullPath()+'_V1.nii.gz','-ot rgbvector' ]
     context.system(*cmd)
     
     return FA, evecs, rgb
