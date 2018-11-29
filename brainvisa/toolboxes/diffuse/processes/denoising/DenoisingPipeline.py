@@ -75,7 +75,7 @@ def initialization(self):
     eNode.Selection.LPCA.removeLink('denoised_dwi_data','dwi_data')
 
     eNode.addLink('Selection.LPCA.dwi_data','dwi_data')
-    eNode.addLink('Selection.LPCA.brain_mask','dwi_data')
+    eNode.addLink('Selection.LPCA.brain_mask','brain_mask')
     eNode.addLink('Selection.LPCA.sigma', 'Piesno.sigma')
     eNode.addLink('Selection.LPCA.denoised_dwi_data','denoised_dwi_data')
 
@@ -85,7 +85,7 @@ def initialization(self):
     eNode.Selection.NLMS.removeLink('denoised_dwi_data', 'dwi_data')
 
     eNode.addLink('Selection.NLMS.dwi_data', 'dwi_data')
-    eNode.addLink('Selection.NLMS.brain_mask', 'dwi_data')
+    eNode.addLink('Selection.NLMS.brain_mask', 'brain_mask')
     eNode.addLink('Selection.NLMS.sigma', 'Piesno.sigma')
     eNode.addLink('Selection.NLMS.denoised_dwi_data', 'denoised_dwi_data')
 
