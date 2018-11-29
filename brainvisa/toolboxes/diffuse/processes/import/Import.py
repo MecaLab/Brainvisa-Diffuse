@@ -40,11 +40,11 @@ userLevel = 0
 roles = ( 'importer' )
 
 signature=Signature(
-  'dwi_data', ReadDiskItem( 'Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
+  'dwi_data', ReadDiskItem( 'External File Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'bvals', ReadDiskItem( 'B Values', 'BValues' ),
   'bvecs', ReadDiskItem( 'B Vectors', 'BVectors' ),
   'additional_acquisition', Choice("None", "Fieldmap", "Blip-reversed images", "Both"),
-  'blip_reversed_data', ReadDiskItem( 'Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
+  'blip_reversed_data', ReadDiskItem( 'External File Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'fieldmap', ReadDiskItem( 'Fieldmap', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'magnitude', ReadDiskItem( 'Fieldmap', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
 
@@ -147,7 +147,7 @@ def execution( self, context ):
   elif self.additional_acquisition=="Blip-reversed images":
     nvol_blip = self.blip_reversed_data.get( 'volume_dimension', search_header=True )[3]
     if nvol_blip == nvol:
-        context.write('Full acquisiton with opposite phase-encode direction DETECTED')
+        context.write('Full acquisition with opposite phase-encode direction DETECTED')
     else:
         context.write('Only b0 volumes with opposite phase-encode direction DETECTED')
     context.system('AimsFileConvert', '-i', self.blip_reversed_data.fullPath(), '-o', self.output_blip_reversed_data.fullPath(), '--orient', '"abs: -1 -1 -1"')

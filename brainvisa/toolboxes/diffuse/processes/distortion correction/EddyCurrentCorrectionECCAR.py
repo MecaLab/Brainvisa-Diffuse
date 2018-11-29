@@ -64,9 +64,10 @@ def initialization( self ):
 def execution( self, context ):
 
     context.write('Eddy-current distortion correction')
-    
+
+
     configuration = Application().configuration
-    
+    context.write(configuration.FSL.fsl_commands_prefix, configuration.FSL.fsldir)
     context.write('- Identification of first b0 volume')
     b0_tmp = context.temporary( 'gz compressed NIFTI-1 image' )
     bvals = numpy.loadtxt(self.bvals.fullPath())

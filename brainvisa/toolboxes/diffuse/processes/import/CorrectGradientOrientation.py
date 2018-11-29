@@ -32,6 +32,7 @@
 
 from brainvisa.processes import *
 from soma.wip.application.api import Application
+from distutils.spawn import find_executable
 import numpy
 from dipy.core.gradients import gradient_table
 from dipy.reconst import dti
@@ -79,31 +80,35 @@ def flipBvecs(bvecs, flip):
     return bvecs
 
 def tensorFitting(context, dwi_path, gtab):
-    img = nibabel.load(dwi_path)
-    data = img.get_data()
-    tenmodel = dti.TensorModel(gtab)  # instantiate tensor model
-    tenfit = tenmodel.fit(data)  # fit data to tensor model
-    FA = dti.fractional_anisotropy(tenfit.evals)
-    FA[numpy.isnan(FA)] = 0  # correct for background values
-    evecs = tenfit.evecs.astype(numpy.float32)
-    rgb = dti.color_fa(FA, evecs)
-    
-    tensor_fa = context.temporary( 'NIFTI-1 image' )
-    tensor_evecs = context.temporary( 'NIFTI-1 image' )
-    fa_img = nibabel.Nifti1Image(FA.astype(numpy.float32), img.get_affine())
-    nibabel.save(fa_img, tensor_fa.fullPath()+'_FA.nii.gz')
-    evecs_img = nibabel.Nifti1Image(evecs, img.get_affine())
-    nibabel.save(evecs_img, tensor_evecs.fullPath()+'_V1.nii.gz')
+    fslview = find_executable('fslview')
+    if fslview is not None:
+        img = nibabel.load(dwi_path)
+        data = img.get_data()
+        tenmodel = dti.TensorModel(gtab)  # instantiate tensor model
+        tenfit = tenmodel.fit(data)  # fit data to tensor model
+        FA = dti.fractional_anisotropy(tenfit.evals)
+        FA[numpy.isnan(FA)] = 0  # correct for background values
+        evecs = tenfit.evecs.astype(numpy.float32)
+        rgb = dti.color_fa(FA, evecs)
 
-    context.write('If color coding of FA map is not right, swap axes and run again')
-    context.write('If orientation of principal diffusion direction does not look right, flip the axis along which slices look good')
-    configuration = Application().configuration
-    fsldir = configuration.FSL.fsldir
-    #display principal tensor direction weighted by FA
-    cmd = [ configuration.FSL.fsl_commands_prefix + 'fsleyes', tensor_fa.fullPath()+'_FA.nii.gz', tensor_evecs.fullPath()+'_V1.nii.gz','-ot rgbvector' ]
-    context.system(*cmd)
+        tensor_fa = context.temporary( 'NIFTI-1 image' )
+        tensor_evecs = context.temporary( 'NIFTI-1 image' )
+        fa_img = nibabel.Nifti1Image(FA.astype(numpy.float32), img.get_affine())
+        nibabel.save(fa_img, tensor_fa.fullPath()+'_FA.nii.gz')
+        evecs_img = nibabel.Nifti1Image(evecs, img.get_affine())
+        nibabel.save(evecs_img, tensor_evecs.fullPath()+'_V1.nii.gz')
+
+        context.write('If color coding of FA map is not right, swap axes and run again')
+        context.write('If orientation of principal diffusion direction does not look right, flip the axis along which slices look good')
+
+        #display principal tensor direction weighted by FA
+        cmd = [ fslview , tensor_fa.fullPath() + '_FA.nii.gz', tensor_evecs.fullPath()+'_V1.nii.gz' ]
+        context.system(*cmd)
+        return FA, evecs, rgb
+    else:
+        return
     
-    return FA, evecs, rgb
+
 
 def execution( self, context ):
     # Create gradient table
@@ -117,6 +122,7 @@ def execution( self, context ):
         context.write(self.flip_axis, 'axis has been flipped !')
 
     if self.visual_check == True:
+
         context.write('Tensor fitting...')
         data_path = context.temporary( 'gz compressed NIFTI-1 image' )
         dimx = self.dwi_data.get( 'volume_dimension', search_header=True )[0]

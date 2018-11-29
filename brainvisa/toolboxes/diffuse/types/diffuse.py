@@ -74,6 +74,7 @@ FileType( 'Corrected B Vectors', 'B Vectors' )
 FileType( 'Preprocessing Directory', 'Directory' )
 
 FileType( 'Diffusion MR', '4D Volume' )
+FileType( 'External File Diffusion MR','Diffusion MR' )
 FileType( 'Blip Reversed DW Diffusion MR', 'Diffusion MR' )
 FileType( 'Raw Denoised Diffusion MR', 'Diffusion MR' )
 FileType( 'Raw Diffusion MR', 'Raw Denoised Diffusion MR')

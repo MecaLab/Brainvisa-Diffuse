@@ -66,10 +66,22 @@ It is solved by installing the openblas-base package ::
 Optional
 --------
 
-* **DCM2NIIX**: ``dcm2niix`` must be installed to handle diffusion weighted dicom data. On Linux based systems like Ubuntu 16.04, ``dcm2niix`` is installable as a package. ::
+* **DCM2NIIX**: ``dcm2niix`` must be installed to handle diffusion weighted dicom data. On  Ubuntu 16.04 dcm2niix can be installed either from dcm2niix github site or from neurodebian.
+
+    + neurodebian installation, requires administrator priviledges: (http://neuro.debian.net/install_pkg.html?p=dcm2niix): ::
+
+        wget -O- http://neuro.debian.net/lists/xenial.de-m.libre | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
+        sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9
+        sudo apt-get update
+        sudo apt-get install dcm2niix
 
 
-    sudo apt-get install dcm2niix
+    + github installation:
+        * precompiled version :  https://github.com/rordenlab/dcm2niix/releases
+        * from sources : https://github.com/rordenlab/dcm2niix
+
+    Diffuse code involving dcm2niix was developped and tested using the neurodebian version of dcm2niix (1:1.0.20180622-1~nd16.04+1).
+    We can not garantee that other dcm2niix version will behave correctly.
 
 
 * **NIFTYREG**: ``niftyreg`` was found to perform more accurate non-linear  diffusion to structural space registration than FSL or Dipy in most cases. The niftyreg installation instructions are available here http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg_install.
@@ -78,9 +90,9 @@ Optional
 
      2. Build and install from sources according to the following instructions: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg_install#Linux
 
-* **NLSAM**: Diffuse integrates the denoising algorithms coming with Dipy (Local PCA, Non Local Means essnetially). However, the  Non Local Spatial and Angular Matching (NLSAM) denoising algorithm is not yet part of Dipy and
-has to be installed from the NLSAM reference site https://github.com/samuelstjean/nlsam.  Using the ``pip`` of the BrainVISA distribution do.
-    pip install https://github.com/samuelstjean/nlsam/archive/master.zip --user --process-dependency-links
+* **NLSAM**: Diffuse integrates the denoising algorithms coming with Dipy (Local PCA, Non Local Means essnetially). However, the  Non Local Spatial and Angular Matching (NLSAM) denoising algorithm is not yet part of Dipy andhas to be installed from the NLSAM reference site https://github.com/samuelstjean/nlsam.  Using the ``pip`` of the BrainVISA distribution do: ::
+
+        pip install https://github.com/samuelstjean/nlsam/archive/master.zip --user --process-dependency-links
 
 
 

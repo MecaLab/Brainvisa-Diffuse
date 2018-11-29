@@ -57,7 +57,6 @@ signature=Signature(
   'fieldmap_directory', ReadDiskItem( 'Directory', 'Directory' ),
   'magnitude_directory', ReadDiskItem( 'Directory', 'Directory' ),
   'mricron_program', Choice('dcm2niix', 'dcm2nii'),
-
   'output_dwi_data', WriteDiskItem( 'Raw Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'output_bvals', WriteDiskItem( 'Raw B Values', 'Text file' ),
   'output_bvecs', WriteDiskItem( 'Raw B Vectors', 'Text file' ),
@@ -112,6 +111,8 @@ def initialization( self ):
   self.linkParameters( 'output_blip_reversed_data', 'output_dwi_data' )
   self.linkParameters( 'output_fieldmap', 'output_dwi_data' )
   self.linkParameters( 'output_magnitude', 'output_dwi_data' )
+  #fix to dcm2niix --> for DICOM this is the best
+  self.mricron_program ='dcm2niix'
   
 def execution( self, context ):
     configuration = Application().configuration
@@ -143,7 +144,7 @@ def execution( self, context ):
         context.system( 'mv', glob.glob(os.path.join(self.magnitude_directory.fullPath(), '*.nii.gz'))[0], tmp_directory + '/mag.nii.gz' ) #data
         for f in glob.glob(os.path.join(self.magnitude_directory.fullPath(), '*.nii.gz')):
             context.system( 'rm', f) #_e2data
-    
+
     elif self.additional_acquisition=="Blip-reversed images":
         DicomToNifti.dicom_to_nifti(self.blip_reversed_directory, self.mricron_program, context)
         context.system( 'mv', glob.glob(os.path.join(self.blip_reversed_directory.fullPath(), '*.nii.gz'))[0], tmp_directory + '/blip_reversed.nii.gz' ) #data
@@ -190,4 +191,18 @@ def execution( self, context ):
     context.write('Readout Time (s) = ' + str(RT))
     context.write('Matrix Size (voxels) = ' + str(dimx) + ' x ' + str(dimy) + ' x ' + str(dimz))
     context.write('Phase-encoding direction along ' + PE)
-    
+
+    #store these additional dicom informations to .minf file :
+    # minf = {}
+    # minf['Manufacturer'] = manufact
+    # minf['TR'] = TR
+    # minf['TE'] = TE
+    # minf['Bandwith_per_Pixel_PhaseEncode_Hz'] = BdWpp
+    # minf['Effective_Echo_Spacing'] = ESeff
+    # minf['ReadOut_Time_s'] = RT
+    # minf['Matrix_Voxel_Size'] = tuple(dimx,dimy,dimz)
+    # minf['Phase Encoding Direction'] = PE
+    #
+    # self.output_dwi_data.updateMinf(minf, saveMinf=True)
+
+
