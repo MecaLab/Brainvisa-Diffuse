@@ -49,7 +49,7 @@ Mandatory
   3. FSL configuration into BrainVISA: Once BrainVISA is launched go to BrainVISA/Preferences/FSL menu.
 
 
-    .. image:: fsl_config.png
+    .. image:: doc/images/fsl_config.png
         :width: 400
         :alt: Checking FSL preferences
 

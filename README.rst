@@ -12,6 +12,8 @@ France by both MeCA_ and  SCaLP_  research teams. Diffuse mainly relies on  FSL_
 Main Features
 =============
 
+
+
 =========================
 Installation
 =========================
@@ -20,7 +22,7 @@ To install Diffuse please refer to the `installation guide <doc/installation.rst
 
 
 =======
-Licence
+License
 =======
 
 The source code of this work is placed under the CeCILL licence (see `<license.txt>`_).

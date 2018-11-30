@@ -164,7 +164,7 @@ def execution( self, context ):
         context.system( 'cp', self.magnitude, self.output_magnitude )
       nvol_blip = self.blip_reversed_data.get('volume_dimension', search_header=True)[3]
       if nvol_blip == nvol:
-          context.write('Full acquisiton with opposite phase-encode direction DETECTED')
+          context.write('Full acquisition with opposite phase-encode direction DETECTED')
       else:
           context.write('Only b0 volumes with opposite phase-encode direction DETECTED')
       context.system('AimsFileConvert', '-i', self.blip_reversed_data.fullPath(), '-o', self.output_blip_reversed_data.fullPath(), '--orient', '"abs: -1 -1 -1"')

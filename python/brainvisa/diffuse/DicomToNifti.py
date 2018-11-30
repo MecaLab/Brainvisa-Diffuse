@@ -1,12 +1,25 @@
 from brainvisa.processes import *
 import os
+import glob
+from distutils.spawn import find_executable
 
-def dicom_to_nifti(indir, mricron, context):
-    if mricron=='dcm2niix':
-        script_path = os.path.dirname(os.path.abspath(__file__))
-        cmd = [ script_path + '/dcm2niix', '-z', 'y', '-f', 'data', indir ]
-        context.system( *cmd ) # output directory cannot be chosen in dcm2niix
+def dicom_to_nifti(indir, outdir, context,filename='data', mricron='dcm2niix'):
+    """
+    Launch dicom to nifti conversion from Brainvisa process using either dcm2niix or dcm2nii.
+    dcm2niix should be used,we only keep dcm2nii for rare case.
+    :param indir:
+    :param outdir:
+    :param context:
+    :param filename: name of the output
+    :param mricron: converter program either dcm2niix or dcmnii
+    :return:
+    """
+
+    converter = find_executable(mricron)
+    if mricron == 'dcm2niix':
+        cmd = [converter, '-z', 'y', '-f', filename, '-o', outdir, indir ]
+        context.system(*cmd)
     else:
-        prog = distutils.spawn.find_executable('dcm2nii')
-        context.system(prog, '-f', 'y', '-d', 'n', '-e', 'n', '-p', 'n', '-i', 'n', indir)
-    
+        context.system(converter, '-f', 'y', '-d', 'n', '-e', 'n', '-p', 'n', '-i', 'n', '-o', outdir, indir)
+        #modify the filename so that it corresponds to what is expected
+
