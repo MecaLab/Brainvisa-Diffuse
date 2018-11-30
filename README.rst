@@ -31,10 +31,11 @@ The source code of this work is placed under the CeCILL licence (see `<license.t
 
  Copying and distribution of this file, with or without modification, are permitted in any medium without royalty provided the copyright notice and this notice are preserved. This file is offered as-is, without any warranty.
 
-
-Authors:
-        * Lucile BRUN  <lucile.brun@univ-amu.fr>.
-        * Alexandre PRON <alexandre.pron@univ-amu.fr>.
+=======
+Authors
+=======
+* Lucile BRUN  <lucile.brun@univ-amu.fr>.
+* Alexandre PRON <alexandre.pron@univ-amu.fr>.
 
     .. _INT: http://www.int.univ-amu.fr/
     .. _Meca: https://meca-brain.org/
