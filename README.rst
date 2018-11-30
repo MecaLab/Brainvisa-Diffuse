@@ -12,6 +12,13 @@ France by both MeCA_ and  SCaLP_  research teams. Diffuse mainly relies on  FSL_
 Main Features
 =============
 
+* diffusion data  management (DICOM, nifti) with a database and diffusion gradient directions reorientation.
+* diffusion data denoising
+* movement, susceptibility and eddy current induced distorsions correction
+* registration with subject structural space and  maps creation stemming from strucutral data.
+* diffusion local modeling (DTI, CSD).
+* seeding from grey/white interface mesh.
+* tractograpy: both deterministic and  probabilistic local tractography, particle filtering tractography.
 
 
 =========================
