@@ -30,8 +30,20 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+
+def validation():
+
+    from distutils.spawn import find_executable as find_exec
+    configuration = Application().configuration
+    cmds = ['fslmaths','fugue','flirt']
+    for cmd in cmds:
+        if not find_exec(configuration.FSL.fsl_commands_prefix + cmd):
+            raise ValidationError(_t_(' FSL ' + cmd + ' commandline could not be found. Check fsldir and fsl_command_prefix values into Brainvisa Preferences FSL menu !'))
+    pass
+
+
 import numpy
-from copy import copy
+import copy
 from brainvisa.processes import *
 from brainvisa.diffuse import BrainExtraction
 from soma.wip.application.api import Application
@@ -77,7 +89,7 @@ def switchCorrection( self, data_are_eddy_current_corrected):
     dwi_type = 'Raw Denoised Diffusion MR'
   if dwi_type == self.signature[ 'dwi_data' ].type.name:
     return
-  signature = copy( self.signature )
+  signature = copy.copy(( self.signature ))
   signature[ 'dwi_data' ] = ReadDiskItem( dwi_type, 'Aims readable volume formats' )
   self.changeSignature( signature )
 

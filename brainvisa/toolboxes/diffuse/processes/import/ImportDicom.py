@@ -30,6 +30,16 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+
+def validation():
+    from distutils.spawn import find_executable
+    mricronx = find_executable( 'dcm2niix' )
+    if not mricronx:
+       mricron = find_executable('dcm2nii')
+       if not mricron:
+           raise ValidationError( 'MRICRON dcm2nii(x) program not found' )
+    pass
+
 from brainvisa.processes import *
 from soma.wip.application.api import Application
 from brainvisa.diffuse import DicomToNifti
@@ -43,12 +53,7 @@ name = 'Import diffusion data (dicom)'
 userLevel = 0
 roles = ( 'importer' )
 
-# def validation():
-#   mricronx = distutils.spawn.find_executable( 'dcm2niix' )
-#   if not mricronx:
-#       mricron = distutils.spawn.find_executable('dcm2nii')
-#       if not mricron:
-#       raise ValidationError( 'MRICRON dcm2nii(x) program not found' )
+
 
 signature=Signature(
   'dwi_directory', ReadDiskItem( 'Directory', 'Directory' ),
@@ -119,14 +124,15 @@ def execution( self, context ):
     tmp_directory = configuration.brainvisa.temporaryDirectory
 
     # Dicom converter -> to nifti
-    if self.mricron_program=='dcm2nii':
-        mricron = find_executable('dcm2nii')
-        if not mricron:
-            context.write('MRICRON dcm2nii program not found. Will use dcm2niix instead' )
-            mricron = find_executable('dcm2niix')
-            self.mricron_program = 'dcm2niix'
-            if not mricron:
-                raise RuntimeError(_t_('dcm2nii or dcm2niix executable NOT found !'))
+
+    #if self.mricron_program=='dcm2niix':
+    #    mricron = find_executable('dcm2niix')
+       # if not mricron:
+            #context.write('MRICRON dcm2nii program not found. Will use dcm2niix instead' )
+            #mricron = find_executable('dcm2niix')
+            #self.mricron_program = 'dcm2niix'
+           # if not mricron:
+                #raise RuntimeError(_t_('dcm2nii or dcm2niix executable NOT found !'))
 
     DicomToNifti.dicom_to_nifti(self.dwi_directory, self.mricron_program, context)
     outputFiles = glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.nii.gz'))
@@ -148,8 +154,8 @@ def execution( self, context ):
     elif self.additional_acquisition=="Blip-reversed images":
         DicomToNifti.dicom_to_nifti(self.blip_reversed_directory, self.mricron_program, context)
         context.system( 'mv', glob.glob(os.path.join(self.blip_reversed_directory.fullPath(), '*.nii.gz'))[0], tmp_directory + '/blip_reversed.nii.gz' ) #data
-        for f in glob.glob(os.path.join(self.magnitude_directory.fullPath(), '*')):
-            context.system('rm', f)  # _e2data
+        #for f in glob.glob(os.path.join(self.magnitude_directory.fullPath(), '*')):
+            #context.system('rm', f)  # _e2data
         
     # Import data
     if self.additional_acquisition=="None":

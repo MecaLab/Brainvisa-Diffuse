@@ -30,6 +30,26 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+def validation():
+
+    from distutils.spawn import find_executable as find_exec
+    configuration = Application().configuration
+    #fsldir = configuration.FSL.fsldir
+    #check for eddy implementations (two for fsl>5.0.10)
+    eddy_cpu = find_exec('eddy_openmp')
+    #pb ! executable can exist even if no GPU on the system (dont consider GPU for now)
+    #eddy_gpu_old = os.path.join(fsldir ,'bin','eddy.gpu')
+    #eddy_gpu_new = find_exec('eddy_cuda')
+    eddy_base = find_exec('eddy')
+    #For now we consider that there is a problem if no CPU implementation of eddy  is found
+    if eddy_cpu is None and eddy_base is None:
+        raise ValidationError(_t_('NO CPU implementation of eddy was found ! Check fsldir and fsl_command_prefix values into Brainvisa Preferences FSL menu !'))
+    cmds = ['fslmaths','fslroi','fsl_anat','fslmerge','topup','applytopup']
+    for cmd in cmds:
+        if not find_exec(configuration.FSL.fsl_commands_prefix + cmd):
+            raise ValidationError(_t_(' FSL ' + cmd + ' commandline could not be found. Check fsldir and fsl_command_prefix values into Brainvisa Preferences FSL menu !'))
+    pass
+
 from brainvisa.processes import *
 from soma.wip.application.api import Application
 from brainvisa.registration import getTransformationManager
@@ -249,16 +269,19 @@ def execution( self, context ):
     if eddyExec:
        context.write('CPU-multithread version of eddy found')
     else:
-        eddyExec = fsldir + '/bin/eddy.gpu'
-        if os.path.isfile(eddyExec) == True:
-            context.write('GPU-multithread version of eddy found')
-        else:
-            eddyExec = fsldir + '/bin/eddy_cuda'
-            if os.path.isfile(eddyExec) == True:
-                context.write('GPU-multithread version of eddy found')
-            else:
-                context.write('CPU/GPU-multithread version of eddy NOT found')
-                eddyExec = fsldir + '/bin/eddy'
+       context.write('CPU/GPU-multithread version of eddy NOT found')
+       eddyExec = find_executable('eddy')
+    #else:
+        #eddyExec = fsldir + '/bin/eddy.gpu'
+        #if os.path.isfile(eddyExec) == True:
+           # context.write('GPU-multithread version of eddy found')
+        #else:
+           # eddyExec = fsldir + '/bin/eddy_cuda'
+            #if os.path.isfile(eddyExec) == True:
+               # context.write('GPU-multithread version of eddy found')
+            #else:
+             #   context.write('CPU/GPU-multithread version of eddy NOT found')
+              #  eddyExec = fsldir + '/bin/eddy'
 
     ## default parameters for eddy
     #--fep # Fill Empty Planes by duplication or interpolation, can occur depending on scanner
@@ -280,8 +303,8 @@ def execution( self, context ):
     cmd2 += ' --flm=' + str(self.flm) + ' --slm=' + slm+ ' --fwhm=' + str(self.fwhm) + ',0,0,0,0' + ' --niter=' + str(self.niter) + ' --fep --interp=spline --resamp=' + resamp + ' --nvoxhp=' + str(self.nvoxhp) + ' --ff=10 --very_verbose'
     if not self.multi_shell:
        cmd2 += " --dont_peas"
-    ##    else:
-    ##        cmd2 += " --data_is_shelled" # option does NOT exist
+    else:
+        cmd2 += " --data_is_shelled" # option does NOT exist
     cmd = cmd1 + ' ; ' + cmd2
     os.system( cmd )
 
