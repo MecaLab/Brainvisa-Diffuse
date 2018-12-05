@@ -30,6 +30,27 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+def validation():
+    from soma.wip.application.api import Application
+    from distutils.spawn import find_executable
+    
+    configuration = Application().configuration
+    fsl_prefix = configuration.FSL.fsl_commands_prefix
+    #checking for Niftyreg commands
+    cmds = ['reg_f3d','reg_resample','reg_transform']
+    for i, cmd in enumerate(cmds):
+	executable = find_executable(cmd)
+        if not executable:
+           raise ValidationError(cmd + 'command was not found.Please check your Niftyreg installation and/or version')
+    #checking for FSl's commands
+    cmds = ['bet','flirt','dtifit']
+    for i, cmd in enumerate(cmds):
+	executable = find_executable(fsl_prefix + cmd)
+        if not executable:
+           raise ValidationError(cmd + 'FSL command was not found.Please check your FSL installation and/or fsldir and fsl_commands_prefix setting in BranVISA')
+    pass
+   
+
 from brainvisa.processes import *
 from soma.wip.application.api import Application
 from soma.aims import fslTransformation
@@ -102,8 +123,7 @@ def execution( self, context ):
     niftyreg_f3d = find_executable('reg_f3d')
     niftyreg_resample = find_executable('reg_resample')
     niftyreg_transform = find_executable('reg_transform')
-    if not niftyreg_f3d:
-        raise RuntimeError(_t_('Niftyreg executable NOT found !'))
+    
 
     context.write('Fractional anisotropy temporary estimation')
     dtifit = context.temporary('File')
@@ -121,24 +141,26 @@ def execution( self, context ):
     context.system('AimsMask', '-i', self.T1_volume, '-m', self.T1_mask.fullPath(), '-o', t1_brain.fullPath())
     cmd = [configuration.FSL.fsl_commands_prefix + 'flirt', '-ref', t1_brain.fullPath(), '-in', FA, '-omat', diff_to_t1_xfm.fullPath() + '_init.mat', '-out', reg.fullPath()+'_FA_to_t1_affine.nii.gz']
     context.system(*cmd)
+    #diff_to_t1_xfm.fullPath() is an affine 4X4 matrix
     cmd = [configuration.FSL.fsl_commands_prefix + 'flirt', '-ref', t1_brain.fullPath(), '-in', self.b0_volume.fullPath(), '-applyxfm', '-init', diff_to_t1_xfm.fullPath() + '_init.mat', '-out', reg.fullPath() + '_b0_to_t1_affine.nii.gz']
     context.system(*cmd)
+    #register the bo into the T1 space using affine transformation
 
     tmp_file = context.temporary('gz compressed NIFTI-1 image')
 
     context.write('Non linear registration')
     cmd = [niftyreg_f3d, '-ref', self.T1_volume.fullPath(), '-flo', reg.fullPath()+'_FA_to_t1_affine.nii.gz', '-sym', '-cpp', diff_to_t1_xfm.fullPath() + '_cpp.nii', '-res', reg.fullPath()+'_FA_to_t1_nonlinear.nii.gz']
     context.system(*cmd)
-    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', reg.fullPath()+'_b0_to_t1_affine.nii.gz', '-cpp', diff_to_t1_xfm.fullPath() + '_cpp.nii', '-res', tmp_file.fullPath()]
+    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', reg.fullPath()+'_b0_to_t1_affine.nii.gz', '-trans', diff_to_t1_xfm.fullPath() + '_cpp.nii', '-res', tmp_file.fullPath()]
     context.system(*cmd)
     ref = self.T1_volume.get( 'storage_to_memory', search_header=True )
     context.system('AimsFileConvert', '-i', tmp_file.fullPath(), '-o', self.b0_to_T1.fullPath(), '--orient', '"abs: '+' '.join(map(str, ref))+'"')
     transformManager.copyReferential(self.T1_volume, self.b0_to_T1)
 
     context.write('Invert transformation...')
-    cmd = [niftyreg_transform, '-ref', self.T1_volume.fullPath(), '-cpp2def', diff_to_t1_xfm.fullPath() + '_cpp.nii', self.diff_to_T1_nonlinear_dfm.fullPath()]
+    cmd = [niftyreg_transform, '-ref', self.T1_volume.fullPath(), '-def', diff_to_t1_xfm.fullPath() + '_cpp.nii', self.diff_to_T1_nonlinear_dfm.fullPath()]
     context.system(*cmd)
-    cmd = [niftyreg_transform, '-ref', self.T1_volume.fullPath(), '-cpp2def', diff_to_t1_xfm.fullPath() + '_cpp_backward.nii', self.T1_to_diff_nonlinear_dfm.fullPath()] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
+    cmd = [niftyreg_transform, '-ref', self.T1_volume.fullPath(), '-def', diff_to_t1_xfm.fullPath() + '_cpp_backward.nii', self.T1_to_diff_nonlinear_dfm.fullPath()] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
     context.system(*cmd)
     # cmd = [configuration.FSL.fsl_commands_prefix + 'convert_xfm', '-omat', diff_to_t1_xfm.fullPath() + '_init_inv.mat', '-inverse', diff_to_t1_xfm.fullPath() + '_init.mat']
     # context.system(*cmd)
@@ -149,7 +171,7 @@ def execution( self, context ):
     context.system(*cmd)
 
     context.write('Registration of T1 to DWI space...')
-    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', self.T1_volume.fullPath(), '-def', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', tmp_file.fullPath()] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
+    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', self.T1_volume.fullPath(), '-trans', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', tmp_file.fullPath()] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
     context.system(*cmd)
     cmd = ['AimsResample', '-i', tmp_file, '-m', self.T1_to_diff_linear_xfm, '-t', self.T1_to_b0_interpolation, '-o', self.T1_to_b0]
     if self.T1_to_b0_resampling == True:
@@ -165,7 +187,7 @@ def execution( self, context ):
     transformManager.copyReferential( self.b0_volume, self.T1_to_b0 )
 
     context.write('Registration of T1 brain mask to DWI space...')
-    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', self.T1_mask.fullPath(), '-def', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', tmp_file.fullPath()] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
+    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', self.T1_mask.fullPath(), '-trans', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', tmp_file.fullPath()] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
     context.system(*cmd)
     cmd = ['AimsResample', '-i', tmp_file, '-m', self.T1_to_diff_linear_xfm, '-t', self.T1_to_b0_interpolation, '-o', self.T1_to_b0_mask, '-r', self.b0_volume]
     context.system(*cmd)
@@ -194,7 +216,7 @@ def execution( self, context ):
     aims.write(WM_vol, WM_file.fullPath())
 
     context.write('Registration of white-matter and grey-matter masks to DWI space...')
-    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', GM_file.fullPath(), '-def', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', tmp_file.fullPath(), '-NN', '1'] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
+    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', GM_file.fullPath(), '-trans', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', tmp_file.fullPath(), '-inter', 0 ] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
     context.system(*cmd)
     cmd = ['AimsResample', '-i', tmp_file, '-m', self.T1_to_diff_linear_xfm, '-t', '0', '-o', self.T1_to_b0_GM, '-d', '1', '-r', self.b0_volume]
     context.system(*cmd)
@@ -202,7 +224,7 @@ def execution( self, context ):
     context.system(*cmd)
     os.system(' '.join(['AimsFileConvert', '-i', self.T1_to_b0_GM.fullPath(), '-o', self.T1_to_b0_GM.fullPath(), '--orient', '"abs: ' + ' '.join(map(str, ref)) + '"']))
     transformManager.copyReferential(self.dwi_data, self.T1_to_b0_GM)
-    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', WM_file.fullPath(), '-def', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', tmp_file.fullPath(), '-NN', '1'] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
+    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', WM_file.fullPath(), '-trans', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', tmp_file.fullPath(), '-inter', '0'] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
     context.system(*cmd)
     cmd = ['AimsResample', '-i', tmp_file, '-m', self.T1_to_diff_linear_xfm, '-t', '0', '-o', self.T1_to_b0_WM, '-d', '1', '-r', self.b0_volume]
     # cmd = [configuration.FSL.fsl_commands_prefix + 'fslmaths', self.T1_to_b0_WM.fullPath(), '-thr', '50', '-bin', self.T1_to_b0_WM.fullPath()]
@@ -229,7 +251,7 @@ def execution( self, context ):
     aims.write(skeleton, skeleton_file.fullPath())
 
     context.write('Registration of T1 skeleton mask to DWI space...')
-    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', skeleton_file.fullPath(), '-def', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', tmp_file.fullPath()] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
+    cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', skeleton_file.fullPath(), '-trans', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', tmp_file.fullPath()] #reg.fullPath()+'_FA_to_t1_affine.nii.gz'
     context.system(*cmd)
     cmd = ['AimsResample', '-i', tmp_file, '-m', self.T1_to_diff_linear_xfm, '-t', '0', '-o', self.T1_to_b0_skeleton, '-r', self.b0_volume]
     context.system(*cmd)
