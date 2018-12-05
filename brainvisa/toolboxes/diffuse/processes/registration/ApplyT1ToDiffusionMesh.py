@@ -30,6 +30,20 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
+def validation():
+    from soma.wip.application.api import Application
+    from distutils.spawn import find_executable
+    configuration = Application().configuration
+    fsl_prefix = configuration.FSL.fsl_commands_prefix
+    cmds = ['fslsplit']
+    for i, cmd in enumerate(cmds):
+        executable = find_executable(fsl_prefix + cmd)
+        if not executable:
+            raise ValidationError('FSL command ' + cmd + ' could not be located on your system. Please check you FSL installation and/or fsldir , fsl_commands_prefix variables in BrainVISA preferences') 
+	pass
+
+
+
 from brainvisa.processes import *
 from soma.wip.application.api import Application
 from brainvisa.registration import getTransformationManager

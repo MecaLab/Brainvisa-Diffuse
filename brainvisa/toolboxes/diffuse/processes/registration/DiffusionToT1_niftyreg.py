@@ -39,13 +39,13 @@ def validation():
     #checking for Niftyreg commands
     cmds = ['reg_f3d','reg_resample','reg_transform']
     for i, cmd in enumerate(cmds):
-	executable = find_executable(cmd)
+        executable = find_executable(cmd)
         if not executable:
            raise ValidationError(cmd + 'command was not found.Please check your Niftyreg installation and/or version')
     #checking for FSl's commands
     cmds = ['bet','flirt','dtifit']
     for i, cmd in enumerate(cmds):
-	executable = find_executable(fsl_prefix + cmd)
+        executable = find_executable(fsl_prefix + cmd)
         if not executable:
            raise ValidationError(cmd + 'FSL command was not found.Please check your FSL installation and/or fsldir and fsl_commands_prefix setting in BranVISA')
     pass
@@ -261,6 +261,5 @@ def execution( self, context ):
     context.system(*cmd)
     os.system(' '.join(['AimsFileConvert', '-i', self.T1_to_b0_skeleton.fullPath(), '-o', self.T1_to_b0_skeleton.fullPath(), '--orient', '"abs: ' + ' '.join(map(str, ref)) + '"']))
     transformManager.copyReferential(self.dwi_data, self.T1_to_b0_skeleton)
-
     context.write('Finished')
 

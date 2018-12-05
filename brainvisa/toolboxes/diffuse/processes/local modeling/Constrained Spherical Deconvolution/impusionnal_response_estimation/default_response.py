@@ -25,14 +25,13 @@ signature = Signature(
 		'Single Fiber Response',
 		'Joblib Pickle File'
 	),
-
 )
+
 
 
 def initialization ( self ):
 	self.addLink('response','diffusion_data')
 	pass
-
 
 
 def execution( self , context ):

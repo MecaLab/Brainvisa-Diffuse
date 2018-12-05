@@ -32,11 +32,11 @@ def initialization ( self ):
 
     eNode = SelectionExecutionNode(self.name, parameterized=self)
     eNode.addChild('Default',
-                   ProcessExecutionNode('Fiber Impulsionnal Response: Default Prolate Response', optional=True,selected=True))
+                   ProcessExecutionNode('Default Prolate Response', optional=True,selected=True))
     eNode.addChild('FromDTI',
-                   ProcessExecutionNode('Fiber Impulsionnal Response DTI Estimation', optional=True,selected=False))
+                   ProcessExecutionNode(' DTI Estimation', optional=True,selected=False))
     eNode.addChild('Recursive',
-                   ProcessExecutionNode('Fiber Impulsionnal Response Recursive Estimation', optional=True,selected=False))
+                   ProcessExecutionNode('Recursive Estimation', optional=True,selected=False))
     #Linking
     # self.addLink(['mask','sphere'],None,self.switch_pipeline_signature)
     self.addLink('mask','diffusion_data')
@@ -46,6 +46,7 @@ def initialization ( self ):
     eNode.addLink('Default.diffusion_data','diffusion_data')
     eNode.addLink('Default.response','response')
     #DTI
+    eNode.FromDTI.setOptional('mask')
     eNode.removeLink('FromDTI.response', 'FromDTI.diffusion_data')
     eNode.addLink('FromDTI.diffusion_data', 'diffusion_data')
     eNode.addLink('FromDTI.response', 'response')

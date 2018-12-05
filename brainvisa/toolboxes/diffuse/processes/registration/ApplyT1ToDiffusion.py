@@ -29,6 +29,21 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license version 2 and that you accept its terms.
+def validation():
+    from soma.wip.application.api import Application
+    from distutils.spawn import find_executable
+    #checking for niftyreg 
+    niftyreg_resample = find_executable('reg_resample')
+    if not niftyreg_resample:
+        raise ValidationError(_t_('Niftyreg executable NOT found !'))
+    configuration = Application().configuration
+    fsl_prefix = configuration.FSL.fsl_commands_prefix
+    cmds = ['fslsplit']
+    for i, cmd in enumerate(cmds):
+        executable = find_executable(fsl_prefix + cmd)
+        if not executable:
+            raise ValidationError('FSL command ' + cmd + ' could not be located on your system. Please check you FSL installation and/or fsldir , fsl_commands_prefix variables in BrainVISA preferences') 
+	pass
 
 from brainvisa.processes import *
 from brainvisa.registration import getTransformationManager
@@ -51,7 +66,6 @@ signature=Signature(
     'T1_to_b0_registration_method', Choice("niftyreg", "fnirt"),
     'T1_to_diff_linear_xfm', WriteDiskItem( 'Transform T1 MRI to Diffusion MR', 'Transformation matrix' ),
     'T1_to_diff_nonlinear_dfm', WriteDiskItem( 'NL Deform T1 MRI to Diffusion MR', 'NIFTI-1 image' ),
-
     'ROI_in_DWI', WriteDiskItem('3D Volume' , aimsGlobals.aimsVolumeFormats ),
 )
 
@@ -70,8 +84,9 @@ def execution( self, context ):
     configuration = Application().configuration
     transformManager = getTransformationManager()
     niftyreg_resample = find_executable('reg_resample')
-    if not niftyreg_resample:
-        raise RuntimeError(_t_('Niftyreg executable NOT found !'))
+    #no longer needed since validation check !
+    #if not niftyreg_resample:
+        #raise RuntimeError(_t_('Niftyreg executable NOT found !'))
 
     reg = context.temporary('File')
     tmp_file = context.temporary('gz compressed NIFTI-1 image')
