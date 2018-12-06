@@ -40,15 +40,16 @@ def validation():
         executable = find_executable(fsl_prefix + cmd)
         if not executable:
             raise ValidationError('FSL command ' + cmd + ' could not be located on your system. Please check you FSL installation and/or fsldir , fsl_commands_prefix variables in BrainVISA preferences') 
-	pass
-
+    pass
 
 
 from brainvisa.processes import *
 from soma.wip.application.api import Application
+from brainvisa.diffuse.tools import array_to_vol
 from brainvisa.registration import getTransformationManager
 from copy import copy
-import numpy
+import numpy as np
+import nibabel as nib
 
 
 name = 'Apply T1 to Diffusion transform to Mesh'
@@ -62,27 +63,27 @@ signature=Signature(
     'GM_mesh_in_T1', ReadDiskItem( 'Hemisphere Mesh', 'Aims mesh formats' ),
     'T1_to_diff_linear_xfm', ReadDiskItem( 'Transform T1 MRI to Diffusion MR', 'Transformation matrix' ),
     'diff_to_T1_nonlinear_dfm', ReadDiskItem( 'NL Deform Diffusion MR to T1 MRI', 'Aims readable volume formats' ),
-    # 'registration_method', Choice("niftyreg", "fnirt"),
+    #'registration_method', Choice("niftyreg", "fnirt"),
     
     'WM_mesh_in_DWI', WriteDiskItem('Registered White Mesh' , 'GIFTI file' ), #Registered White
     'GM_mesh_in_DWI', WriteDiskItem('Registered Hemisphere Mesh' , 'GIFTI file' ), #Registered White 
 )
 
 def meshTransform(mesh, deformation, voxel_size, affine2mm):
-    vert = numpy.array(mesh.vertex())
-    vert_new = numpy.empty_like(vert)
+    vert = np.array(mesh.vertex())
+    vert_new = np.empty_like(vert)
     for i, vertice in enumerate(vert):
         v_vx = vertice / voxel_size
         # Find the 8 voxel centers surrounding v
-        A = numpy.floor(v_vx).astype(int)  # voxel lowest corner
+        A = np.floor(v_vx).astype(int)  # voxel lowest corner
         M = A + voxel_size / 2.0  # voxel (center) coordinates
         inferior = v_vx < M
         superior = v_vx > M
         N = M + (inferior * -1 + superior * 1) * voxel_size
-        [x0, y0, z0] = numpy.min([M, N], 0)
-        [x1, y1, z1] = numpy.max([M, N], 0)
-        [X0, Y0, Z0] = numpy.floor([x0, y0, z0]).astype(int)
-        [X1, Y1, Z1] = numpy.floor([x1, y1, z1]).astype(int)
+        [x0, y0, z0] = np.min([M, N], 0)
+        [x1, y1, z1] = np.max([M, N], 0)
+        [X0, Y0, Z0] = np.floor([x0, y0, z0]).astype(int)
+        [X1, Y1, Z1] = np.floor([x1, y1, z1]).astype(int)
         xd = (vertice[0] - x0) / max((x1 - x0),1e-10)
         yd = (vertice[1] - y0) / max((y1 - y0),1e-10)
         zd = (vertice[2] - z0) / max((z1 - z0),1e-10)
@@ -93,7 +94,7 @@ def meshTransform(mesh, deformation, voxel_size, affine2mm):
         c0 = c00 * (1 - yd) + c10 * yd
         c1 = c01 * (1 - yd) + c11 * yd
         c = c0 * (1 - zd) + c1 * zd
-        vert_new[i] = numpy.linalg.inv(affine2mm)[:3,:3].dot(c)+numpy.linalg.inv(affine2mm)[:3,3]
+        vert_new[i] = np.linalg.inv(affine2mm)[:3,:3].dot(c)+np.linalg.inv(affine2mm)[:3,3]
     for i, v in enumerate(mesh.vertex()):
         v.assign(vert_new[i])
     return mesh
@@ -124,19 +125,32 @@ def execution( self, context ):
     configuration = Application().configuration
 
     tmp_file = context.temporary('File')
+    tmp_deform = context.temporary('File')
 
     # if self.registration_method == 'niftyreg':
-    cmd = [configuration.FSL.fsl_commands_prefix + 'fslsplit', self.diff_to_T1_nonlinear_dfm.fullPath(), tmp_file.fullPath(), '-t']
+
+
+    # #disgusting but dont want to mess with Lucile's code
+    deform_vol = nib.load(self.diff_to_T1_nonlinear_dfm.fullPath())
+    if len(deform_vol.shape)==5:
+        deform = deform_vol.get_data()
+        deform = deform[...,0,:]
+        nib.save(nib.Nifti1Image(deform,deform_vol.affine),tmp_deform.fullPath() + '.nii.gz')
+    else:
+        nib.save(deform_vol, tmp_deform.fullPath() + '.nii.gz')
+    #reuse Lucile code to split volume cause dont want to mess with orientations as it worked
+    cmd = [configuration.FSL.fsl_commands_prefix + 'fslsplit', tmp_deform.fullPath() + '.nii.gz' , tmp_file.fullPath(), '-t']
     context.system(*cmd)
+    context.write(tmp_file.fullPath())
     f1 = aims.read(tmp_file.fullPath() + '0000.nii.gz')
     f2 = aims.read(tmp_file.fullPath() + '0001.nii.gz')
     f3 = aims.read(tmp_file.fullPath() + '0002.nii.gz')
-    f = numpy.concatenate((f1.arraydata(), f2.arraydata(), f3.arraydata()))
-    field = numpy.swapaxes(f, 0,3)
-    field = numpy.swapaxes(field, 1,2)
-    vxsize = numpy.array(f1.header()['voxel_size'][:3])
+    f = np.concatenate((f1.arraydata(), f2.arraydata(), f3.arraydata()))
+    field = np.swapaxes(f, 0,3)
+    field = np.swapaxes(field, 1,2)
+    vxsize = np.array(f1.header()['voxel_size'][:3])
     affine = f1.header()['transformations']
-    affine_mm = numpy.reshape(affine[0], (4, 4))
+    affine_mm = np.reshape(affine[0], (4, 4))
 
     mesh = aims.read(self.WM_mesh_in_T1.fullPath())
     new_mesh = meshTransform(mesh, field, vxsize, affine_mm)
@@ -152,7 +166,7 @@ def execution( self, context ):
     cmd = [ 'AimsMeshTransform', '-i', self.GM_mesh_in_DWI, '-t', self.T1_to_diff_linear_xfm, '-o', self.GM_mesh_in_DWI ]
     context.system( *cmd )
     transformManager = getTransformationManager()
-    transformManager.copyReferential( self.b0_volume, self.GM_mesh_in_DWI )
+   transformManager.copyReferential( self.b0_volume, self.GM_mesh_in_DWI )
 
     # elif self.registration_method == 'fnirt':
     #     field_file = context.temporary('gz compressed NIFTI-1 image')
@@ -163,14 +177,14 @@ def execution( self, context ):
     #     f1 = aims.read(tmp_file.fullPath() + '0000.nii.gz')
     #     f2 = aims.read(tmp_file.fullPath() + '0001.nii.gz')
     #     f3 = aims.read(tmp_file.fullPath() + '0002.nii.gz')
-    #     f = numpy.concatenate((f1.arraydata(), f2.arraydata(), f3.arraydata()))
-    #     field = numpy.swapaxes(f, 0, 3)
-    #     field = numpy.swapaxes(field, 1, 2)
+    #     f = np.concatenate((f1.arraydata(), f2.arraydata(), f3.arraydata()))
+    #     field = np.swapaxes(f, 0, 3)
+    #     field = np.swapaxes(field, 1, 2)
     #     t1 = aims.read(self.T1_volume.fullPath())
-    #     vxsize = numpy.array(f1.header()['voxel_size'][:3])
+    #     vxsize = np.array(f1.header()['voxel_size'][:3])
     #     affine = t1.header()['transformations']
     #     # affine = f1.header()['transformations']
-    #     affine_mm = numpy.reshape(affine[0], (4, 4))
+    #     affine_mm = np.reshape(affine[0], (4, 4))
     #
     #     mesh = aims.read(self.WM_mesh_in_T1.fullPath())
     #     new_mesh = meshTransform(mesh, field, vxsize, affine_mm)

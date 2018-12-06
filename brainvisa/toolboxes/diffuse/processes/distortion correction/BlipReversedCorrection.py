@@ -146,6 +146,8 @@ def execution( self, context ):
     up_data = up_img.arraydata()
     up_bvals = numpy.loadtxt(self.bvals.fullPath())
     up_bvecs = numpy.loadtxt(self.bvecs.fullPath())
+    context.write(up_bvals.shape)
+    context.write(up_bvecs.shape)
     down_img = aims.read(self.blip_reversed_data.fullPath())
     down_data = down_img.arraydata()
     Nvol_up = self.dwi_data.get('volume_dimension', search_header=True)[3]
@@ -181,6 +183,7 @@ def execution( self, context ):
        down_bvals = up_bvals
        down_b0_index = up_b0_index
        down_bvecs = up_bvecs
+
     down_b0 = down_data[down_b0_index, :, :, :]
 
     context.write('- Merging blip-up and blip-down b0 images')
@@ -211,7 +214,7 @@ def execution( self, context ):
     up_down_data_vol.copyHeaderFrom(up_img.header())
     aims.write(up_down_data_vol, self.topup_data.fullPath())
     context.write('- Merging bvals and bvecs')
-    up_down_bvals = numpy.concatenate((up_bvals, down_bvals), axis=1)
+    up_down_bvals = numpy.concatenate((up_bvals, down_bvals), axis=0)
     up_down_bvals = up_down_bvals.reshape((1,len(up_down_bvals)))
     numpy.savetxt(self.topup_bvals.fullPath(), up_down_bvals, fmt='%d')
     up_down_bvecs = numpy.concatenate((up_bvecs, down_bvecs), axis=1)

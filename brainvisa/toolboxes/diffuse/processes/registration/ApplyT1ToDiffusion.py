@@ -43,14 +43,14 @@ def validation():
         executable = find_executable(fsl_prefix + cmd)
         if not executable:
             raise ValidationError('FSL command ' + cmd + ' could not be located on your system. Please check you FSL installation and/or fsldir , fsl_commands_prefix variables in BrainVISA preferences') 
-	pass
+    pass
 
 from brainvisa.processes import *
 from brainvisa.registration import getTransformationManager
 from soma.wip.application.api import Application
 from distutils.spawn import find_executable
 import brainvisa.tools.aimsGlobals as aimsGlobals
-import os
+
 
 name = 'Apply T1 to Diffusion transform to ROI'
 userLevel = 0
@@ -105,7 +105,7 @@ def execution( self, context ):
     ##
 
     if self.T1_to_b0_registration_method == 'niftyreg':
-        cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', tmp_file.fullPath(), '-def', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', reg.fullPath()+'_ROI.nii.gz', '-NN', '1']
+        cmd = [niftyreg_resample, '-ref', self.T1_volume.fullPath(), '-flo', tmp_file.fullPath(), '-trans', self.T1_to_diff_nonlinear_dfm.fullPath(), '-res', reg.fullPath()+'_ROI.nii.gz', '-inter', '0']
         context.system(*cmd)
         cmd = ['AimsResample', '-i', reg.fullPath()+'_ROI.nii.gz', '-m', self.T1_to_diff_linear_xfm, '-t', '0', '-o', self.ROI_in_DWI, '-d', '1', '-r', self.b0_volume.fullPath()]
         context.system(*cmd)
@@ -114,7 +114,7 @@ def execution( self, context ):
         cmd = [configuration.FSL.fsl_commands_prefix + 'applywarp', '-i', tmp_file.fullPath(), '-r', self.b0_volume.fullPath(), '-o', self.ROI_in_DWI.fullPath(), '-w', self.T1_to_diff_nonlinear_dfm.fullPath(), '--interp=nn']
         context.system(*cmd)
 
-    if self.binarise == True:
+    if self.binarise:
         cmd = [configuration.FSL.fsl_commands_prefix + 'fslmaths', self.ROI_in_DWI.fullPath(), '-thr', self.threshold, '-bin', self.ROI_in_DWI.fullPath()]  # , '--fg', '1']
     else:
         cmd = [configuration.FSL.fsl_commands_prefix + 'fslmaths', self.ROI_in_DWI.fullPath(), '-thr', self.threshold, self.ROI_in_DWI.fullPath()]  # , '--fg', '1']
