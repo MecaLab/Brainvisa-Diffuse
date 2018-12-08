@@ -15,10 +15,6 @@ signature = Signature(
     'mask', ReadDiskItem(
         'Diffusion MR Mask',
         'Aims readable volume formats'),
-    'sphere', ReadDiskItem(
-        'Sphere Template',
-        'Gifti File'
-    ),
     'response', WriteDiskItem(
         'Single Fiber Response',
         'Joblib Pickle File'
@@ -56,10 +52,10 @@ def initialization ( self ):
     eNode.addLink('Recursive.diffusion_data', 'diffusion_data')
     eNode.addLink('Recursive.response', 'response')
     eNode.addLink('Recursive.mask','mask')
-    eNode.addLink('Recursive.sphere','sphere')
+    #eNode.addLink('Recursive.sphere','sphere')
 
     self.setOptional('mask')
-    self.setOptional('sphere')
+    #self.setOptional('sphere')
 
 
 
