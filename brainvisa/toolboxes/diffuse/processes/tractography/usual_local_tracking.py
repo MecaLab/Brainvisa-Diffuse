@@ -32,6 +32,7 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 from brainvisa.processes import *
+from brainvisa.registration import getTransformationManager
 import numpy as np
 import nibabel as nib
 from copy import copy
@@ -40,8 +41,8 @@ from dipy.data import get_sphere
 from dipy.tracking.local import LocalTracking, ActTissueClassifier, BinaryTissueClassifier, ThresholdTissueClassifier
 from dipy.direction.probabilistic_direction_getter import DeterministicMaximumDirectionGetter, ProbabilisticDirectionGetter
 from brainvisa.diffuse.building_spheres import read_sphere
-import nibabel.streamlines.trk as trk
-trk.TrkFile
+
+
 
 
 
@@ -204,8 +205,10 @@ def execution(self,context):
         seeds[i] = s
         seeds = seeds.reshape((-1,3))
     #put seeds in voxel space
-    #seeds = nib.affines.apply_affine(np.linalg.inv(scaling_mat), seeds)
+    context.write(seeds[0])
+    seeds = nib.affines.apply_affine(np.linalg.inv(scaling_mat), seeds)
     #building classifier
+    context.write(seeds[0])
 
     if self.constraint == 'Binary':
         mask_vol = aims.read(self.mask.fullPath())
@@ -238,14 +241,18 @@ def execution(self,context):
         wm[total != 0] = (wm[total != 0])/(total[total != 0])
         gm[total != 0] = gm[total != 0] / (total[total != 0])
 
-
         classifier = ActTissueClassifier.from_pve(wm_map=wm, gm_map=gm, csf_map=csf)
 
 
-    #Tracking is made in the LPI voxel space in order no to imposes affine to data. The seeds are supposed to also be in LPI voxel space
-    streamlines_generator = LocalTracking(dg, classifier, seeds, scaling_mat, step_size=self.step_size, max_cross=self.crossing_max, maxlen=self.nb_iter_max,fixedstep=np.float32(self.fixed_step),return_all=self.return_all)
+    #Tracking is made in the Aims LPO space (solve shear verification problem, does not work for anisotropic voxels)
+    streamlines_generator = LocalTracking(dg, classifier, seeds, affine_tracking, step_size=self.step_size, max_cross=self.crossing_max, maxlen=self.nb_iter_max,fixedstep=np.float32(self.fixed_step),return_all=self.return_all)
     #Store Fibers directly in  LPI orientation with appropriate transformation
-    save_trk(self.streamlines.fullPath(),streamlines_generator,affine=aims_mm_to_ras_mm, vox_size=voxel_size,shape=vol_shape)
+    save_trk(self.streamlines.fullPath(),streamlines_generator, affine=aims_voxel_to_ras_mm, vox_size=voxel_size,shape=vol_shape)
+
+    transformManager = getTransformationManager()
+    transformManager.copyReferential(self.sh_coefficients, self.streamlines)
+
+
 
 
 

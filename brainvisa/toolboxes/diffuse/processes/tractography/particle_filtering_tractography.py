@@ -33,7 +33,7 @@
 
 from brainvisa.processes import *
 import numpy as np
-import nibabel as nib
+from brainvisa.registration import getTransformationManager
 from dipy.io.streamline import save_trk
 from dipy.data import get_sphere
 from dipy.tracking.local import ParticleFilteringTracking, ActTissueClassifier, CmcTissueClassifier
@@ -215,6 +215,9 @@ def execution(self,context):
     streamlines_generator = ParticleFilteringTracking(dg, classifier,seeds,affine_tracking,step_size=self.step_size,max_cross=self.crossing_max, maxlen=self.nb_iter_max,pft_back_tracking_dist=self.back_tracking_dist, pft_front_tracking_dist=self.front_tracking_dist,pft_max_trial=self.max_trial,particle_count=self.nb_particles,return_all=self.return_all)
     #Store Fibers directly in  LPI orientation with appropriate transformation
     save_trk(self.streamlines.fullPath(),streamlines_generator,affine=aims_voxel_to_ras_mm,vox_size=voxel_size,shape=vol_shape)
+
+    transformManager = getTransformationManager()
+    transformManager.copyReferential(self.sh_coefficients, self.streamlines)
 
 
 

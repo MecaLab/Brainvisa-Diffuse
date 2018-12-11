@@ -19,7 +19,7 @@ def load_streamlines(path_file,lazy=True):
     :return: tractogram , header
     """
     file = nib.streamlines.load(path_file,lazy_load=lazy)
-    header = file.header
+    affine = file.affine
     tractogram = file.tractogram
     aims_vox_to_ras_mm = tractogram.affine_to_rasmm
     aims_vox_to_aims_mm = np.diag(header['voxel_sizes'].tolist() + [1])
