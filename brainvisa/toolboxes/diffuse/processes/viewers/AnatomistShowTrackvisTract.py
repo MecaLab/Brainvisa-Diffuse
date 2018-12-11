@@ -54,7 +54,7 @@ def initialization( self ):
 def execution( self, context ):
 
   #lazy load just to estimate the number of streamlines
-  tractogram, header = load_streamlines(self.streamlines.fullPath(),lazy=True)
+  tractogram, header = load_streamlines(self.streamlines.fullPath(),lazy=False)
   #streamlines are in the LPI mm space
   nb_streamlines = header['nb_streamlines']
   streamlines = tractogram.streamlines
@@ -65,7 +65,7 @@ def execution( self, context ):
     bundle = [s for i, s in enumerate(streamlines) if i < self.max_number]
   else:
     bundle = list(streamlines)
-  bundle_aims = bundle_to_mesh(bundle)
+  bundle_aims = bundle_to_mesh(bundle, encode_local=True)
   del bundle
 
   a = anatomist.Anatomist()

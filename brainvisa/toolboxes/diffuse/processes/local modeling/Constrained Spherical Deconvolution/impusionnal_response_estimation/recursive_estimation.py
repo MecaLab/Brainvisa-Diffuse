@@ -10,8 +10,8 @@ import numpy as np
 from joblib import load, dump
 
 
-userLevel = 2
-name = 'Fiber Impulsionnal Response Recursive Estimation'
+userLevel = 0
+name = 'Recursive Estimation'
 category = 'Local_modeling'
 
 signature = Signature(
@@ -60,7 +60,6 @@ def initialization ( self ):
     self.addLink('mask','diffusion_data')
     self.addLink('response','diffusion_data')
     pass
-
 
 
 def execution( self , context ):

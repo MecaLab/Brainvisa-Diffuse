@@ -65,7 +65,9 @@ signature=Signature(
   'output_dwi_data', WriteDiskItem( 'Raw Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'output_bvals', WriteDiskItem( 'Raw B Values', 'Text file' ),
   'output_bvecs', WriteDiskItem( 'Raw B Vectors', 'Text file' ),
+  'output_dwi_metadata', WriteDiskItem( 'Diffusion Acquisition Metadata','JSON file' ),
   'output_blip_reversed_data', WriteDiskItem( 'Blip Reversed DW Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
+  'output_blip_reversed_metadata', WriteDiskItem( 'Blip Reversed DW Diffusion MR', 'JSON file'),
   'output_fieldmap', WriteDiskItem( 'Fieldmap Phase', 'gz compressed NIFTI-1 image' ),
   'output_magnitude', WriteDiskItem( 'Fieldmap Magnitude', 'gz compressed NIFTI-1 image' ),
 )
@@ -140,6 +142,9 @@ def execution( self, context ):
     context.system( 'mv', glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.nii.gz'))[0], tmp_directory + '/dwi.nii.gz' ) #data
     context.system( 'mv', glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.bvec'))[0], tmp_directory + '/bvec.txt' ) #data
     context.system( 'mv', glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.bval'))[0], tmp_directory + '/bval.txt' ) #data
+    list_metadata = glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.json'))
+    if list_metadata:
+    	context.system( 'mv', glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.json'))[0], tmp_directory + '/dwi_metadata.json')
 
     if self.additional_acquisition=="Fieldmap":
         DicomToNifti.dicom_to_nifti(self.fieldmap_directory, self.mricron_program, context)
@@ -154,6 +159,10 @@ def execution( self, context ):
     elif self.additional_acquisition=="Blip-reversed images":
         DicomToNifti.dicom_to_nifti(self.blip_reversed_directory, self.mricron_program, context)
         context.system( 'mv', glob.glob(os.path.join(self.blip_reversed_directory.fullPath(), '*.nii.gz'))[0], tmp_directory + '/blip_reversed.nii.gz' ) #data
+        list_metadata = glob.glob(os.path.join(self.blip_reversed_directory.fullPath(), '*.json'))
+        if list_metadata:
+        	context.system( 'mv', glob.glob(os.path.join(self.blip_reversed_directory.fullPath(), '*.json'))[0], tmp_directory + '/blip_reversed_metadata.json' )
+        
         #for f in glob.glob(os.path.join(self.magnitude_directory.fullPath(), '*')):
             #context.system('rm', f)  # _e2data
         

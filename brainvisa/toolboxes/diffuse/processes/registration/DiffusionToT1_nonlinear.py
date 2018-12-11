@@ -63,6 +63,9 @@ signature=Signature(
     'T1_to_b0_GM', WriteDiskItem('T1 MRI to DW Diffusion MR GM' , 'gz compressed NIFTI-1 image' ),
     'T1_to_b0_WM', WriteDiskItem('T1 MRI to DW Diffusion MR WM' , 'gz compressed NIFTI-1 image' ),
     'T1_to_b0_skeleton', WriteDiskItem('T1 MRI to DW Diffusion MR Skeleton', 'gz compressed NIFTI-1 image' ),
+    'T1_to_b0_WM_pve',WriteDiskItem('WM PVE Diffusion MR', 'gz compressed NIFTI-1 image' ),
+    'T1_to_b0_GM_pve',WriteDiskItem('GM PVE Diffusion MR', 'gz compressed NIFTI-1 image' ),
+    'T1_to_b0_CSF_pve',WriteDiskItem('CSF PVE Diffusion MR', 'gz compressed NIFTI-1 image' ),
     'diff_to_T1_linear_xfm', WriteDiskItem( 'Transform Diffusion MR to T1 MRI', 'Transformation matrix' ),
     'diff_to_T1_nonlinear_dfm', WriteDiskItem( 'NL Deform Diffusion MR to T1 MRI', 'gz compressed NIFTI-1 image' ),
     'T1_to_diff_linear_xfm', WriteDiskItem( 'Transform T1 MRI to Diffusion MR', 'Transformation matrix' ),
@@ -89,6 +92,9 @@ def initialization( self ):
     self.linkParameters( 'diff_to_T1_nonlinear_dfm', 'b0_volume' )
     self.linkParameters( 'T1_to_diff_linear_xfm', 'b0_volume' )
     self.linkParameters( 'T1_to_diff_nonlinear_dfm', 'b0_volume' )
+    self.addLink('T1_to_b0_WM_pve','b0_volume')
+    self.addLink('T1_to_b0_GM_pve', 'b0_volume')
+    self.addLink('T1_to_b0_CSF_pve', 'b0_volume')
 
 def execution( self, context ):
 
@@ -120,6 +126,8 @@ def execution( self, context ):
     cmd = [configuration.FSL.fsl_commands_prefix + 'fast', '-o', fast_seg.fullPath(), t1_brain.fullPath()]
     context.system(*cmd)
     T1_white_matter = fast_seg.fullPath() + '_pve_2.nii.gz'
+    T1_grey_matter = fast_seg.fullPath() + '_pve_1.nii.gz'
+    T1_csf = fast_seg.fullPath() + '_pve_0.nii.gz'
 
     context.write('Affine pre-alignment')
     diff_to_t1_lin = context.temporary('File')
@@ -143,12 +151,30 @@ def execution( self, context ):
     context.system( *cmd )
     cmd = [configuration.FSL.fsl_commands_prefix + 'invwarp', '--ref=' + self.b0_volume.fullPath(), '--warp=' + self.diff_to_T1_nonlinear_dfm.fullPath(), '--out=' + self.T1_to_diff_nonlinear_dfm.fullPath()]
     context.system(*cmd)
-
+    
+    ## Transport T1 space maps to DWI
     context.write('Registration of T1 to DWI space...')
     print(self.T1_to_b0_interpolation)
     cmd = [configuration.FSL.fsl_commands_prefix + 'applywarp', '-i', self.T1_volume.fullPath(), '-r', self.b0_volume.fullPath(), '-o', self.T1_to_b0.fullPath(), '-w', self.T1_to_diff_nonlinear_dfm.fullPath(), '--interp=' + self.T1_to_b0_interpolation]
     context.system(*cmd)
     transformManager.copyReferential( self.b0_volume, self.T1_to_b0 )
+
+    context.write('Registration of T1 PVE maps to DWI space...')
+
+    context.write('White matter Partial Volume Estimation Map')
+    cmd = [configuration.FSL.fsl_commands_prefix + 'applywarp', '-i', T1_white_matter, '-r', self.b0_volume.fullPath(), '-o', self.T1_to_b0_WM_pve.fullPath(), '-w', self.T1_to_diff_nonlinear_dfm.fullPath(), '--interp=' + self.T1_to_b0_interpolation]
+    context.system(*cmd)
+    transformManager.copyReferential( self.b0_volume, self.T1_to_b0_WM_pve )
+
+    context.write('Grey matter Partial Volume Estimation Map')
+    cmd = [configuration.FSL.fsl_commands_prefix + 'applywarp', '-i', T1_grey_matter, '-r', self.b0_volume.fullPath(), '-o', self.T1_to_b0_GM_pve.fullPath(), '-w', self.T1_to_diff_nonlinear_dfm.fullPath(), '--interp=' + self.T1_to_b0_interpolation]
+    context.system(*cmd)
+    transformManager.copyReferential( self.b0_volume, self.T1_to_b0_GM_pve)
+
+    context.write('CSF Partial Volume Estimation Map')
+    cmd = [configuration.FSL.fsl_commands_prefix + 'applywarp', '-i', T1_csf, '-r', self.b0_volume.fullPath(), '-o', self.T1_to_b0_CSF_pve.fullPath(), '-w', self.T1_to_diff_nonlinear_dfm.fullPath(), '--interp=' + self.T1_to_b0_interpolation]
+    context.system(*cmd)
+    transformManager.copyReferential( self.b0_volume, self.T1_to_b0_CSF_pve)
 
     context.write('Registration of T1 brain mask to DWI space...')
     cmd = [configuration.FSL.fsl_commands_prefix + 'applywarp', '-i', self.T1_mask.fullPath(), '-r', self.b0_volume.fullPath(), '-o', self.T1_to_b0_mask.fullPath(), '-w', self.T1_to_diff_nonlinear_dfm.fullPath(), '--interp=' + self.T1_to_b0_interpolation]

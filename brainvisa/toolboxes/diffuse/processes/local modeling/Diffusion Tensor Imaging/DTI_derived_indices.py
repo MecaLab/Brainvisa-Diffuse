@@ -90,7 +90,6 @@ def show_advanced_indices(self,dummy):
         self.setOptional('axial_diffusivity', 'planarity', 'sphericity', 'linearity', 'mode')
         self.setHidden('axial_diffusivity','planarity','sphericity','linearity','mode')
     self.changeSignature(signature)
-    self.changeSignature(signature)
     tensor = getattr(self, 'tensor_coefficients')
     self._parameterHasChanged('tensor_coefficients', tensor)
     pass

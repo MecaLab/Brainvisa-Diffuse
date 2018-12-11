@@ -32,6 +32,7 @@
 
 from brainvisa.processes import *
 from dipy.tracking.utils import random_seeds_from_mask
+from brainvisa.registration import getTransformationManager
 import numpy as np
 
 
@@ -61,7 +62,18 @@ def initialization(self):
 def execution(self, context):
 
 	mask_vol = aims.read(self.mask.fullPath())
-	mask = np.asarray(mask_vol)[...,0]
+	h = mask_vol.header()
+	mask = np.asarray(mask_vol)[..., 0]
 	mask = mask.astype(bool)
-	seeds = random_seeds_from_mask(mask,seeds_count=self.seed_number,seed_count_per_voxel=self.number_per_voxel)
+	voxel_size = np.array(h['voxel_size'])
+	if len(voxel_size) == 4:
+		voxel_size[-1] = 1
+	elif len(voxel_size) == 3:
+		voxel_size = np.concatenate((voxel_size, np.ones(1)))
+	scaling = np.diag(voxel_size)
+
+	seeds = random_seeds_from_mask(mask,seeds_count=self.seed_number,seed_count_per_voxel=self.number_per_voxel,affine=scaling)
 	np.savetxt(self.seeds.fullPath(), seeds)
+	transformManager = getTransformationManager()
+	transformManager.copyReferential(self.mask, self.seeds)
+

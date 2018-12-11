@@ -127,10 +127,8 @@ def execution( self, context ):
     tmp_file = context.temporary('File')
     tmp_deform = context.temporary('File')
 
-    # if self.registration_method == 'niftyreg':
-
-
-    # #disgusting but dont want to mess with Lucile's code
+    #if self.registration_method == 'niftyreg':
+        # new niftyreg deformation volume is X,Y,Z,1,3 instead of X,Y,Z,3
     deform_vol = nib.load(self.diff_to_T1_nonlinear_dfm.fullPath())
     if len(deform_vol.shape)==5:
         deform = deform_vol.get_data()
@@ -166,7 +164,7 @@ def execution( self, context ):
     cmd = [ 'AimsMeshTransform', '-i', self.GM_mesh_in_DWI, '-t', self.T1_to_diff_linear_xfm, '-o', self.GM_mesh_in_DWI ]
     context.system( *cmd )
     transformManager = getTransformationManager()
-   transformManager.copyReferential( self.b0_volume, self.GM_mesh_in_DWI )
+    transformManager.copyReferential( self.b0_volume, self.GM_mesh_in_DWI )
 
     # elif self.registration_method == 'fnirt':
     #     field_file = context.temporary('gz compressed NIFTI-1 image')

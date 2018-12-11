@@ -43,15 +43,19 @@ signature=Signature(
   'dwi_data', ReadDiskItem( 'External File Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'bvals', ReadDiskItem( 'B Values', 'BValues' ),
   'bvecs', ReadDiskItem( 'B Vectors', 'BVectors' ),
+  'dwi_metadata', ReadDiskItem('Diffusion Acquisition Metadata','JSON file'),
   'additional_acquisition', Choice("None", "Fieldmap", "Blip-reversed images", "Both"),
   'blip_reversed_data', ReadDiskItem( 'External File Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
+  'blip_reversed_metada', ReadDiskItem('Blip Reversed Diffusion Acquisition Metadata','JSON file'),
   'fieldmap', ReadDiskItem( 'Fieldmap', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'magnitude', ReadDiskItem( 'Fieldmap', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
 
   'output_dwi_data', WriteDiskItem( 'Raw Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'output_bvals', WriteDiskItem( 'Raw B Values', 'Text file' ),
   'output_bvecs', WriteDiskItem( 'Raw B Vectors', 'Text file' ),
+  'output_dwi_metadata', WriteDiskItem('Diffusion Acquisition Metadata','JSON file'),
   'output_blip_reversed_data', WriteDiskItem( 'Blip Reversed DW Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
+  'output_blip_reversed_metadata', WriteDiskItem( 'Blip Reversed Diffusion Acquisition Metadata','JSON file' ),
   'output_fieldmap', WriteDiskItem( 'Fieldmap Phase', 'gz compressed NIFTI-1 image' ),
   'output_magnitude', WriteDiskItem( 'Fieldmap Magnitude', 'gz compressed NIFTI-1 image' ),
 )
@@ -60,15 +64,21 @@ def switchSignature( self, additional_acquisition ):
     self.setOptional('blip_reversed_data')
     self.setOptional('fieldmap')
     self.setOptional('magnitude')
+    self.setOptional('metadata')
+    self.setOptional('blip_reversed_metadata')
     self.setOptional('output_blip_reversed_data')
     self.setOptional('output_fieldmap')
     self.setOptional('output_magnitude')
+    self.setOptional('output_dwi_metadata')
+    self.setOptional('output_blip_reversed_metadata')
     self.setHidden('blip_reversed_data')
     self.setHidden('fieldmap')
     self.setHidden('magnitude')
     self.setHidden('output_blip_reversed_data')
+    self.setHidden('output_blip_reversed_metadata')
     self.setHidden('output_fieldmap')
     self.setHidden('output_magnitude')
+    self.setHidden('output_blip_reversed_metadata')
     if self.additional_acquisition=="Fieldmap":
         self.setEnable('fieldmap')
         self.setEnable('magnitude')
@@ -77,6 +87,7 @@ def switchSignature( self, additional_acquisition ):
     elif self.additional_acquisition=="Blip-reversed images":
         self.setEnable('blip_reversed_data')
         self.setEnable('output_blip_reversed_data')
+        self.setEnable('output_blip_reversed_metadata')
     elif self.additional_acquisition == "Both":
         self.setEnable('fieldmap')
         self.setEnable('magnitude')
@@ -84,6 +95,7 @@ def switchSignature( self, additional_acquisition ):
         self.setEnable('output_magnitude')
         self.setEnable('blip_reversed_data')
         self.setEnable('output_blip_reversed_data')
+        self.setEnable('output_blip_reversed_metadata')
     self.changeSignature( signature )
 
 def initSubject(self, inp):
@@ -99,20 +111,26 @@ def initialization( self ):
   self.addLink( None, 'additional_acquisition', self.switchSignature )
   self.addLink("output_dwi_data", "dwi_data", self.initSubject)
   self.signature['dwi_data'].databaseUserLevel = 3
+  self.signature['dwi_metadata'].databaseUserLevel = 3
   self.signature['bvals'].databaseUserLevel = 3
   self.signature['bvecs'].databaseUserLevel = 3
   self.signature['blip_reversed_data'].databaseUserLevel = 3
+  self.signature['blip_reversed_metadata'].databaseUserLevel = 3
   self.signature['fieldmap'].databaseUserLevel = 3
   self.signature['magnitude'].databaseUserLevel = 3
   self.signature['output_dwi_data'].browseUserLevel = 3
+  self.signature['output_dwi_metadata'].browseUserLevel = 3
   self.signature['output_bvals'].browseUserLevel = 3
   self.signature['output_bvecs'].browseUserLevel = 3
   self.signature['output_blip_reversed_data'].browseUserLevel = 3
+  self.signature['output_blip_reversed_metadata'].browseUserLevel = 3
   self.signature['output_fieldmap'].browseUserLevel = 3
   self.signature['output_magnitude'].browseUserLevel = 3
   self.linkParameters( 'output_bvals', 'output_dwi_data' )
   self.linkParameters( 'output_bvecs', 'output_dwi_data' )
+  self.linkParameters( 'output_dwi_metatada','output_dwi_data')
   self.linkParameters( 'output_blip_reversed_data', 'output_dwi_data' )
+  self.linkParameters( 'output_blip_reversed_metadata', 'output_blip_reversed_data')
   self.linkParameters( 'output_fieldmap', 'output_dwi_data' )
   self.linkParameters( 'output_magnitude', 'output_dwi_data' )
   
@@ -130,6 +148,10 @@ def execution( self, context ):
     raise RuntimeError( _t_( 'The gradient orientations file should have 3 lines and %s columns' % nvol))
   context.system( 'cp', self.bvals, self.output_bvals )
   context.system( 'cp', self.bvecs, self.output_bvecs )
+
+  if self.dwi_metadata is not None:
+     context.system( 'cp', self.dwi_metadata, self.ouptut_dwi_data )
+
   context.system('AimsFileConvert', '-i', self.dwi_data.fullPath(), '-o', self.output_dwi_data.fullPath(), '--orient', '"abs: -1 -1 -1"')
   transformManager = getTransformationManager()
   transformManager.createNewReferentialFor( self.output_dwi_data, name='Raw DW Diffusion MR' )
@@ -151,6 +173,8 @@ def execution( self, context ):
     else:
         context.write('Only b0 volumes with opposite phase-encode direction DETECTED')
     context.system('AimsFileConvert', '-i', self.blip_reversed_data.fullPath(), '-o', self.output_blip_reversed_data.fullPath(), '--orient', '"abs: -1 -1 -1"')
+    if self.blip_reversed_metada is not None:
+        context.system('cp', self.blip_reversed_metadata, self.output_blip_reversed_metada )
     transformManager.copyReferential(self.output_dwi_data, self.blip_reversed_data)
   elif self.additional_acquisition=="Both":
       if self.fieldmap is not None:
@@ -168,9 +192,10 @@ def execution( self, context ):
       else:
           context.write('Only b0 volumes with opposite phase-encode direction DETECTED')
       context.system('AimsFileConvert', '-i', self.blip_reversed_data.fullPath(), '-o', self.output_blip_reversed_data.fullPath(), '--orient', '"abs: -1 -1 -1"')
+      if self.blip_reversed_metada is not None:
+        context.system('cp', self.blip_reversed_metadata, self.output_blip_reversed_metada )
       transformManager.copyReferential(self.output_dwi_data, self.blip_reversed_data)
 
-  
   context.write( 'Importation done' )
   
 

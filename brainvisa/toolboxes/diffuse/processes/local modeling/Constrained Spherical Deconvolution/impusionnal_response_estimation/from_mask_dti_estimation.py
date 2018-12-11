@@ -8,8 +8,8 @@ from dipy.reconst.dti import TensorFit, TensorModel
 from dipy.reconst.csdeconv import response_from_mask, _get_response
 
 
-userLevel = 2
-name = 'Fiber Impulsionnal Response DTI Estimation'
+userLevel = 0
+name = 'DTI Estimation'
 category = 'Local_modeling'
 
 signature = Signature(
@@ -22,14 +22,15 @@ signature = Signature(
         'Gradient Table',
         'Joblib Pickle file'
     ),
-    'tensor_model', ReadDiskItem(
-        'Diffusion Tensor Model',
-        'Joblib Pickle file'
-    ),
     'tensor_coefficients', ReadDiskItem(
         'Diffusion Tensor Coefficients',
         'gz compressed NIFTI-1 image'
     ),
+    'tensor_model', ReadDiskItem(
+        'Diffusion Tensor Model',
+        'Joblib Pickle file'
+    ),
+
     'mask', ReadDiskItem(
         'Diffusion MR Mask',
         'Aims readable volume formats'
@@ -48,14 +49,17 @@ def initialization ( self ):
     #linking
     self.addLink('gradient_table','diffusion_data')
     self.addLink('mask','diffusion_data')
+    self.addLink('brain_mask','diffusion_data')
     self.addLink('response','diffusion_data')
-    self.setOptional('mask','tensor_model','tensor_coefficient','fa_theshold')
+    self.addLink('tensor_coefficients', 'diffusion_data')
+    self.addLink('tensor_model', 'tensor_coefficients')
+    self.setOptional('mask','tensor_model','tensor_coefficients','fa_threshold')
     #if this link works tensor_coefficient is found. will not work if several models or fit with different masks
-    self.addLink('tensor_coefficients','diffusion_data')
-    self.addLink('tensor_model','tensor_coefficient') #will work fo sure
+     #will work fo sure
     #setting values
     self.fa_threshold = 0.7 #default value used in Dipy tutorial
     #cosmetics
+    self.setHidden('tensor_model')
     pass
 
 
@@ -83,12 +87,12 @@ def execution( self , context ):
             mask = fa > self.fa_threshold
             mask = mask.astype(bool)
         #code extracted from dipy  response_from_mask function
-        sub_tenfit = tenfit[mask]
+        indices = np.where(mask > 0)
+        sub_tenfit = tenfit[indices]
         lambdas = sub_tenfit.evals[:, :2]
         gtab = sub_tenfit.model.gtab
         vol = aims.read(self.diffusion_data.fullPath())
         data = np.asarray(vol)
-        indices = np.where(mask)
         S0s = data[indices][:, np.nonzero(gtab.b0s_mask)[0]]
         response, ratio = _get_response(S0s, lambdas)
 
@@ -112,7 +116,7 @@ def execution( self , context ):
             mask = array_to_mask(mask)
             response, ratio = response_from_mask(gtab, data, mask)
         else:
-            context.warning("No mask provided ! Compute a high-FA based mask with threshold" + str(self.th))
+            context.warning("No mask provided ! Compute a high-FA based mask:  FA higher than  " + str(self.fa_threshold) + " are considered as single direction voxels")
             #default tensor model --> we dont store it for now
             tensor = TensorModel(gtab)
             #whole volume fit
@@ -123,13 +127,13 @@ def execution( self , context ):
             # high FA vale is associated with single fiber direction voxel
             mask = fa > self.fa_threshold
             mask = mask.astype(bool)
+            indices = np.where(mask)
             # code extracted from dipy  response_from_mask function
-            sub_tenfit = tenfit[mask]
+            sub_tenfit = tenfit[indices]
             lambdas = sub_tenfit.evals[:, :2]
             gtab = sub_tenfit.model.gtab
             vol = aims.read(self.diffusion_data.fullPath())
             data = np.asarray(vol)
-            indices = np.where(mask)
             S0s = data[indices][:, np.nonzero(gtab.b0s_mask)[0]]
             response, ratio = _get_response(S0s, lambdas)
 

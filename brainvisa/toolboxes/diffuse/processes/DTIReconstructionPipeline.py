@@ -38,8 +38,8 @@ from copy import copy
 
 
 
-userLevel = 2
-name = 'Diffusion Tensor Imaging (DTI) Reconstruction'
+userLevel = 0
+name = 'DTI Pipeline'
 category = 'dti pipeline'
 
 signature = Signature(
@@ -53,7 +53,7 @@ signature = Signature(
                      ('Non Linear Least Square', 'NNLS'),
                      ),
     'mask', ReadDiskItem(
-        'B0 Volume Brain Mask',
+        'Diffusion MR Mask',
         'Aims readable volume formats'
     ),
     'tensor_model', WriteDiskItem(
@@ -82,6 +82,10 @@ signature = Signature(
 #         #eNode.ODF.setSelected(False)
 #     self.changeSignature(signature)
 
+def linkOutput(self, eNode, dummy):
+    if self.mask is not None:
+        eNode.Reconstruction.mask = self.mask
+    pass
 
 
 def initialization(self):
@@ -105,11 +109,11 @@ def initialization(self):
     eNode.addChild('SignalPrediction',
                    ProcessExecutionNode('DTI_signal_prediction',
                                         optional=True,
-                                        selected=True))
-    eNode.addChild('ODF',
-                     ProcessExecutionNode('DTI_ODF',
-                                         optional=True,
-                                          selected=False))
+                                        selected=False))
+    # eNode.addChild('ODF',
+    #                  ProcessExecutionNode('DTI_ODF',
+    #                                      optional=True,
+    #                                       selected=False))
 
     self.setExecutionNode(eNode)
 
@@ -118,11 +122,7 @@ def initialization(self):
     #LINKINGS
     self.addLink('mask','diffusion_data')
     self.addLink('tensor_coefficients','tensor_model')
-    # self.addLink('d-odf','tensor_coefficients')
-    # self.addLink(None, 'compute_odf', self.switch_odf_computation)
-
-
-
+    self.setOptional('mask')
 
     #GradientTable process links
     # eNode.GradientTable.removeLink('corrected_dwi_volume', 'bvecs')
@@ -143,7 +143,7 @@ def initialization(self):
     eNode.Reconstruction.removeLink('tensor_coefficients', 'tensor_model')
     eNode.addLink('Reconstruction.diffusion_data','diffusion_data')
     eNode.addLink('Reconstruction.tensor_model','tensor_model')
-    eNode.addLink('Reconstruction.mask','mask')
+    eNode.addLink('Reconstruction.mask','mask', self.linkOutput)
     eNode.addLink('Reconstruction.tensor_coefficients','tensor_coefficients')
 
     #

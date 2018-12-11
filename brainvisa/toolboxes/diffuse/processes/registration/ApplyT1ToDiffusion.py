@@ -63,9 +63,9 @@ signature=Signature(
     'upper_thresh', Number(),
     'binarise', Boolean(),
     'threshold', Number(),
-    'T1_to_b0_registration_method', Choice("niftyreg", "fnirt"),
+    'T1_to_b0_registration_method', Choice( "fnirt","niftyreg"),
     'T1_to_diff_linear_xfm', WriteDiskItem( 'Transform T1 MRI to Diffusion MR', 'Transformation matrix' ),
-    'T1_to_diff_nonlinear_dfm', WriteDiskItem( 'NL Deform T1 MRI to Diffusion MR', 'NIFTI-1 image' ),
+    'T1_to_diff_nonlinear_dfm', WriteDiskItem( 'NL Deform T1 MRI to Diffusion MR', 'gz compressed NIFTI-1 image' ),
     'ROI_in_DWI', WriteDiskItem('3D Volume' , aimsGlobals.aimsVolumeFormats ),
 )
 

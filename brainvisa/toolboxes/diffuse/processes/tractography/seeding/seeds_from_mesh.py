@@ -49,10 +49,6 @@ signature=Signature(
 		'ROI Texture',
 		'GIFTI file'
 	),
-	'reference_volume', ReadDiskItem(
-	'Corrected DW Diffusion MR',
-	'Aims readable volume formats'
-	),
 	'seeds',WriteDiskItem(
 	    'Seeds',
 		'Text File'

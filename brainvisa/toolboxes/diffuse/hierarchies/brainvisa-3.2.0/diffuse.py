@@ -40,13 +40,15 @@ insert( '{center}/{subject}',
   'dmri', SetContent( 
     '{acquisition}', SetDefaultAttributeValue( 'acquisition', default_acquisition ), SetContent(
       'raw_dwi_referential_<subject>', SetType( 'Referential of Raw DW Diffusion MR' ),
-      'raw_dwi_<subject>', SetType( 'Raw Diffusion MR' ),
+      'raw_dwi_<subject>', SetType( 'Raw Diffusion MR'),
+      'raw_dwi_<subject>', SetType( 'Diffusion Acquisition Metadata'),
       'sigma_noise_<subject>', SetType( 'Noise Standard Deviation'),
-      'denoised_dwi_<subject>', SetType( 'Denoised Diffusion MR' ),
-      'raw_bvecs_<subject>', SetType( 'Raw B Vectors' ),
-      'raw_bvals_<subject>', SetType( 'Raw B Values' ),
+      'denoised_dwi_<subject>', SetType( 'Denoised Diffusion MR'),
+      'raw_bvecs_<subject>', SetType( 'Raw B Vectors'),
+      'raw_bvals_<subject>', SetType( 'Raw B Values'),
       'reoriented_bvecs_<subject>', SetType('Reoriented B Vectors'),
       'blip_reversed_dwi_<subject>', SetType( 'Blip Reversed DW Diffusion MR'),
+      'blip_reversed_dwi_<subject>',  SetType( 'Blip Reversed Diffusion Acquisition Metadata'),
       'fieldmap_rads_<subject>', SetType( 'Fieldmap Phase'),
       'fieldmap_abs_<subject>', SetType('Fieldmap Magnitude'),
     ),
@@ -68,6 +70,10 @@ insert( '{center}/{subject}/dmri/{acquisition}',
     'WM_mask_<subject>', SetType( 'T1 MRI to DW Diffusion MR WM' ),
     'GM_mask_<subject>', SetType( 'T1 MRI to DW Diffusion MR GM' ),
     'skeleton_mask_<subject>', SetType( 'T1 MRI to DW Diffusion MR Skeleton' ),
+    #useful to provide more accurate tractography constraints
+    'CSF_pve_dwi_<subject>', SetType( 'CSF PVE Diffusion MR'),
+    'WM_pve_dwi_<subject>', SetType( 'WM PVE Diffusion MR'),
+    'GM_pve_dwi_<subject>', SetType( 'GM PVE Diffusion MR'),
   ),
 )
 
@@ -156,15 +162,11 @@ insert('{center}/{subject}/dmri/{acquisition}/{analysis}/dti/{model}',
         ),
         'diffusion_odf', SetContent(
             'sh_coefficients',SetType('Spherical Harmonics Coefficients'),
-            '{tracking_session}',SetContent(
-                    'streamlines', SetType('Streamlines'),
             ),
             '{odf_instance}', SetContent(
                 'odf', SetType('Orientation Distribution Function'),
             ),
         ),
-  ),
-
 )
 
 
@@ -191,13 +193,11 @@ insert('{center}/{subject}/dmri/{acquisition}/{analysis}/csd/{fiber_response}',
                         'odf_mesh', SetType('Spherical Function Mesh'),
                         'odf_texture', SetType('Spherical Function Texture'),
                             ),
-                    '{tracking_session}',SetContent(
-                        'streamlines', SetType('Streamlines'),
-                ),
-                        ),
+                    
                     ),
                 ),
-            )
+         ),
+)
 
 insert('{center}/{subject}/dmri/{acquisition}/{analysis}/global_tracking',
     'gibbs_tracking', SetContent(
@@ -206,7 +206,11 @@ insert('{center}/{subject}/dmri/{acquisition}/{analysis}/global_tracking',
     ),
 )
 
-
-
+insert('{center}/{subject}/dmri/{acquisition}/{analysis}/tractography',
+    '{tracking_session}', SetContent(
+         '<subject>_<analysis>_<tracking_session>_streamlines', SetType('Streamlines'),
+         '<subject>_<analysis>_<tracking_session>_density_map', SetType('Streamlines Density Map'), SetType('Streamlines Density Map'),
+	),
+)
 
 

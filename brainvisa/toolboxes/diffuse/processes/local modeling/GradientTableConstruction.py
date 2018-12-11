@@ -42,15 +42,14 @@ def initialization( self ):
     self.addLink('bvecs', 'diffusion_data')
     self.addLink('bvals','bvecs' )
     self.addLink('gradient_table', 'bvecs' )
+    #default value in dipy and value used by Lucile in import and correction distorsion processes
     self.b0_threshold = 50
-
-
 
 
 def execution( self, context):
     bvals, bvecs = read_bvals_bvecs(self.bvals.fullPath(), self.bvecs.fullPath())
     if self.round_bvals:
-        context.write("Rouding bvalues: useful for shell based models")
+        context.write("Rouding bvalues to : useful for shell based models")
         bvals = np.round(bvals,-2)
     try:
         minf = self.diffusion_data.minf()

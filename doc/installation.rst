@@ -8,7 +8,8 @@ Prerequisites
 
 Mandatory
 =========
-* **UBUNTU 16.04**: currently the only operating system supported.  Diffuse was tested using  Ubuntu-16.04.5-64bit_
+
+* **UBUNTU 16.04**: currently the only operating system supported.  Diffuse was tested using  Ubuntu-16.04.5-64bit_ . At least 8GO of RAM are required to process an average subject (eg an diffusion MRI scan of 118x118x80 voxels with 109 diffusion directions with full reversed acquisition scheme) an can goes up to 30GO to fully process an HCP 3T subject. A multi processor architecture is strongly recommended to speed up distorsion correction processing but not mandatory.
 
 * **BRAINVISA v4.6.1**: click on  BrainVISA-4.6.1-installer_. Once download is finished, open a terminal and type the following lines. ``<download_location>`` refers to the directory where the installer has been downloaded: ::
 

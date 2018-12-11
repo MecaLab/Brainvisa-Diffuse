@@ -35,6 +35,7 @@ from brainvisa import anatomist
 from soma import aims
 import numpy as np
 from scipy.spatial.distance import pdist
+from brainvisa.registration import getTransformationManager
 from brainvisa.diffuse.visualization import quick_replicate_meshes,vertices_and_faces_to_mesh,array_to_texture
 
 
@@ -43,14 +44,12 @@ name = 'Anatomist Show Seeds as spheres'
 roles = ('viewer', )
 
 signature = Signature(
-    'seeds_coordinates', ReadDiskItem(
+    'seeds', ReadDiskItem(
         'Seeds',
         'Text File'
     ),
-    'reference_volume',ReadDiskItem(
-        'Corrected DW Diffusion MR',
-        'Aims readable volume formats'
-    ),
+    'n_sampling',Integer(),
+    'n_display', Integer(),
 )
 
 
@@ -59,45 +58,37 @@ def validation():
 
 
 def initialization(self):
-    self.addLink('reference_volume','seeds_coordinates')
-    self.setHidden('reference_volume')
+
+    self.n_sampling = 500
+    self.n_display = 10000
     pass
 
 
 def execution(self, context):
+    n_faces = 21
+    transformManager = getTransformationManager()
+    seeds_referential = transformManager.referential(self.seeds)
 
-    seeds_centers = np.loadtxt(self.seeds_coordinates.fullPath())
+    seeds_centers = np.loadtxt(self.seeds.fullPath())
+    n_sample = min(len(seeds_centers), self.n_sampling)
+    if len(seeds_centers) > self.n_display:
+        context.warning(
+            "You try to display more than ", str(self.n_display), " seeds. It may causes Memory Error. The first ", str(self.display)," seeds ONLY are displayed in order to prevent crashes")
+    radius = np.min(pdist(seeds_centers[:n_sample])) / 2.0
+    sphere = aims.SurfaceGenerator.icosphere((0, 0, 0), radius, n_faces)
+    vertices = np.array(sphere.vertex())
+    triangles = np.array(sphere.polygon())
+    seeds_centers = seeds_centers[:min(self.n_display, len(seeds_centers))]
+    new_vertices, new_triangles = quick_replicate_meshes(seeds_centers, vertices, triangles)
+    mesh = vertices_and_faces_to_mesh(new_vertices, new_triangles)
 
-    #getting_voxel_size from metada of reference volume (rem: is it possible to create one referential with voxel size in it?)
-    #remove the 1 size of 4D volume on loading
-    voxel_size = np.array(self.reference_volume.minf()['voxel_size'])[:-1]
-    context.write(seeds_centers.shape, voxel_size.shape)
-    if voxel_size.shape[0]!= seeds_centers.shape[-1]:
-        context.write('No compatible dimensions, aborting display')
-    else:
-        #putting seeds back in mm for visualization
-        seeds_centers = seeds_centers*voxel_size[np.newaxis,:]
+    a = anatomist.Anatomist()
+    w3d = a.createWindow("3D")
 
-        #compute the min difference between two centers (can be long if too many seeds)
-        n_sample = min(len(seeds_centers),500)
-        if len(seeds_centers)>10000:
-            context.warning("You try to display more than 10000 seeds. It can causes Memory Error. The 5000 first seeds ONLY are displayed in order to prevent crashes")
-        radius = np.min(pdist(seeds_centers[:n_sample]))/2.0
-
-        nfaces = 21
-        sphere = aims.SurfaceGenerator.icosphere((0, 0, 0), radius, nfaces)
-        vertices = np.array(sphere.vertex())
-        triangles = np.array(sphere.polygon())
-
-        seeds_centers = seeds_centers[:min(10000,len(seeds_centers))]
-        new_vertices, new_triangles = quick_replicate_meshes(seeds_centers,vertices,triangles)
-        mesh = vertices_and_faces_to_mesh(new_vertices,new_triangles)
-
-        a = anatomist.Anatomist()
-        w3d = a.createWindow("3D")
-
-        A_graph=a.toAObject(mesh)
-        material = a.Material(diffuse=[1, 0, 0, 1])
-        A_graph.setMaterial(material)
-        w3d.addObjects(A_graph)
-        return [w3d, A_graph]
+    A_graph = a.toAObject(mesh)
+    #yellow colors for the seeds (different form Red, Green , Blue so that they appears with orientation coded fibers
+    material = a.Material(diffuse=[1, 1, 0, 1])
+    A_graph.setMaterial(material)
+    A_graph.assignReferential(seeds_referential)
+    w3d.addObjects(A_graph)
+    return [w3d, A_graph]

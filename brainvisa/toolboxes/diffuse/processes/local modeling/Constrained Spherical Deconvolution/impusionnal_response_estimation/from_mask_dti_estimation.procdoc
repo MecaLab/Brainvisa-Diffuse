@@ -14,6 +14,7 @@
        A diffusion  tensor model is fitted in every voxel belonging to the given mask. Obtained tensors are then reoriented so that their main axis is coherent and the impulsionnal response
 is obtained as the mean of the reoriented tensors. It implies that the region where the tensor is fitted must correspond to single fiber voxels (no crossing fibers). As an example one can generate such mask by slecting high Fractionnal Anisotropy Voxels (>0.7)
         or use anatomical priors (corpus callosum from the JHU atlas [ref JHU]. To know more about implementation and details please refer to  <a href = "http://nipy.org/dipy/reference/dipy.reconst.html#dipy.reconst.csdeconv.estimate_response">Dipy documentation</a>
+        If no mask is provided a default mask is computed as  FA values greater than threshold, default value 0.7.
     </xhtml>
   </d>
 </d>

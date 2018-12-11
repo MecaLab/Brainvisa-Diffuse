@@ -35,8 +35,8 @@ from brainvisa.processes import *
 
 
 
-userLevel = 2
-name = 'Constrained Spherical Deconvolution Reconstruction'
+userLevel = 1
+name = 'CSD Pipeline'
 category = 'pipeline'
 
 signature = Signature(
@@ -78,7 +78,7 @@ def initialization(self):
                    ProcessExecutionNode('GradientTableConstruction', optional=True))
 
     eNode.addChild('FiberResponse',
-                   ProcessExecutionNode('default_response', optional=True))
+                   ProcessExecutionNode('recursive_estimation', optional=True))
 
     eNode.addChild('Model',
                    ProcessExecutionNode('csd_model', optional=True))
@@ -106,7 +106,7 @@ def initialization(self):
     self.addLink('mask', 'diffusion_data')
     self.addLink('FOD_sh_coeff','model')
     self.addLink('FOD', 'FOD_sh_coeff')
-    self.setOptional('FOD')
+    self.setOptional('FOD','mask')
     #classical links to insure all parameters can be changed (rem Links can have funny behavior)
 
 
@@ -115,7 +115,11 @@ def initialization(self):
 
     #FiberResponse process links
     eNode.removeLink('FiberResponse.response', 'FiberResponse.diffusion_data')
+    eNode.removeLink('FiberResponse.gradient_table','FiberResponse.diffusion_data')
+    eNode.removeLink('FiberResponse.mask', 'FiberResponse.diffusion_data')
     eNode.addLink('FiberResponse.diffusion_data','GradientTable.diffusion_data')
+    eNode.addLink('FiberResponse.gradient_table','GradientTable.gradient_table')
+    eNode.addLink('FiberResponse.mask','mask')
     eNode.addLink('FiberResponse.response','impulsionnal_fiber_response')
 
     #Model process links

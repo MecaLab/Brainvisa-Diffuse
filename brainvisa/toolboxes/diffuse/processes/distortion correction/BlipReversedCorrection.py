@@ -158,109 +158,109 @@ def execution( self, context ):
     else:
         blip_down_scheme = 'b0_volumes_only'
         context.write('Only b0 volumes with opposite phase-encode direction DETECTED')
-
-    context.write('- Correcting number of slices')
-    dimx = self.dwi_data.get( 'volume_dimension', search_header=True )[0]
-    dimy = self.dwi_data.get( 'volume_dimension', search_header=True )[1]
-    dimz = self.dwi_data.get( 'volume_dimension', search_header=True )[2]
-    if dimz % 2 != 0:
-       context.write('ODD number of slices')
-       up_data = up_data[:,1:,:,:]
-       down_data = down_data[:,1:,:,:]
-       dimz = dimz -1
-
-    context.write('- b0 volumes extraction')
-    up_b0_index = numpy.where(up_bvals < 50)[0] ## bvals==0 not possible when bvalues take values +-5 or +-10
-    ##    if len(up_b0_index)>3:
-    ##        up_b0_index=up_b0_index[::2]
-    up_b0 = up_data[up_b0_index, :, :, :]
-    if blip_down_scheme == 'b0_volumes_only':
-       down_bvals = numpy.zeros((1, Nvol_down))+up_bvals[up_b0_index[0]]
-       down_bvals = down_bvals[0]
-       down_b0_index = numpy.arange(Nvol_down)
-       down_bvecs = numpy.zeros((3, Nvol_down))+up_bvecs[:,up_b0_index[0]].reshape((3,1))
-    else:
-       down_bvals = up_bvals
-       down_b0_index = up_b0_index
-       down_bvecs = up_bvecs
-
-    down_b0 = down_data[down_b0_index, :, :, :]
-
-    context.write('- Merging blip-up and blip-down b0 images')
-    up_down_b0 = numpy.concatenate((up_b0, down_b0))
-    up_down_b0_vol = aims.Volume(up_down_b0)
-    up_down_b0_vol.copyHeaderFrom(up_img.header())
-    aims.write(up_down_b0_vol, self.topup_b0_volumes.fullPath())
-
-    if self.b0_bias_correction:
-       context.write('- Intensity bias correction of b0 images')
-       biais_corrected_img = context.temporary('gz compressed NIFTI-1 image' )
-       sec = int(time.time())
-       for i in range(len(up_b0_index)+len(down_b0_index)):
-           context.write('volume '+str(i))
-           context.system( configuration.FSL.fsl_commands_prefix + 'fslroi', self.topup_b0_volumes.fullPath(), tmp_directory+'/bias_img_'+str(sec)+'.nii.gz', str(i), '1' )
-           context.system( configuration.FSL.fsl_commands_prefix + 'fsl_anat', '--noreorient', '--nocrop', '--noreg', '--nononlinreg', '--noseg', '--nosubcortseg', '-t', 'T2', '-i', tmp_directory+'/bias_img_'+str(sec)+'.nii.gz')
-           if i==0:
-               context.system( 'cp', tmp_directory + '/bias_img_'+str(sec)+'.anat/T2_biascorr.nii.gz', biais_corrected_img.fullPath())
-           else:
-               context.system( configuration.FSL.fsl_commands_prefix + 'fslmerge', '-t', biais_corrected_img.fullPath(), biais_corrected_img.fullPath(), tmp_directory + '/bias_img_'+str(sec)+'.anat/T2_biascorr.nii.gz')
-           context.system( 'rm', '-r', tmp_directory + '/bias_img_'+str(sec)+'.anat/' )
-       context.system( 'mv', biais_corrected_img.fullPath(), self.topup_b0_volumes.fullPath())
-
-    context.write('- Merging blip-up and blip-down dwi images')
-    ##    context.system( configuration.FSL.fsl_commands_prefix + 'fslmerge', '-t', self.topup_data.fullPath(), self.dwi_data.fullPath(), self.blip_reversed_data.fullPath() )
-    up_down_data = numpy.concatenate((up_data, down_data))
-    up_down_data_vol = aims.Volume(up_down_data)
-    up_down_data_vol.copyHeaderFrom(up_img.header())
-    aims.write(up_down_data_vol, self.topup_data.fullPath())
-    context.write('- Merging bvals and bvecs')
-    up_down_bvals = numpy.concatenate((up_bvals, down_bvals), axis=0)
-    up_down_bvals = up_down_bvals.reshape((1,len(up_down_bvals)))
-    numpy.savetxt(self.topup_bvals.fullPath(), up_down_bvals, fmt='%d')
-    up_down_bvecs = numpy.concatenate((up_bvecs, down_bvecs), axis=1)
-    up_down_bvecs = up_down_bvecs
-    numpy.savetxt(self.topup_bvecs.fullPath(), up_down_bvecs, fmt='%.15f')
-
-    context.write('- Setting acquisition parameters')
-    PE_parameters = self.topup_parameters.fullPath()
-    PE_index = self.topup_index.fullPath()
-    f_param = open(PE_parameters, 'w')
-    f_index = open(PE_index, 'w')
-    PE_list = ["AP", "PA", "LR", "RL"]
-    vector_list_up = ['0 1 0 ', '0 -1 0 ', '1 0 0 ', '-1 0 0 ']
-    vector_list_down = ['0 -1 0 ', '0 1 0 ', '-1 0 0 ', '1 0 0 ']
-    indx = PE_list.index(self.phase_encoding_direction)
-    [f_param.write(vector_list_up[indx] + str(self.readout_time) + '\n') for i in range(len(up_b0_index))]
-    [f_param.write(vector_list_down[indx] + str(self.readout_time) + '\n') for i in range(len(down_b0_index))]
-    val=1
-    for i in range(len(up_data)+len(down_data)):
-       if i in up_b0_index[1:] or i in down_b0_index+len(up_bvals):
-           val+=1
-       f_index.write(str(val)+' ')
-    f_param.close()
-    f_index.close()
-
-    context.write('- Estimation of the susceptibility off-resonance field...')
-    topup_config = fsldir + '/etc/flirtsch/b02b0.cnf'
-    cmd = [ configuration.FSL.fsl_commands_prefix + 'topup', '--imain=' + self.topup_b0_volumes.fullPath(), '--datain=' + self.topup_parameters.fullPath(), '--config=' + topup_config, '--out=' + FSL_topup_directory+ '/topup', '--iout=' + self.topup_b0_volumes_unwarped.fullPath(), '--verbose' ]
-    context.system( *cmd )
-
-    context.write('- Apply fieldcoeff to b0 volumes')
-    up_b01 = context.temporary('gz compressed NIFTI-1 image' )
-    down_b01 = context.temporary('gz compressed NIFTI-1 image' )
-    up_b01_vol = aims.Volume(up_b0[0,:,:,:])
-    up_b01_vol.copyHeaderFrom(up_img.header())
-    aims.write(up_b01_vol, up_b01.fullPath())
-    down_b01_vol = aims.Volume(down_b0[0,:,:,:])
-    down_b01_vol.copyHeaderFrom(down_img.header())
-    aims.write(down_b01_vol, down_b01.fullPath())
-    cmd = [ configuration.FSL.fsl_commands_prefix + 'applytopup', '--imain=' + up_b01.fullPath() + ',' + down_b01.fullPath(), '--inindex='+ '1' + ',' + str(len(up_b0_index)+1), '--datain=' + self.topup_parameters.fullPath(), '--topup=' + FSL_topup_directory + '/topup', '--out=' + self.topup_b0_mean.fullPath()]
-    context.system( *cmd )
-    BrainExtraction.defaultBrainExtraction(self.topup_b0_mean.fullPath(), self.topup_b0_mean_brain.fullPath(), f=str(self.brain_extraction_factor))
+    #
+    # context.write('- Correcting number of slices')
+    # dimx = self.dwi_data.get( 'volume_dimension', search_header=True )[0]
+    # dimy = self.dwi_data.get( 'volume_dimension', search_header=True )[1]
+    # dimz = self.dwi_data.get( 'volume_dimension', search_header=True )[2]
+    # if dimz % 2 != 0:
+    #    context.write('ODD number of slices')
+    #    up_data = up_data[:,1:,:,:]
+    #    down_data = down_data[:,1:,:,:]
+    #    dimz = dimz -1
+    #
+    # context.write('- b0 volumes extraction')
+    # up_b0_index = numpy.where(up_bvals < 50)[0] ## bvals==0 not possible when bvalues take values +-5 or +-10
+    # ##    if len(up_b0_index)>3:
+    # ##        up_b0_index=up_b0_index[::2]
+    # up_b0 = up_data[up_b0_index, :, :, :]
+    # if blip_down_scheme == 'b0_volumes_only':
+    #    down_bvals = numpy.zeros((1, Nvol_down))+up_bvals[up_b0_index[0]]
+    #    down_bvals = down_bvals[0]
+    #    down_b0_index = numpy.arange(Nvol_down)
+    #    down_bvecs = numpy.zeros((3, Nvol_down))+up_bvecs[:,up_b0_index[0]].reshape((3,1))
+    # else:
+    #    down_bvals = up_bvals
+    #    down_b0_index = up_b0_index
+    #    down_bvecs = up_bvecs
+    #
+    # down_b0 = down_data[down_b0_index, :, :, :]
+    #
+    # context.write('- Merging blip-up and blip-down b0 images')
+    # up_down_b0 = numpy.concatenate((up_b0, down_b0))
+    # up_down_b0_vol = aims.Volume(up_down_b0)
+    # up_down_b0_vol.copyHeaderFrom(up_img.header())
+    # aims.write(up_down_b0_vol, self.topup_b0_volumes.fullPath())
+    #
+    # if self.b0_bias_correction:
+    #    context.write('- Intensity bias correction of b0 images')
+    #    biais_corrected_img = context.temporary('gz compressed NIFTI-1 image' )
+    #    sec = int(time.time())
+    #    for i in range(len(up_b0_index)+len(down_b0_index)):
+    #        context.write('volume '+str(i))
+    #        context.system( configuration.FSL.fsl_commands_prefix + 'fslroi', self.topup_b0_volumes.fullPath(), tmp_directory+'/bias_img_'+str(sec)+'.nii.gz', str(i), '1' )
+    #        context.system( configuration.FSL.fsl_commands_prefix + 'fsl_anat', '--noreorient', '--nocrop', '--noreg', '--nononlinreg', '--noseg', '--nosubcortseg', '-t', 'T2', '-i', tmp_directory+'/bias_img_'+str(sec)+'.nii.gz')
+    #        if i==0:
+    #            context.system( 'cp', tmp_directory + '/bias_img_'+str(sec)+'.anat/T2_biascorr.nii.gz', biais_corrected_img.fullPath())
+    #        else:
+    #            context.system( configuration.FSL.fsl_commands_prefix + 'fslmerge', '-t', biais_corrected_img.fullPath(), biais_corrected_img.fullPath(), tmp_directory + '/bias_img_'+str(sec)+'.anat/T2_biascorr.nii.gz')
+    #        context.system( 'rm', '-r', tmp_directory + '/bias_img_'+str(sec)+'.anat/' )
+    #    context.system( 'mv', biais_corrected_img.fullPath(), self.topup_b0_volumes.fullPath())
+    #
+    # context.write('- Merging blip-up and blip-down dwi images')
+    # ##    context.system( configuration.FSL.fsl_commands_prefix + 'fslmerge', '-t', self.topup_data.fullPath(), self.dwi_data.fullPath(), self.blip_reversed_data.fullPath() )
+    # up_down_data = numpy.concatenate((up_data, down_data))
+    # up_down_data_vol = aims.Volume(up_down_data)
+    # up_down_data_vol.copyHeaderFrom(up_img.header())
+    # aims.write(up_down_data_vol, self.topup_data.fullPath())
+    # context.write('- Merging bvals and bvecs')
+    # up_down_bvals = numpy.concatenate((up_bvals, down_bvals), axis=0)
+    # up_down_bvals = up_down_bvals.reshape((1,len(up_down_bvals)))
+    # numpy.savetxt(self.topup_bvals.fullPath(), up_down_bvals, fmt='%d')
+    # up_down_bvecs = numpy.concatenate((up_bvecs, down_bvecs), axis=1)
+    # up_down_bvecs = up_down_bvecs
+    # numpy.savetxt(self.topup_bvecs.fullPath(), up_down_bvecs, fmt='%.15f')
+    #
+    # context.write('- Setting acquisition parameters')
+    # PE_parameters = self.topup_parameters.fullPath()
+    # PE_index = self.topup_index.fullPath()
+    # f_param = open(PE_parameters, 'w')
+    # f_index = open(PE_index, 'w')
+    # PE_list = ["AP", "PA", "LR", "RL"]
+    # vector_list_up = ['0 1 0 ', '0 -1 0 ', '1 0 0 ', '-1 0 0 ']
+    # vector_list_down = ['0 -1 0 ', '0 1 0 ', '-1 0 0 ', '1 0 0 ']
+    # indx = PE_list.index(self.phase_encoding_direction)
+    # [f_param.write(vector_list_up[indx] + str(self.readout_time) + '\n') for i in range(len(up_b0_index))]
+    # [f_param.write(vector_list_down[indx] + str(self.readout_time) + '\n') for i in range(len(down_b0_index))]
+    # val=1
+    # for i in range(len(up_data)+len(down_data)):
+    #    if i in up_b0_index[1:] or i in down_b0_index+len(up_bvals):
+    #        val+=1
+    #    f_index.write(str(val)+' ')
+    # f_param.close()
+    # f_index.close()
+    #
+    # context.write('- Estimation of the susceptibility off-resonance field...')
+    # topup_config = fsldir + '/etc/flirtsch/b02b0.cnf'
+    # cmd = [ configuration.FSL.fsl_commands_prefix + 'topup', '--imain=' + self.topup_b0_volumes.fullPath(), '--datain=' + self.topup_parameters.fullPath(), '--config=' + topup_config, '--out=' + FSL_topup_directory+ '/topup', '--iout=' + self.topup_b0_volumes_unwarped.fullPath(), '--verbose' ]
+    # context.system( *cmd )
+    #
+    # context.write('- Apply fieldcoeff to b0 volumes')
+    # up_b01 = context.temporary('gz compressed NIFTI-1 image' )
+    # down_b01 = context.temporary('gz compressed NIFTI-1 image' )
+    # up_b01_vol = aims.Volume(up_b0[0,:,:,:])
+    # up_b01_vol.copyHeaderFrom(up_img.header())
+    # aims.write(up_b01_vol, up_b01.fullPath())
+    # down_b01_vol = aims.Volume(down_b0[0,:,:,:])
+    # down_b01_vol.copyHeaderFrom(down_img.header())
+    # aims.write(down_b01_vol, down_b01.fullPath())
+    # cmd = [ configuration.FSL.fsl_commands_prefix + 'applytopup', '--imain=' + up_b01.fullPath() + ',' + down_b01.fullPath(), '--inindex='+ '1' + ',' + str(len(up_b0_index)+1), '--datain=' + self.topup_parameters.fullPath(), '--topup=' + FSL_topup_directory + '/topup', '--out=' + self.topup_b0_mean.fullPath()]
+    # context.system( *cmd )
+    # BrainExtraction.defaultBrainExtraction(self.topup_b0_mean.fullPath(), self.topup_b0_mean_brain.fullPath(), f=str(self.brain_extraction_factor))
 
     context.write('- Eddy current estimation and correction... [can take several hours]')
-    memoryUse = 2*8*(len(up_data)+len(down_data))*dimx*dimy*dimz/1000000
-    context.write('Estimated memory usage: '+str(memoryUse)+' MB')
+    #memoryUse = 2*8*(len(up_data)+len(down_data))*dimx*dimy*dimz/1000000
+    #context.write('Estimated memory usage: '+str(memoryUse)+' MB')
 
     # if oldORnew == "old":
     #    context.write('INFO: FSL version is anterior to 5.0.9')

@@ -34,18 +34,19 @@
 from brainvisa.processes import *
 import numpy as np
 import nibabel as nib
+from copy import copy
 from dipy.io.streamline import save_trk
-from dipy.tracking.local import LocalTracking,ActTissueClassifier,BinaryTissueClassifier,ThresholdTissueClassifier
+from dipy.data import get_sphere
+from dipy.tracking.local import LocalTracking, ActTissueClassifier, BinaryTissueClassifier, ThresholdTissueClassifier
 from dipy.direction.probabilistic_direction_getter import DeterministicMaximumDirectionGetter, ProbabilisticDirectionGetter
 from brainvisa.diffuse.building_spheres import read_sphere
-from copy import copy
+import nibabel.streamlines.trk as trk
+trk.TrkFile
 
 
 
-userLevel = 2
+userLevel = 0
 name = 'Local Tracking'
-
-
 
 
 signature = Signature(
@@ -55,7 +56,7 @@ signature = Signature(
     ),
     'type',Choice('DETERMINISTIC','PROBABILISTIC'),
 
-    'constraint', Choice('Binary','Threshold','Anatomical','CMC'),
+    'constraint', Choice('Anatomical','Threshold','Binary'),
     'mask', ReadDiskItem(
         'Diffusion MR Mask',
         'gz compressed NIFTI-1 image'
@@ -64,16 +65,19 @@ signature = Signature(
         'Fractionnal Anisotropy Volume',
         'gz compressed NIFTI-1 image'
     ),
-    'include_pve_map', ReadDiskItem(
-        'Diffusion MR Mask',
-        'gz compressed NIFTI-1 image'
-    ),
-    'exclude_pve_map',ReadDiskItem(
-        'Diffusion MR Mask',
-        'gz compressed NIFTI-1 image'
-    ),
     'threshold', Float(),
-
+    'wm_pve',ReadDiskItem(
+        'WM PVE Diffusion MR',
+        'gz compressed NIFTI-1 image'
+    ),
+    'gm_pve', ReadDiskItem(
+        'GM PVE Diffusion MR',
+        'gz compressed NIFTI-1 image'
+    ),
+    'csf_pve', ReadDiskItem(
+        'CSF PVE Diffusion MR',
+        'gz compressed NIFTI-1 image'
+    ),
     'sphere', ReadDiskItem(
         'Sphere Template',
         'GIFTI file'
@@ -84,14 +88,14 @@ signature = Signature(
     ),
     'max_angle', Float(),
     'relative_peak_threshold', Float(),
-    'min_separation_angle',Float(),
+    'min_separation_angle', Float(),
     'crossing_max', Integer(),
     'step_size', Float(),
     'fixed_step', Boolean(),
     'nb_iter_max', Integer(),
-    'return_all',Boolean(),
-    'nb_samples',Integer(),
-    'streamlines',WriteDiskItem(
+    'return_all', Boolean(),
+    'nb_samples', Integer(),
+    'streamlines', WriteDiskItem(
         'Streamlines',
         'Trackvis tracts'
     ),
@@ -106,7 +110,7 @@ def switching_type(self,dumb):
         self.nb_iter_max = 500
         self.setHidden('nb_samples')
     elif self.type == 'PROBABILISTIC':
-        self.nb_samples = 5000
+        self.nb_samples = 50
         self.nb_iter_max = 1000
         self.setEnable('nb_samples')
     self.changeSignature(signature)
@@ -114,16 +118,17 @@ def switching_type(self,dumb):
 def switching_classifier(self,dumb):
     signature = copy(self.signature)
     if self.constraint == 'Binary':
-        self.setHidden('scalar_volume','include_pve_map','exclude_pve_map','threshold')
-        self.setOptional('scalar_volume','include_pve_map','exclude_pve_map','threshold')
+        self.setHidden('scalar_volume','threshold','wm_pve','gm_pve','csf_pve')
+        self.setOptional('scalar_volume','threshold','wm_pve','gm_pve','csf_pve')
         self.setEnable('mask')
     elif self.constraint == 'Threshold':
-        self.setHidden('mask', 'include_pve_map', 'exclude_pve_map')
+        self.setHidden('mask', 'wm_pve','gm_pve','csf_pve')
+        self.setOptional('mask', 'wm_pve','gm_pve','csf_pve')
         self.setEnable('scalar_volume','threshold')
     elif self.constraint == 'Anatomical' or self.constraint == 'CMC':
         self.setHidden('scalar_volume', 'mask' , 'threshold')
-        self.setEnable('include_pve_map','exclude_pve_map')
-        self.setOptional('mask')
+        self.setEnable('wm_pve','gm_pve','csf_pve')
+        self.setOptional('scalar_volume', 'mask', 'threshold')
     self.changeSignature(signature)
 
 
@@ -132,7 +137,7 @@ def switching_classifier(self,dumb):
 def initialization(self):
 
     #Defualt values
-    self.type='DETERMINISTIC'
+    self.type = 'DETERMINISTIC'
     self.max_angle = 30
     self.relative_peak_threshold = 0.1
     self.min_separation_angle = 5
@@ -142,11 +147,15 @@ def initialization(self):
     self.return_all = False
     self.nb_samples = 1
     self.crossing_max = None
-    self.setOptional('crossing_max')
+    self.setOptional('crossing_max','sphere')
+    self.constraint = 'Anatomical'
 
     self.addLink('mask','sh_coefficients')
     self.addLink('scalar_volume','sh_coefficients')
     self.addLink('seeds','sh_coefficients')
+    self.addLink('csf_pve', 'sh_coefficients')
+    self.addLink('gm_pve', 'sh_coefficients')
+    self.addLink('wm_pve', 'sh_coefficients')
     self.addLink(None,'type',self.switching_type)
     self.addLink(None,'constraint',self.switching_classifier)
     self.addLink('streamlines','sh_coefficients')
@@ -161,23 +170,28 @@ def execution(self,context):
 
     #transformation from Aims LPI mm space to RAS mm (reference space)
 
-    aims_mm_to_ras_mm = np.array(header['transformations'][0])
+    aims_mm_to_ras_mm = np.array(header['transformations'][0]).reshape((4,4))
     voxel_size = np.array(header['voxel_size'])
-    scaling = np.concatenate((voxel_size,np.ones(1)))
+    if len(voxel_size) == 4:
+        voxel_size = voxel_size[:-1]
+    scaling = np.concatenate((voxel_size, np.ones(1)))
+    #context.write(voxel_size.shape)
     scaling_mat = np.diag(scaling)
-    aims_voxel_to_ras_mm = np.dot((scaling_mat,aims_mm_to_ras_mm))
-
+    #context.write(scaling_mat.shape, aims_mm_to_ras_mm.shape )
+    aims_voxel_to_ras_mm = np.dot(aims_mm_to_ras_mm,scaling_mat)
 
     affine_tracking = np.eye(4)
 
     sh = np.array(sh_coeff_vol,copy=True)
     sh = sh.astype(np.float64)
     vol_shape = sh.shape[:-1]
-    sphere = read_sphere(self.sphere.fullPath())
+    if self.sphere is not None:
+        sphere = read_sphere(self.sphere.fullPath())
+    else:
+        context.write('No Projection Sphere provided. Default dipy sphere symmetric 362 is used' )
+        sphere = get_sphere()
 
-
-    dg = DirectionGetter[self.type].from_shcoeff(sh,self.max_angle,sphere,basis_type=None,relative_peak_threshold=self.relative_peak_threshold,min_separation_angle=self.min_separation_angle)
-    #tractography is done in voxel space it is more convenient (avoid shearing etc)
+    dg = DirectionGetter[self.type].from_shcoeff(sh, self.max_angle, sphere, basis_type=None, relative_peak_threshold=self.relative_peak_threshold, min_separation_angle=self.min_separation_angle)
 
     #Handling seeds in both deterministic and probabilistic framework
     s = np.loadtxt(self.seeds.fullPath())
@@ -189,6 +203,8 @@ def execution(self,context):
         seeds = np.zeros((self.nb_samples,)+s.shape)
         seeds[i] = s
         seeds = seeds.reshape((-1,3))
+    #put seeds in voxel space
+    #seeds = nib.affines.apply_affine(np.linalg.inv(scaling_mat), seeds)
     #building classifier
 
     if self.constraint == 'Binary':
@@ -201,17 +217,35 @@ def execution(self,context):
         scal = np.asarray(scal_vol)[...,0]
         scal = scal.astype(np.float32)
         classifier = ThresholdTissueClassifier(scal, self.threshold)
-    elif self.constraint == 'Anatomical':
-        include_pve = np.asarray(aims.read(self.include_pve_map.fullPath()))[...,0]
-        exclude_pve = np.asarray(aims.read(self.exclude_pve_map.fullPath()))[...,0]
-        classifier = ActTissueClassifier(include_pve,exclude_pve)
     else:
-        pass
+        csf_vol = aims.read(self.csf_pve.fullPath())
+        grey_vol = aims.read(self.gm_pve.fullPath())
+        white_vol = aims.read(self.wm_pve.fullPath())
+
+        csf = np.array(csf_vol)
+        csf = csf[..., 0]
+        gm = np.array(grey_vol)
+        gm = gm[..., 0]
+        wm = np.array(white_vol)
+        wm = wm[..., 0]
+
+        #rethreshold volumes due to interpolation (eg values >1)
+        total = (csf + gm + wm).copy()
+        csf[total<=0] = 0
+        gm[total<=0] = 0
+        wm[total<=0] = 0
+        csf[total!=0]= (csf[total !=0 ])/(total[total!=0])
+        wm[total != 0] = (wm[total != 0])/(total[total != 0])
+        gm[total != 0] = gm[total != 0] / (total[total != 0])
+
+
+        classifier = ActTissueClassifier.from_pve(wm_map=wm, gm_map=gm, csf_map=csf)
+
 
     #Tracking is made in the LPI voxel space in order no to imposes affine to data. The seeds are supposed to also be in LPI voxel space
-    streamlines_generator = LocalTracking(dg, classifier,seeds,affine_tracking,step_size=self.step_size,max_cross=self.crossing_max, maxlen=self.nb_iter_max,fixedstep=np.float32(self.fixed_step),return_all=self.return_all)
+    streamlines_generator = LocalTracking(dg, classifier, seeds, scaling_mat, step_size=self.step_size, max_cross=self.crossing_max, maxlen=self.nb_iter_max,fixedstep=np.float32(self.fixed_step),return_all=self.return_all)
     #Store Fibers directly in  LPI orientation with appropriate transformation
-    save_trk(self.streamlines.fullPath(),streamlines_generator,affine=aims_voxel_to_ras_mm,vox_size=voxel_size,shape=vol_shape)
+    save_trk(self.streamlines.fullPath(),streamlines_generator,affine=aims_mm_to_ras_mm, vox_size=voxel_size,shape=vol_shape)
 
 
 

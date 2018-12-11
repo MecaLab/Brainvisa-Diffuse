@@ -32,6 +32,7 @@
 
 from brainvisa.processes import *
 from dipy.tracking.utils import seeds_from_mask
+from brainvisa.registration import getTransformationManager
 import numpy as np
 
 name = 'Evenly distributed seeds from mask'
@@ -60,10 +61,21 @@ def initialization(self):
 
 
 def execution(self, context):
+
 	mask_vol = aims.read(self.mask.fullPath())
+	h = mask_vol.header()
 	mask = np.asarray(mask_vol)[..., 0]
 	mask = mask.astype(bool)
+	voxel_size = np.array(h['voxel_size'])
+	if len(voxel_size) == 4:
+		voxel_size[-1] = 1
+	elif len(voxel_size) == 3:
+		voxel_size = np.concatenate((voxel_size,np.ones(1)))
+	scaling = np.diag(voxel_size)
 
 	density = [self.nb_seeds_x, self.nb_seeds_y, self.nb_seeds_z ]
-	seeds = seeds_from_mask(mask, density=density)
+	seeds = seeds_from_mask(mask, density=density,affine=scaling)
 	np.savetxt(self.seeds.fullPath(), seeds)
+
+	transformManager = getTransformationManager()
+	transformManager.copyReferential(self.mask, self.seeds)

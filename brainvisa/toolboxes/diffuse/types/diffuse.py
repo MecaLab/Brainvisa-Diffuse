@@ -66,6 +66,11 @@ FileType( 'Blip Reversed B Vectors', 'B Vectors' )
 FileType( 'Reoriented B Vectors', 'B Vectors' )
 FileType( 'Corrected B Vectors', 'B Vectors' )
 
+#to handle diffusion metadata coming from DICOM file in BIDs format
+FileType( 'Acquisition Metadata','Any Type','JSON file')
+FileType('Diffusion Acquisition Metadata','Acquisition Metadata')
+FileType('Blip Reversed Diffusion Acquisition Metadata','Acquisition Metadata')
+
 #-----------------------------------------------------------------------------------------------------------------------|
 
 
@@ -155,11 +160,7 @@ FileType( 'Right Registered Hemisphere Mesh', 'Registered Hemisphere Mesh')
 #fixme: might be a good idea to check the type of the mesh used in t1 space to be more pertinent
 #fixme Meshes in Diffusion Space: Rem convenient because of non linear transform but could be better to have a converter implemented.
 
-#----------------------Miscellaneous-----------------------------------------------------------------------------|
-FileType( 'Tissue Partial Volume Estimation','3D Volume')
-FileType( 'CSF Partial Volume Estimation', 'Tissue Partial Volume Estimation' )
-FileType( 'GM Partial Volume Estimation', 'Tissue Partial Volume Estimation' )
-FileType( 'WM Partial Volume Estimation', 'Tissue Partial Volume Estimation')
+
 
 
 ###########################################LOCAL MODELING TYPES AND FORMATS ############################################
@@ -236,7 +237,13 @@ FileType('Sphere Template', 'Mesh')
 FileType('Spherical Function Mesh', 'Mesh')
 FileType('Spherical Function Texture', 'Texture')
 
-
+#----------------------Miscellaneous-----------------------------------------------------------------------------|
+FileType( 'Tissue Partial Volume Estimation','3D Volume')
+FileType('Tissue PVE T1 MR', 'Tissue Partial Volume Estimation')
+FileType('Tissue PVE Diffusion MR', 'Tissue Partial Volume Estimation')
+FileType( 'CSF PVE Diffusion MR', 'Tissue PVE Diffusion MR')
+FileType( 'GM PVE Diffusion MR', 'Tissue PVE Diffusion MR')
+FileType( 'WM PVE Diffusion MR', 'Tissue PVE Diffusion MR')
 
 
 ############################################# TRACTOGRAPHY #############################################################
