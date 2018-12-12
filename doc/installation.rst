@@ -101,13 +101,13 @@ Proper Installation
 1. Click on ``Download ZIP`` on github.
 
 2. Unpack the archive into any desired location with your favorite archive manager.
-   Here is an example in command line using ``tar`` ::
+   Here is an example in command line using ``unzip`` ::
 
-    tar xvf Brainvisa-Diffuse.zip -C <desired_location>
+    unzip  Brainvisa-Diffuse-master.zip -d <desired_location>
 
 3. Switch to the Brainvisa-Diffuse directory ::
 
-    cd <desired_location>/Brainvisa-Diffuse
+    cd <desired_location>/Brainvisa-Diffuse-master
 
 4. Change the permissions of setup.sh so that you can execute it ::
 
@@ -115,18 +115,25 @@ Proper Installation
 
 5. Run the setup.sh script ::
 
-    ./setup.sh
+    sh setup.sh
 
-6. During the installation, you will be asked to enter manually the location of your ``BrainVISA`` directory.
+6. During the installation, you will be asked to enter manually the location of your ``BrainVISA`` directory note hereunder <BrainVISA_location>.
 
 7. At this stage, the setup.sh script will automatically handle the copy of Diffuse directories in the correct
    location. If any error occurs, please check that you specified the correct BrainVISA location or the access permissions into the BrainVISA directory.
 
 8. Run BrainVISA and update Diffuse documentation::
 
-    brainvisa --updateDocumentation
+    <BrainVISA_location>/BrainVISA --updateDocumentation
 
-9. Congratulations ! Diffuse is installed and ready to be used !
+9. To ease the calls to BrainVISA and Anatomist add the BrainVISA installation directory to the PATH variable. To do so add the following lines in your .bashrc or .bash_personal file ::
+
+    export PATH=${PATH}:<BrainVISA_location>
+
+close terminal and open a new one to see the modifications.
+
+
+10. Congratulations ! Diffuse is installed and ready to be used!.
 
 
 ---------------------------------------
