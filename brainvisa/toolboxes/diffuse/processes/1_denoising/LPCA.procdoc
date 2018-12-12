@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Denoising using overcomplete Local PCA </xhtml>
+    <d name="parameters">
+      <xhtml name="patch_radius">size in voxel of the local patch to be taken around each voxel. Default size is 2 </xhtml>
+      <xhtml name="brain_mask">Mask of the brain to avoid estimating the noise outside the brain. </xhtml>
+      <xhtml name="denoised_dwi_data"/>
+      <xhtml name="tau_factor">thresholding factor for pca eigenvalues:  \tau = (\tau_{factor} \sigma)^2
+</xhtml>
+      <xhtml name="sigma">Standard deviation of the noise estimated using PIESNO algorithm</xhtml>
+      <xhtml name="method">Computation method used to perform Principal Component Analysis. Possible values are:
+eigen values decomposition (eig)
+singular values decomposition (svd)
+</xhtml>
+      <xhtml name="dwi_data">Diffusion data volume (4D volume) </xhtml>
+    </d>
+    <xhtml name="long">Diffusion data denoising using overcomplete local principal component analysis. We rely on the Dipy implementation based on:
+Reference: J. V. Manjon, P. Coupé, L. Concha, A. Buades, D. L. Collins, M. Robles. Diffusion Weighted Image Denoising using overcomplete Local PCA. PLoS ONE 8(9): e73021. doi:10.1371/journal.pone.0073021</xhtml>
+  </d>
+</d>
+</minf>

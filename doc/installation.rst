@@ -81,13 +81,13 @@ Optional
 
 
 
-* **NIFTYREG**: ``niftyreg`` was in general found to be more accurate than FSL and Dipy when it comes to non-linearly register diffusion to structural space. `General installation instructions <http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg_install>`_.
+.. * **NIFTYREG**: ``niftyreg`` was in general found to be more accurate than FSL and Dipy when it comes to non-linearly register diffusion to structural space. `General installation instructions <http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg_install>`_.
 
      1. How to get niftyreg sources: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg_install#Source
 
      2. How to build and install from sources: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg_install#Linux
 
-* **NLSAM**: Diffuse relies on Dipy denoising algorithms (LPCA, NLMS). Non Local Spatial and Angular Matching (NLSAM) dwi denoising algorithm is not yet part of Dipy and has to be installed from the `NLSAM reference site <https://github.com/samuelstjean/nlsam>`_.  Using the ``pip`` of the BrainVISA distribution do: ::
+.. * **NLSAM**: Diffuse relies on Dipy denoising algorithms (LPCA, NLMS). Non Local Spatial and Angular Matching (NLSAM) dwi denoising algorithm is not yet part of Dipy and has to be installed from the `NLSAM reference site <https://github.com/samuelstjean/nlsam>`_.  Using the ``pip`` of the BrainVISA distribution do: ::
 
         pip install https://github.com/samuelstjean/nlsam/archive/master.zip --user --process-dependency-links
 
@@ -130,7 +130,7 @@ Proper Installation
 
 
 ---------------------------------------
-Alternative : installation from sources
+Alternative: installation from sources
 ---------------------------------------
 
 For users already familiar with the BrainVISA compilation from source machinery, aka ``bv_maker`` , Diffuse can be included in the compilation process by adding the following lines to the ``bv_maker.cfg``

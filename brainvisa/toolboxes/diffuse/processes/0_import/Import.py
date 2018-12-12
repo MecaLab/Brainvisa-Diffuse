@@ -46,7 +46,7 @@ signature=Signature(
   'dwi_metadata', ReadDiskItem('Diffusion Acquisition Metadata','JSON file'),
   'additional_acquisition', Choice("None", "Fieldmap", "Blip-reversed images", "Both"),
   'blip_reversed_data', ReadDiskItem( 'External File Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
-  'blip_reversed_metada', ReadDiskItem('Blip Reversed Diffusion Acquisition Metadata','JSON file'),
+  'blip_reversed_metadata', ReadDiskItem('Blip Reversed Diffusion Acquisition Metadata','JSON file'),
   'fieldmap', ReadDiskItem( 'Fieldmap', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
   'magnitude', ReadDiskItem( 'Fieldmap', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
 
@@ -64,7 +64,7 @@ def switchSignature( self, additional_acquisition ):
     self.setOptional('blip_reversed_data')
     self.setOptional('fieldmap')
     self.setOptional('magnitude')
-    self.setOptional('metadata')
+    self.setOptional('dwi_metadata')
     self.setOptional('blip_reversed_metadata')
     self.setOptional('output_blip_reversed_data')
     self.setOptional('output_fieldmap')
@@ -72,6 +72,7 @@ def switchSignature( self, additional_acquisition ):
     self.setOptional('output_dwi_metadata')
     self.setOptional('output_blip_reversed_metadata')
     self.setHidden('blip_reversed_data')
+    self.setHidden('blip_reversed_metadata')
     self.setHidden('fieldmap')
     self.setHidden('magnitude')
     self.setHidden('output_blip_reversed_data')
@@ -106,10 +107,26 @@ def initSubject(self, inp):
             value["subject"] = os.path.basename(
                 self.dwi_data.fullPath()).partition(".")[0]
     return value
+
+# def linkExternalfile(self,dummy):
+#     ###Test if the same file with different extension exists name would be okay
+#     base_file = os.path.join(os.path.basename(self.dwi_data.fullPath()), os.path.basename(self.dwi_data.fullPath()).partition("."))
+#     extensions = 'bval', 'bvec', 'json'
+#     diskitems =[self.bvals, self.bvecs, self.dwi_metadata]
+#     links = ['bvals','bvecs','dwi_metadata']
+#     related_files = [base_file + '.' + ext for ext in extensions]
+#     for i , e in enumerate(extensions):
+#         if os.path.isfile(related_files[i]):
+#             diskitems[i] = related_files[i]
+#         else:
+#             self.addLink(links[i],'dwi_data')
+#     pass
+
     
 def initialization( self ):
-  self.addLink( None, 'additional_acquisition', self.switchSignature )
+  self.addLink(None, 'additional_acquisition', self.switchSignature )
   self.addLink("output_dwi_data", "dwi_data", self.initSubject)
+  #self.addLink(None, 'dwi_data', self.linkExternalfile )
   self.signature['dwi_data'].databaseUserLevel = 3
   self.signature['dwi_metadata'].databaseUserLevel = 3
   self.signature['bvals'].databaseUserLevel = 3
@@ -128,7 +145,7 @@ def initialization( self ):
   self.signature['output_magnitude'].browseUserLevel = 3
   self.linkParameters( 'output_bvals', 'output_dwi_data' )
   self.linkParameters( 'output_bvecs', 'output_dwi_data' )
-  self.linkParameters( 'output_dwi_metatada','output_dwi_data')
+  self.linkParameters( 'output_dwi_metadata','output_dwi_data')
   self.linkParameters( 'output_blip_reversed_data', 'output_dwi_data' )
   self.linkParameters( 'output_blip_reversed_metadata', 'output_blip_reversed_data')
   self.linkParameters( 'output_fieldmap', 'output_dwi_data' )
@@ -150,7 +167,7 @@ def execution( self, context ):
   context.system( 'cp', self.bvecs, self.output_bvecs )
 
   if self.dwi_metadata is not None:
-     context.system( 'cp', self.dwi_metadata, self.ouptut_dwi_data )
+     context.system( 'cp', self.dwi_metadata, self.output_dwi_metadata )
 
   context.system('AimsFileConvert', '-i', self.dwi_data.fullPath(), '-o', self.output_dwi_data.fullPath(), '--orient', '"abs: -1 -1 -1"')
   transformManager = getTransformationManager()
@@ -173,7 +190,7 @@ def execution( self, context ):
     else:
         context.write('Only b0 volumes with opposite phase-encode direction DETECTED')
     context.system('AimsFileConvert', '-i', self.blip_reversed_data.fullPath(), '-o', self.output_blip_reversed_data.fullPath(), '--orient', '"abs: -1 -1 -1"')
-    if self.blip_reversed_metada is not None:
+    if self.blip_reversed_metadata is not None:
         context.system('cp', self.blip_reversed_metadata, self.output_blip_reversed_metada )
     transformManager.copyReferential(self.output_dwi_data, self.blip_reversed_data)
   elif self.additional_acquisition=="Both":
@@ -192,7 +209,7 @@ def execution( self, context ):
       else:
           context.write('Only b0 volumes with opposite phase-encode direction DETECTED')
       context.system('AimsFileConvert', '-i', self.blip_reversed_data.fullPath(), '-o', self.output_blip_reversed_data.fullPath(), '--orient', '"abs: -1 -1 -1"')
-      if self.blip_reversed_metada is not None:
+      if self.blip_reversed_metadata is not None:
         context.system('cp', self.blip_reversed_metadata, self.output_blip_reversed_metada )
       transformManager.copyReferential(self.output_dwi_data, self.blip_reversed_data)
 

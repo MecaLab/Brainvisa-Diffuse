@@ -32,7 +32,7 @@
 
 
 def validation():
-
+    from soma.wip.application.api import Application
     from distutils.spawn import find_executable as find_exec
     configuration = Application().configuration
     cmds = ['flseyes', 'fslview']

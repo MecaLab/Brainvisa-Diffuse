@@ -44,7 +44,7 @@ from copy import copy
 
 
 
-userLevel = 1
+userLevel = 0
 name = 'Particle Filtering Tracking'
 
 

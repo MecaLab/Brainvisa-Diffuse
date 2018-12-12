@@ -35,8 +35,8 @@ from brainvisa.processes import *
 
 
 
-userLevel = 1
-name = 'CSD Pipeline'
+userLevel = 0
+name = '2.b CSD Pipeline'
 category = 'pipeline'
 
 signature = Signature(

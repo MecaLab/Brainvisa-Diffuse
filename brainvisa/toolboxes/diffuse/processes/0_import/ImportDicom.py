@@ -62,12 +62,12 @@ signature=Signature(
   'fieldmap_directory', ReadDiskItem( 'Directory', 'Directory' ),
   'magnitude_directory', ReadDiskItem( 'Directory', 'Directory' ),
   'mricron_program', Choice('dcm2niix', 'dcm2nii'),
-  'output_dwi_data', WriteDiskItem( 'Raw Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
+  'output_dwi_data', WriteDiskItem( 'Raw Diffusion MR', 'gz compressed NIFTI-1 image' ),
   'output_bvals', WriteDiskItem( 'Raw B Values', 'Text file' ),
   'output_bvecs', WriteDiskItem( 'Raw B Vectors', 'Text file' ),
   'output_dwi_metadata', WriteDiskItem( 'Diffusion Acquisition Metadata','JSON file' ),
-  'output_blip_reversed_data', WriteDiskItem( 'Blip Reversed DW Diffusion MR', ['gz compressed NIFTI-1 image', 'NIFTI-1 image'] ),
-  'output_blip_reversed_metadata', WriteDiskItem( 'Blip Reversed DW Diffusion MR', 'JSON file'),
+  'output_blip_reversed_data', WriteDiskItem( 'Blip Reversed DW Diffusion MR', 'gz compressed NIFTI-1 image' ),
+  'output_blip_reversed_metadata', WriteDiskItem( 'Blip Reversed Diffusion Acquisition Metadata', 'JSON file'),
   'output_fieldmap', WriteDiskItem( 'Fieldmap Phase', 'gz compressed NIFTI-1 image' ),
   'output_magnitude', WriteDiskItem( 'Fieldmap Magnitude', 'gz compressed NIFTI-1 image' ),
 )
@@ -77,12 +77,15 @@ def switchSignature( self, additional_acquisition ):
     self.setOptional('fieldmap_directory')
     self.setOptional('magnitude_directory')
     self.setOptional('output_blip_reversed_data')
+    self.setOptional('output_dwi_metadata')
+    self.setOptional('output_blip_reversed_metadata')
     self.setOptional('output_fieldmap')
     self.setOptional('output_magnitude')
     self.setHidden('blip_reversed_directory')
     self.setHidden('fieldmap_directory')
     self.setHidden('magnitude_directory')
     self.setHidden('output_blip_reversed_data')
+    self.setHidden('output_blip_reversed_metadata')
     self.setHidden('output_fieldmap')
     self.setHidden('output_magnitude')
     if self.additional_acquisition=="Fieldmap":
@@ -93,6 +96,8 @@ def switchSignature( self, additional_acquisition ):
     elif self.additional_acquisition=="Blip-reversed images":
         self.setEnable('blip_reversed_directory')
         self.setEnable('output_blip_reversed_data')
+        self.setEnable('output_blip_reversed_metadata')
+        self.setOptional('output_blip_reversed_metadata')
     self.changeSignature( signature )
 
 def initSubject(self, inp):
@@ -116,14 +121,19 @@ def initialization( self ):
   self.linkParameters( 'output_bvals', 'output_dwi_data' )
   self.linkParameters( 'output_bvecs', 'output_dwi_data' )
   self.linkParameters( 'output_blip_reversed_data', 'output_dwi_data' )
+  self.linkParameters( 'output_dwi_metadata','output_dwi_data')
+  self.linkParameters('output_blip_reversed_metadata', 'output_blip_reversed_data')
   self.linkParameters( 'output_fieldmap', 'output_dwi_data' )
   self.linkParameters( 'output_magnitude', 'output_dwi_data' )
-  #fix to dcm2niix --> for DICOM this is the best
-  self.mricron_program ='dcm2niix'
+  #fix to dcm2niix --> for DICOM this is the best (shall we remove dcm2nii support ? it may allow us to extract and
+  # specify the path directly  of the data without additional copy
+  self.mricron_program = 'dcm2niix'
+
   
 def execution( self, context ):
     configuration = Application().configuration
     tmp_directory = configuration.brainvisa.temporaryDirectory
+    context.write(tmp_directory)
 
     # Dicom converter -> to nifti
 
@@ -137,15 +147,17 @@ def execution( self, context ):
                 #raise RuntimeError(_t_('dcm2nii or dcm2niix executable NOT found !'))
 
     DicomToNifti.dicom_to_nifti(self.dwi_directory, self.mricron_program, context)
-    outputFiles = glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.nii.gz'))
-    print outputFiles
+    #outputFiles = glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.nii.gz'))
+    context.write("OK")
+
     context.system( 'mv', glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.nii.gz'))[0], tmp_directory + '/dwi.nii.gz' ) #data
     context.system( 'mv', glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.bvec'))[0], tmp_directory + '/bvec.txt' ) #data
     context.system( 'mv', glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.bval'))[0], tmp_directory + '/bval.txt' ) #data
     list_metadata = glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.json'))
+    context.write("OK1")
     if list_metadata:
-    	context.system( 'mv', glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.json'))[0], tmp_directory + '/dwi_metadata.json')
-
+        context.system('mv', glob.glob(os.path.join(self.dwi_directory.fullPath(), '*.json'))[0], tmp_directory + '/dwi_metadata.json')
+    context.write("OK2")
     if self.additional_acquisition=="Fieldmap":
         DicomToNifti.dicom_to_nifti(self.fieldmap_directory, self.mricron_program, context)
         context.system( 'mv', glob.glob(os.path.join(self.fieldmap_directory.fullPath(), '*.nii.gz'))[0], tmp_directory + '/phase.nii.gz' ) #_e2phdata
@@ -155,24 +167,27 @@ def execution( self, context ):
         context.system( 'mv', glob.glob(os.path.join(self.magnitude_directory.fullPath(), '*.nii.gz'))[0], tmp_directory + '/mag.nii.gz' ) #data
         for f in glob.glob(os.path.join(self.magnitude_directory.fullPath(), '*.nii.gz')):
             context.system( 'rm', f) #_e2data
-
+        context.write("OK3")
     elif self.additional_acquisition=="Blip-reversed images":
         DicomToNifti.dicom_to_nifti(self.blip_reversed_directory, self.mricron_program, context)
         context.system( 'mv', glob.glob(os.path.join(self.blip_reversed_directory.fullPath(), '*.nii.gz'))[0], tmp_directory + '/blip_reversed.nii.gz' ) #data
         list_metadata = glob.glob(os.path.join(self.blip_reversed_directory.fullPath(), '*.json'))
         if list_metadata:
-        	context.system( 'mv', glob.glob(os.path.join(self.blip_reversed_directory.fullPath(), '*.json'))[0], tmp_directory + '/blip_reversed_metadata.json' )
-        
+            context.system( 'mv', glob.glob(os.path.join(self.blip_reversed_directory.fullPath(), '*.json'))[0], tmp_directory + '/blip_reversed_metadata.json' )
+        context.write("OK4")
         #for f in glob.glob(os.path.join(self.magnitude_directory.fullPath(), '*')):
             #context.system('rm', f)  # _e2data
-        
+    context.write("OK5")
     # Import data
     if self.additional_acquisition=="None":
-        context.runProcess( 'Import', dwi_data=tmp_directory + '/dwi.nii.gz', bvals=tmp_directory + '/bval.txt', bvecs=tmp_directory + '/bvec.txt', additional_acquisition=self.additional_acquisition, output_dwi_data=self.output_dwi_data, output_bvals=self.output_bvals, output_bvecs=self.output_bvecs )
+        context.runProcess( 'Import', dwi_data=tmp_directory + '/dwi.nii.gz', bvals=tmp_directory + '/bval.txt', bvecs=tmp_directory + '/bvec.txt', dwi_metadata=tmp_directory + '/dwi_metadata.json', additional_acquisition=self.additional_acquisition, output_dwi_data=self.output_dwi_data, output_bvals=self.output_bvals, output_bvecs=self.output_bvecs, output_dwi_metadata=self.output_dwi_metadata)
+        context.write("OK6")
+        #context.runProcess('Import', dwi_data=tmp_directory + '/dwi.nii.gz', bvals=tmp_directory + '/bval.txt', bvecs=tmp_directory + '/bvec.txt', additional_acquisition=self.additional_acquisition, output_dwi_data=self.output_dwi_data, output_bvals=self.output_bvals, output_bvecs=self.output_bvecs)
+
     if self.additional_acquisition=="Fieldmap":
-        context.runProcess( 'Import', dwi_data=tmp_directory + '/dwi.nii.gz', bvals=tmp_directory + '/bval.txt', bvecs=tmp_directory + '/bvec.txt', additional_acquisition=self.additional_acquisition, output_dwi_data=self.output_dwi_data, output_bvals=self.output_bvals, output_bvecs=self.output_bvecs, fieldmap=tmp_directory + '/phase.nii.gz', magnitude=tmp_directory + '/mag.nii.gz', output_fieldmap=self.output_fieldmap, output_magnitude=self.output_magnitude )
+        context.runProcess( 'Import', dwi_data=tmp_directory + '/dwi.nii.gz', bvals=tmp_directory + '/bval.txt', bvecs=tmp_directory + '/bvec.txt',dwi_metadata=tmp_directory + '/dwi_metadata.json', additional_acquisition=self.additional_acquisition, output_dwi_data=self.output_dwi_data, output_bvals=self.output_bvals, output_bvecs=self.output_bvecs, output_dwi_metadata=self.output_dwi_metadata, fieldmap=tmp_directory + '/phase.nii.gz', magnitude=tmp_directory + '/mag.nii.gz', output_fieldmap=self.output_fieldmap, output_magnitude=self.output_magnitude )
     if self.additional_acquisition=="Blip-reversed images":
-        context.runProcess( 'Import', dwi_data=tmp_directory + '/dwi.nii.gz', bvals=tmp_directory + '/bval.txt', bvecs=tmp_directory + '/bvec.txt', additional_acquisition=self.additional_acquisition, output_dwi_data=self.output_dwi_data, output_bvals=self.output_bvals, output_bvecs=self.output_bvecs, blip_reversed_data=tmp_directory + '/blip_reversed.nii.gz', output_blip_reversed_data=self.output_blip_reversed_data )
+        context.runProcess( 'Import', dwi_data=tmp_directory + '/dwi.nii.gz', bvals=tmp_directory + '/bval.txt', bvecs=tmp_directory + '/bvec.txt', dwi_metadata=tmp_directory + '/dwi_metadata.json', additional_acquisition=self.additional_acquisition, output_dwi_data=self.output_dwi_data, output_bvals=self.output_bvals, output_bvecs=self.output_bvecs,  output_dwi_metadata=self.output_dwi_metadata, blip_reversed_data=tmp_directory + '/blip_reversed.nii.gz', blip_reversed_metada=tmp_directory + '/blip_reversed_metadata.json', output_blip_reversed_data=self.output_blip_reversed_data, output_blip_reversed_metadata=self.output_blip_reversed_metadata)
 
     # Dicom header info
     files = os.listdir(self.dwi_directory.fullPath())

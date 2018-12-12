@@ -59,7 +59,7 @@ signature = Signature(
             'Joblib Pickle file'
     ),
     'mask', ReadDiskItem(
-        'B0 Volume Brain Mask',
+        'Diffusion MR Mask',
         'Aims readable volume formats'
     ),
     'tensor_coefficients', WriteDiskItem(

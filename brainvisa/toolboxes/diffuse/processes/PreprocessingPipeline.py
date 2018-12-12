@@ -33,7 +33,7 @@
 from brainvisa.processes import *
 from copy import copy
 
-name = 'Diffusion Preprocessing Pipeline'
+name = '1. Diffusion Preprocessing Pipeline'
 userLevel = 0
 
 signature = Signature(

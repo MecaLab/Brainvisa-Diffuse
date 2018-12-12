@@ -2,8 +2,8 @@
 from brainvisa.processes import *
 
 
-userLevel = 1
-name = 'Local Tractography Pipeline'
+userLevel = 0
+name = '3. Local Tractography Pipeline'
 
 
 signature = Signature(

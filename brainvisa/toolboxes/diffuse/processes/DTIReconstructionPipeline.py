@@ -39,7 +39,7 @@ from copy import copy
 
 
 userLevel = 0
-name = 'DTI Pipeline'
+name = '2.a DTI Pipeline'
 category = 'dti pipeline'
 
 signature = Signature(
@@ -82,10 +82,7 @@ signature = Signature(
 #         #eNode.ODF.setSelected(False)
 #     self.changeSignature(signature)
 
-def linkOutput(self, eNode, dummy):
-    if self.mask is not None:
-        eNode.Reconstruction.mask = self.mask
-    pass
+
 
 
 def initialization(self):
@@ -143,7 +140,7 @@ def initialization(self):
     eNode.Reconstruction.removeLink('tensor_coefficients', 'tensor_model')
     eNode.addLink('Reconstruction.diffusion_data','diffusion_data')
     eNode.addLink('Reconstruction.tensor_model','tensor_model')
-    eNode.addLink('Reconstruction.mask','mask', self.linkOutput)
+    eNode.addLink('Reconstruction.mask','mask')
     eNode.addLink('Reconstruction.tensor_coefficients','tensor_coefficients')
 
     #

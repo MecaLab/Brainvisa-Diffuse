@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short"><p> Equivalent of the Acquisition viewer for gradient table (diffusion acquisition informations) object. It provides both sum-up and complete information about acquisition sequence</p>
+<ul>
+    <li>Number of non-diffusion weighted (b0) volumes</li>
+    <li>Number of shells and b-values used</li>
+    <li>Sequence of b-values</li>
+    <li>Sequence of b-vectors</li>
+    <li>Sequence of b-vectors</li>
+</ul></xhtml>
+    <d name="parameters">
+      <xhtml name="gradient_table"/>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>
