@@ -33,12 +33,12 @@ def validation():
     from soma.wip.application.api import Application
     from distutils.spawn import find_executable
     #checking for niftyreg 
-    niftyreg_resample = find_executable('reg_resample')
-    if not niftyreg_resample:
-        raise ValidationError(_t_('Niftyreg executable NOT found !'))
+    #niftyreg_resample = find_executable('reg_resample')
+    #if not niftyreg_resample:
+        #raise ValidationError(_t_('Niftyreg executable NOT found !'))
     configuration = Application().configuration
     fsl_prefix = configuration.FSL.fsl_commands_prefix
-    cmds = ['fslsplit']
+    cmds = ['fslsplit','fnirt']
     for i, cmd in enumerate(cmds):
         executable = find_executable(fsl_prefix + cmd)
         if not executable:
@@ -77,7 +77,9 @@ def initialization( self ):
     self.setOptional('upper_thresh')
     self.linkParameters( 'T1_to_diff_linear_xfm', 'b0_volume' )
     self.linkParameters( 'T1_to_diff_nonlinear_dfm', 'b0_volume' )
-    self.T1_to_b0_registration_method = 'niftyreg'
+    #self.T1_to_b0_registration_method = 'niftyreg'
+    self.T1_to_b0_registration_method = 'fnirt'
+    self.setHidden('T1_to_b0_registration_method')
 
 def execution( self, context ):
 
