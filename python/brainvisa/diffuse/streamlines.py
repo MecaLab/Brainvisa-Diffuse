@@ -19,11 +19,12 @@ def load_streamlines(path_file,lazy=True):
     :return: tractogram , header
     """
     file = nib.streamlines.load(path_file,lazy_load=lazy)
-    affine = file.affine
+    header = file.header
+    aims_vox_to_ras_mm = file.affine
+    ras_mm_to_aims_vox = np.linalg.inv(aims_vox_to_ras_mm)
     tractogram = file.tractogram
-    aims_vox_to_ras_mm = tractogram.affine_to_rasmm
     aims_vox_to_aims_mm = np.diag(header['voxel_sizes'].tolist() + [1])
-    ras_mm_to_aims_mm = np.dot(aims_vox_to_aims_mm,np.linalg.inv(aims_vox_to_ras_mm))
+    ras_mm_to_aims_mm = np.dot(aims_vox_to_aims_mm,ras_mm_to_aims_vox)
     tractogram = tractogram.apply_affine(ras_mm_to_aims_mm, lazy=lazy)
     return tractogram, header
 

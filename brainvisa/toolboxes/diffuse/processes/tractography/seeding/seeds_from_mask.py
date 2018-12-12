@@ -36,7 +36,7 @@ from brainvisa.registration import getTransformationManager
 import numpy as np
 
 name = 'Evenly distributed seeds from mask'
-userLevel = 2
+userLevel = 0
 
 ## Readout time (in sec)
 

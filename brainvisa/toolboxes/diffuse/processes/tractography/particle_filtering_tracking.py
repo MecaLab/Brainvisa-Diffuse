@@ -33,6 +33,7 @@
 
 from brainvisa.processes import *
 import numpy as np
+import nibabel as nib
 from brainvisa.registration import getTransformationManager
 from dipy.io.streamline import save_trk
 from dipy.data import get_sphere
@@ -43,7 +44,7 @@ from copy import copy
 
 
 
-userLevel = 0
+userLevel = 1
 name = 'Particle Filtering Tracking'
 
 
@@ -85,7 +86,7 @@ signature = Signature(
     'back_tracking_dist', Float(),
     'front_tracking_dist', Float(),
     'nb_particles',Integer(),
-    'max_trial',Integer(),
+    'max_trial', Integer(),
     'return_all', Boolean(),
     'nb_samples', Integer(),
     'streamlines', WriteDiskItem(
@@ -104,7 +105,7 @@ def switching_type(self,dumb):
         self.nb_iter_max = 500
         self.setHidden('nb_samples')
     elif self.type == 'PROBABILISTIC':
-        self.nb_samples = 5000
+        self.nb_samples = 50
         self.nb_iter_max = 1000
         self.setEnable('nb_samples')
     self.changeSignature(signature)
@@ -123,20 +124,20 @@ def initialization(self):
     self.return_all = False
     self.nb_samples = 1
     self.crossing_max = None
-    self.back_tracking_distance = 2
+    self.back_tracking_dist = 2
     self.front_tracking_dist = 1
     self.max_trial = 10
     self.nb_particles = 15
     self.setOptional('crossing_max','sphere')
     #to be coherent with local tractography
     self.constraint = 'ACT'
-    self.addLink('mask','sh_coefficients')
-    self.addLink('scalar_volume','sh_coefficients')
+    #self.addLink('mask','sh_coefficients')
+    #self.addLink('scalar_volume','sh_coefficients')
     self.addLink('seeds','sh_coefficients')
+    self.addLink(None,'type',self.switching_type)
     self.addLink('csf_pve', 'sh_coefficients')
     self.addLink('gm_pve', 'sh_coefficients')
     self.addLink('wm_pve', 'sh_coefficients')
-    self.addLink(None,'type',self.switching_type)
     self.addLink('streamlines','sh_coefficients')
     pass
 
@@ -184,6 +185,7 @@ def execution(self,context):
         seeds = np.zeros((self.nb_samples,)+s.shape)
         seeds[i] = s
         seeds = seeds.reshape((-1,3))
+    seeds = nib.affines.apply_affine(np.linalg.inv(scaling_mat), seeds)
     #building classifier
 
 

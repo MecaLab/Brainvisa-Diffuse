@@ -31,12 +31,12 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 
 from brainvisa.processes import *
-from copy import copy
+from brainvisa.registration import getTransformationManager
 import numpy as np
 
 
 name = 'Seeds from white mesh'
-userLevel = 0
+userLevel = 2
 
 ## RePlace equidistant seeds (points) of every voxels of a given mask. Number of seeds is controlled along each direction.adout time (in sec)
 
@@ -56,9 +56,8 @@ signature=Signature(
 )
 
 def initialization(self):
-	self.setHidden('reference_volume')
-	self.addLink('roi_texture','white_mesh')
-	self.addLink('reference_volume', 'white_mesh')
+
+	self.addLink('roi_texture', 'white_mesh')
 	self.addLink('seeds', 'white_mesh')
 	self.setOptional('roi_texture')
 	pass
@@ -74,13 +73,12 @@ def execution(self,context):
 	else:
 		texture = aims.read(self.roi_texture.fullPath())
 		tex = np.array(texture[0])
-		v = vertices[tex!=0]
-	#voxels are in LPI mm space: put them in LPI voxel space
-	minf = self.reference_volume.minf()
-	v_size = np.array(minf['voxel_size'][:-1])
-	v = v / v_size[np.newaxis,:]
-
+		v = vertices[tex != 0]
 	np.savetxt(self.seeds.fullPath(), v)
+
+	transformManager = getTransformationManager()
+	transformManager.copyReferential(self.white_mesh,self.seeds)
+
 
 
 

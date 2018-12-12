@@ -38,7 +38,7 @@ import nibabel as nib
 from copy import copy
 from dipy.io.streamline import save_trk
 from dipy.data import get_sphere
-from dipy.tracking.local import LocalTracking, ActTissueClassifier, BinaryTissueClassifier, ThresholdTissueClassifier
+from dipy.tracking.local import LocalTracking, ActTissueClassifier, BinaryTissueClassifier, ThresholdTissueClassifier, CmcTissueClassifier
 from dipy.direction.probabilistic_direction_getter import DeterministicMaximumDirectionGetter, ProbabilisticDirectionGetter
 from brainvisa.diffuse.building_spheres import read_sphere
 
@@ -57,7 +57,7 @@ signature = Signature(
     ),
     'type',Choice('DETERMINISTIC','PROBABILISTIC'),
 
-    'constraint', Choice('Anatomical','Threshold','Binary'),
+    'constraint', Choice(('Anatomical Constraint','ACT'),('Continuous Map Criterion','CMC'),('Threshold Scalar Map','THRESH'),('Binary Mask','BIN')),
     'mask', ReadDiskItem(
         'Diffusion MR Mask',
         'gz compressed NIFTI-1 image'
@@ -118,15 +118,15 @@ def switching_type(self,dumb):
 
 def switching_classifier(self,dumb):
     signature = copy(self.signature)
-    if self.constraint == 'Binary':
+    if self.constraint == 'BIN':
         self.setHidden('scalar_volume','threshold','wm_pve','gm_pve','csf_pve')
         self.setOptional('scalar_volume','threshold','wm_pve','gm_pve','csf_pve')
         self.setEnable('mask')
-    elif self.constraint == 'Threshold':
+    elif self.constraint == 'THRESH':
         self.setHidden('mask', 'wm_pve','gm_pve','csf_pve')
         self.setOptional('mask', 'wm_pve','gm_pve','csf_pve')
         self.setEnable('scalar_volume','threshold')
-    elif self.constraint == 'Anatomical' or self.constraint == 'CMC':
+    elif self.constraint == 'ACT' or  self.constraint == 'CMC':
         self.setHidden('scalar_volume', 'mask' , 'threshold')
         self.setEnable('wm_pve','gm_pve','csf_pve')
         self.setOptional('scalar_volume', 'mask', 'threshold')
@@ -149,7 +149,7 @@ def initialization(self):
     self.nb_samples = 1
     self.crossing_max = None
     self.setOptional('crossing_max','sphere')
-    self.constraint = 'Anatomical'
+    self.constraint = 'ACT'
 
     self.addLink('mask','sh_coefficients')
     self.addLink('scalar_volume','sh_coefficients')
@@ -240,14 +240,16 @@ def execution(self,context):
         csf[total!=0]= (csf[total !=0 ])/(total[total!=0])
         wm[total != 0] = (wm[total != 0])/(total[total != 0])
         gm[total != 0] = gm[total != 0] / (total[total != 0])
-
-        classifier = ActTissueClassifier.from_pve(wm_map=wm, gm_map=gm, csf_map=csf)
+        if self.constraint == 'ACT':
+            classifier = ActTissueClassifier.from_pve(wm_map=wm, gm_map=gm, csf_map=csf)
+        elif self.constraint == 'CMC':
+            classifier = CmcTissueClassifier.from_pve(wm_map=wm, gm_map=gm, csf_map=csf)
 
 
     #Tracking is made in the Aims LPO space (solve shear verification problem, does not work for anisotropic voxels)
     streamlines_generator = LocalTracking(dg, classifier, seeds, affine_tracking, step_size=self.step_size, max_cross=self.crossing_max, maxlen=self.nb_iter_max,fixedstep=np.float32(self.fixed_step),return_all=self.return_all)
     #Store Fibers directly in  LPI orientation with appropriate transformation
-    save_trk(self.streamlines.fullPath(),streamlines_generator, affine=aims_voxel_to_ras_mm, vox_size=voxel_size,shape=vol_shape)
+    save_trk(self.streamlines.fullPath(),streamlines_generator, affine=aims_voxel_to_ras_mm, vox_size=voxel_size, shape=vol_shape)
 
     transformManager = getTransformationManager()
     transformManager.copyReferential(self.sh_coefficients, self.streamlines)

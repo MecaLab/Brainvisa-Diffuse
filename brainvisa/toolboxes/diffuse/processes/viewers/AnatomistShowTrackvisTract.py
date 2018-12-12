@@ -32,6 +32,7 @@
 # knowledge of the CeCILL license version 2 and that you accept its terms.
 from brainvisa.processes import *
 from brainvisa import anatomist
+from brainvisa.registration import getTransformationManager
 from brainvisa.diffuse.streamlines import load_streamlines, bundle_to_mesh
 
 name = 'Anatomist Show Streamlines'
@@ -55,6 +56,8 @@ def execution( self, context ):
 
   #lazy load just to estimate the number of streamlines
   tractogram, header = load_streamlines(self.streamlines.fullPath(),lazy=False)
+  transformManager = getTransformationManager()
+  referential = transformManager.referential(self.streamlines)
   #streamlines are in the LPI mm space
   nb_streamlines = header['nb_streamlines']
   streamlines = tractogram.streamlines
@@ -70,7 +73,8 @@ def execution( self, context ):
 
   a = anatomist.Anatomist()
   bundle_ana = a.toAObject(bundle_aims)
-  bundle_ana.setMaterial(use_shader=1,shader_color_normals=1)
+  bundle_ana.setMaterial(use_shader=1, shader_color_normals=1)
+  bundle_ana.assignReferential(referential)
 
   del bundle_aims
   win = a.createWindow('3D')

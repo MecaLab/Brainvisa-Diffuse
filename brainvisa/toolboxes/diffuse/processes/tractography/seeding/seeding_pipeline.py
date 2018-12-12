@@ -21,9 +21,9 @@ def initialization(self):
                    ProcessExecutionNode('seeds_from_mask', selected=True))
     eNode.addChild('RVolumicSeeds',
                    ProcessExecutionNode('random_seeds_from_mask', selected=False))
-    eNode.addChild('SeedsFromMesh',
-                   ProcessExecutionNode('seeds_from_mesh', selected=False))
-
+    #disabled as mesh registration to dwi space does not work
+    # eNode.addChild('SeedsFromMesh',
+    #                ProcessExecutionNode('seeds_from_mesh', selected=False))
 
     self.setExecutionNode(eNode)
 
