@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Diffusion data denoising based on non local mean method. Diffuse relies on the Dipy implementation of the algorithm presented in [Descoteaux08] Descoteaux, Maxim and Wiest-Daessle`, Nicolas and Prima, Sylvain and Barillot, Christian and Deriche, Rachid Impact of Rician Adapted Non-Local Means Filtering on HARDI, MICCAI 2008</xhtml>
+    <d name="parameters">
+      <xhtml name="block_radius">radius of the block in voxels. Block diameter would be 2 * block_radius + 1. Default is 5</xhtml>
+      <xhtml name="patch_radius">Size in voxel to be taken around the voxel. Patch will be composed of 2*patch_radius + 1 voxels</xhtml>
+      <xhtml name="rician_noise"/>
+      <xhtml name="denoised_dwi_data"/>
+      <xhtml name="sigma">Standard deviation of the noised previously estimated from the data</xhtml>
+      <xhtml name="brain_mask"/>
+      <xhtml name="dwi_data"/>
+    </d>
+    <xhtml name="long">Diffusion data denoising based on non local mean method. Diffuse relies on the Dipy implementation of the algorithm presented in [Descoteaux08] Descoteaux, Maxim and Wiest-Daessle`, Nicolas and Prima, Sylvain and Barillot, Christian and Deriche, Rachid Impact of Rician Adapted Non-Local Means Filtering on HARDI, MICCAI 2008</xhtml>
+  </d>
+</d>
+</minf>

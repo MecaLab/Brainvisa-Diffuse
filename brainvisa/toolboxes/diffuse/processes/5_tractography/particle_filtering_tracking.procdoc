@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Local tracking using Particle Filtering Algorithm. This is the Dipy implementation of Girard2014]	(1, 2) Girard, G., Whittingstall, K., Deriche, R., &amp; Descoteaux, M. Towards quantitative connectivity analysis: reducing tractography biases. NeuroImage, 98, 266-278, 2014.</xhtml>
+    <d name="parameters">
+      <xhtml name="relative_peak_threshold"/>
+      <xhtml name="sh_coefficients">Spherical Harmonics coefficients representing an orientation distribution function.</xhtml>
+      <xhtml name="return_all"/>
+      <xhtml name="sphere"/>
+      <xhtml name="crossing_max"/>
+      <xhtml name="gm_pve"/>
+      <xhtml name="front_tracking_dist"/>
+      <xhtml name="back_tracking_dist"/>
+      <xhtml name="wm_pve"/>
+      <xhtml name="step_size"/>
+      <xhtml name="max_angle"/>
+      <xhtml name="type">type of tractography: deterministic or probabilistic</xhtml>
+      <xhtml name="nb_particles"/>
+      <xhtml name="csf_pve"/>
+      <xhtml name="max_trial"/>
+      <xhtml name="min_separation_angle"/>
+      <xhtml name="streamlines"/>
+      <xhtml name="constraint">method to constraint (i.e. reduce the number of false positive streamlines) the tractography. Two methods are available
+Anatomical Cinstraint Tractography and Continous Map Criterion. Both method requires partial volume estimation of brain tissues (white matter, grey matter , cerebrol spinal fluid).
+
+Girard, G., Whittingstall, K., Deriche, R., &amp; Descoteaux, M. Towards quantitative connectivity analysis: reducing tractography biases. NeuroImage, 98, 266-278, 2014.
+
+Smith, R. E., Tournier, J.-D., Calamante, F., &amp; Connelly, A. Anatomically-constrained tractography: Improved diffusion MRI streamlines tractography through effective use of anatomical information. NeuroImage, 63(3), 1924-1938, 2012
+
+
+</xhtml>
+      <xhtml name="nb_iter_max"/>
+      <xhtml name="nb_samples"/>
+      <xhtml name="seeds"/>
+      <xhtml name="fixed_step"/>
+    </d>
+    <xhtml name="long">Local tracking using Particle Filtering Algorithm. This is the Dipy implementation of Girard2014]	(1, 2) Girard, G., Whittingstall, K., Deriche, R., &amp; Descoteaux, M. Towards quantitative connectivity analysis: reducing tractography biases. NeuroImage, 98, 266-278, 2014. Particle Filtering Tracking works as classical local tracking algorithm in deep white matter. The difference is when a streamline encounter a forbidden area the streamline is back tracked and then corrected using particles </xhtml>
+  </d>
+</d>
+</minf>

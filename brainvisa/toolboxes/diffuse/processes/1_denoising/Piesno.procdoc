@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Probabilistic Identification and Estimation of Noise (PIESNO). Estimation of standard deviation of the noise.</xhtml>
+    <d name="parameters">
+      <xhtml name="trials"/>
+      <xhtml name="eps"/>
+      <xhtml name="itermax"/>
+      <xhtml name="coil_number">The number of phase array coils of the MRI scanner. If your scanner does a SENSE reconstruction, ALWAYS use N=1, as the noise profile is always Rician  If your scanner does a GRAPPA reconstruction, set N as the number of phase array coils.</xhtml>
+      <xhtml name="alpha"/>
+      <xhtml name="sigma"/>
+      <xhtml name="dwi_data"/>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>

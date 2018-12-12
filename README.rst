@@ -17,7 +17,7 @@ Main Features
 * movement, susceptibility and eddy current induced distorsions correction
 * registration with subject structural space and  maps creation stemming from strucutral data.
 * diffusion local modeling (DTI, CSD).
-* seeding from grey/white interface mesh.
+* multiple seeding strategies
 * tractograpy: both deterministic and  probabilistic local tractography, particle filtering tractography.
 
 

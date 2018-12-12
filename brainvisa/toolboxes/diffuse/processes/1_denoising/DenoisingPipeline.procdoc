@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<minf expander="minf_2.0">
+<d>
+  <d name="en">
+    <xhtml name="short">Denoising pipeline regrouping standard deviation estimation and denoising using either Local Principal Component Analysis (LPCA) or Non Local Means (NLMS) algorithm. Denoising is an optional part of the whole processing pipeline. However if one's want to give it a try, it must be performed after the Gradient Orientation correction step and BEFORE the distorsion correction pipeline. Indeed there is no clear studies about how distorsion correction alters the noise of the diffusion MRI scan.</xhtml>
+    <d name="parameters">
+      <xhtml name="coil_number">The number of phase array coils of the MRI scanner. If your scanner does a SENSE reconstruction, ALWAYS use N=1, as the noise profile is always Rician.If your scanner does a GRAPPA reconstruction, set N as the number of phase array coils.</xhtml>
+      <xhtml name="denoised_dwi_data"/>
+      <xhtml name="brain_mask"/>
+      <xhtml name="dwi_data"/>
+    </d>
+    <xhtml name="long"/>
+  </d>
+</d>
+</minf>
