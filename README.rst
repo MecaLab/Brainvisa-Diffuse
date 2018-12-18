@@ -15,10 +15,10 @@ Main Features
 * diffusion data  management (DICOM, nifti) within a database and diffusion gradient directions reorientation.
 * diffusion data denoising
 * movement, susceptibility and eddy current induced distorsions correction
-* registration with subject structural space and  maps creation stemming from strucutral data.
+* registration with subject structural space and  maps creation stemming from structural data.
 * diffusion local modeling (DTI, CSD).
 * multiple seeding strategies
-* tractograpy: both deterministic and  probabilistic local tractography, particle filtering tractography.
+* tractography: both deterministic and  probabilistic local tractography, particle filtering tractography.
 
 
 =========================
