@@ -194,7 +194,11 @@ def execution( self, context ):
     file0 = files[0]
     header = dicom.read_file(self.dwi_directory.fullPath() + '/' + file0)
     print header
-    manufact = header['0008','0070'].value
+    try:
+    	manufact = header['0008','0070'].value
+        context.write('Manufacturer: ' + manufact)
+    except:
+        context.write('Manufacturer: NOT FOUND')
     acqMat = header.get('AcquisitionMatrix')
     # acqMat: Dimensions of the acquired frequency /phase data before reconstruction. Multi-valued: frequency rows\frequency columns\phase rows\phase columns
     if acqMat[0]==0 & acqMat[3]==0: # phase-encoding LR/RL
@@ -207,19 +211,26 @@ def execution( self, context ):
         dimx = acqMat[0]
         dimy = acqMat[3]
         Nvox = dimy
-    dimz = header['0019','100a'].value
+    try:
+        dimz = header['0019','100a'].value
+        context.write('Matrix Size (voxels) = ' + str(dimx) + ' x ' + str(dimy) + ' x ' + str(dimz))
+    except:
+        context.write('Matrix Size (voxels) = ' + str(dimx) + ' x ' + str(dimy))
     TR = header.get('RepetitionTime')
     TE = header.get('EchoTime')
-    BdWpp = header['0019','1028'].value
-    ESeff = 1/(BdWpp*Nvox)
-    RT = 1/BdWpp
-    context.write('Manufacturer: ' + manufact)
-    context.write('TR = ' + str(TR))
-    context.write('TE = ' + str(TE))
-    context.write('BandwidthPerPixelPhaseEncode (Hz) = ' + str(BdWpp))
-    context.write('Effective Echo Spacing (s) = ' + str(ESeff))
-    context.write('Readout Time (s) = ' + str(RT))
-    context.write('Matrix Size (voxels) = ' + str(dimx) + ' x ' + str(dimy) + ' x ' + str(dimz))
+    context.write('TR = ' + str(TR) + ' ms')
+    context.write('TE = ' + str(TE) + ' ms')
+    try:
+        BdWpp = header['0019','1028'].value
+        context.write('BandwidthPerPixelPhaseEncode (Hz) = ' + str(BdWpp))
+        ESeff = 1/(BdWpp*Nvox)
+        RT = 1/BdWpp
+        context.write('Effective Echo Spacing (s) = ' + str(ESeff))
+        context.write('Readout Time (s) = ' + str(RT))
+    except:
+        context.write('BandwidthPerPixelPhaseEncode (Hz) = NOT FOUND')
+        context.write('Effective Echo Spacing (s) = NOT FOUND')
+        context.write('Readout Time (s) = NOT FOUND')
     context.write('Phase-encoding direction along ' + PE)
 
     #store these additional dicom informations to .minf file :
