@@ -39,15 +39,19 @@ Mandatory
 
   1. `FSL installation instructions <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation>`_. All tests were made with  ``FSL version 6.0.0`` installed througth the ``fslinstaller.py`` script.
 
-  2. Assuming FSL installation worked, add the following command lines to your ``.bashrc`` file where <FSL_INSTALL_DIR> is the directory where FSL is installed (by default ``/usr/local/fsl``) ::
+  2. Assuming FSL installation worked, add the following command lines to your ``.bashrc``  file where <FSL_INSTALL_DIR> is the directory where FSL is installed (by default ``/usr/local/fsl``) ::
 
         FSLDIR=<FSL_INSTALL_DIR>
         . ${FSLDIR}/etc/fslconf/fsl.sh
         PATH=${FSLDIR}/bin:${PATH}
         export FSLDIR PATH
 
+  3. Check openblas library is correctly installed by typing ``fslroi`` in a new terminal. If you get an  error message consider installing openblas. ::
 
-  3. FSL configuration into BrainVISA: Once BrainVISA is launched go to BrainVISA/Preferences/FSL menu.
+         sudo apt-get install libopenblas-base
+
+
+  4. FSL configuration into BrainVISA: Once BrainVISA is launched go to BrainVISA/Preferences/FSL menu.
 
 
     .. image:: doc/images/fsl_config.png
