@@ -1,6 +1,7 @@
 
 from brainvisa.processes import *
 from soma.wip.application.api import Application
+from distutils.spawn import find_executable
 from soma import aims
 import os
 import nibabel
@@ -18,6 +19,9 @@ def defaultBrainExtraction(data_path, bet_output, f='0.3'):
 
 def interactiveBrainExtraction(context, data_path, bet_output, f='0.3'):
     """ Iterative and interactive brain extraction using FSL-bet function """
+
+    cmds = ['fsleyes', 'fslview']
+    viewers = [find_executable(configuration.FSL.fsl_commands_prefix + cmd) for cmd in cmds]
 
     img = aims.read(data_path)
     data = img.arraydata()
@@ -48,7 +52,12 @@ def interactiveBrainExtraction(context, data_path, bet_output, f='0.3'):
             os.system(' '.join([configuration.FSL.fsl_commands_prefix + 'bet', data_path, bet_output, '-R -m -f', f]))
 
         val = os.popen(' '.join([configuration.FSL.fsl_commands_prefix + 'fslstats', bet_output, '-r'])).read()
-        os.system(' '.join(['/usr/bin/fslview', data_path, bet_output, '-l Red-Yellow', '-b 0,' + val.split()[1]]))
+        if viewers[0]:
+            os.system(' '.join(['fsleyes', data_path, bet_output]))
+        else:
+            os.system(' '.join(['fslview', data_path, bet_output, '-l Red-Yellow', '-b 0,' + val.split()[1]]))
+    	
+        #os.system(' '.join(['/usr/bin/fslview', data_path, bet_output, '-l Red-Yellow', '-b 0,' + val.split()[1]]))
         result = context.ask("<p><b>Is brain extraction ok ? y/n\n <b></p>", "yes", "no")
         
         if result == 1:
