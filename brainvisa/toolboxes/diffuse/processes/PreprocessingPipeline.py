@@ -32,6 +32,7 @@
 
 from brainvisa.processes import *
 from copy import copy
+from distutils.spawn import find_executable
 
 name = '1. Diffusion Preprocessing Pipeline'
 userLevel = 0
