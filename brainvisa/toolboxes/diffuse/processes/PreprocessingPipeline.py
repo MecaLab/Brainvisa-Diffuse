@@ -52,7 +52,7 @@ signature = Signature(
     'b0_volume', WriteDiskItem( 'B0 Volume', 'gz compressed NIFTI-1 image' ),
     'b0_brain', WriteDiskItem( 'B0 Volume Brain', 'gz compressed NIFTI-1 image' ),
     'T1_to_b0', WriteDiskItem('T1 MRI to DW Diffusion MR', 'gz compressed NIFTI-1 image' ),
-    'T1_to_b0_registration_method', Choice("niftyreg", "fnirt"),
+    'T1_to_b0_registration_method', Choice("fnirt", "niftyreg"),
 )
 
 def switchSignature( self, additional_acquisition ):
@@ -149,10 +149,22 @@ def initialization( self ):
             eNode.DistortionCorrection.m2.BlipReversed.setSelected(True)
             eNode.DistortionCorrection.m1.Fieldmap.setSelected(False)
 
+    configuration = Application().configuration
+    #checking for Niftyreg commands
+    cmds = ['reg_f3d','reg_resample','reg_transform']
+    niftyreg_installed = 1
+    for i, cmd in enumerate(cmds):
+        executable = find_executable(cmd)
+        if not executable:
+            niftyreg_installed = 0
+
     def switchRegistration(enabled, names, parameterized):
         eNode = parameterized[0].executionNode()
         if self.T1_to_b0_registration_method == 'niftyreg':
-            eNode.T1Reg.NIFTYREG.setSelected(True)
+            if niftyreg_installed == 1:
+                eNode.T1Reg.NIFTYREG.setSelected(True)
+            else:
+                eNode.T1Reg.FNIRT.setSelected(True)
         elif self.T1_to_b0_registration_method == 'fnirt':
             eNode.T1Reg.FNIRT.setSelected(True)
 
@@ -179,7 +191,8 @@ def initialization( self ):
     eNode.addChild( 'ExtractB0', ProcessExecutionNode( 'NoDiffusionVolumeExtraction', optional = 1 ))
     regNode = SelectionExecutionNode('Diffusion to T1 registration', optional=1, selected=0, expandedInGui=1)
     eNode.addChild( 'T1Reg', regNode)
-    regNode.addChild( 'NIFTYREG', ProcessExecutionNode('DiffusionToT1_niftyreg', optional = 1, selected=False, altname='Non-linear registration using NIFTYREG'))
+    if niftyreg_installed == 1:
+        regNode.addChild( 'NIFTYREG', ProcessExecutionNode('DiffusionToT1_niftyreg', optional = 1, selected=False, altname='Non-linear registration using NIFTYREG'))
     regNode.addChild('FNIRT', ProcessExecutionNode('DiffusionToT1_nonlinear', optional=1, selected=False, altname='Non-linear registration using FNIRT'))
     eNode.addChild( 'BrainExtraction', ProcessExecutionNode( 'BrainExtractionUsingT1', optional = 1, selected=False, altname='Brain Extraction' ))
     eNode.addChild( 'MeshRegistrationLeft', ProcessExecutionNode('ApplyT1ToDiffusionMesh', optional=1, selected=False, altname='Mesh registration Left'))
@@ -229,11 +242,12 @@ def initialization( self ):
     eNode.ExtractB0.removeLink( 'b0_volume', 'dwi_data' )
     eNode.addLink( 'ExtractB0.b0_volume', 'b0_volume' )
 
-    eNode.addLink( 'T1Reg.NIFTYREG.T1_volume', 'T1_volume' )
-    eNode.addLink( 'T1Reg.NIFTYREG.b0_volume', 'ExtractB0.b0_volume' )
-    eNode.T1Reg.NIFTYREG.removeLink( 'dwi_data', 'b0_volume' )
-    eNode.addLink( 'T1Reg.NIFTYREG.dwi_data', 'ExtractB0.dwi_data' )
-    eNode.addDoubleLink( 'T1Reg.NIFTYREG.T1_to_b0', 'T1_to_b0' )
+    if niftyreg_installed == 1:
+        eNode.addLink( 'T1Reg.NIFTYREG.T1_volume', 'T1_volume' )
+        eNode.addLink( 'T1Reg.NIFTYREG.b0_volume', 'ExtractB0.b0_volume' )
+        eNode.T1Reg.NIFTYREG.removeLink( 'dwi_data', 'b0_volume' )
+        eNode.addLink( 'T1Reg.NIFTYREG.dwi_data', 'ExtractB0.dwi_data' )
+        eNode.addDoubleLink( 'T1Reg.NIFTYREG.T1_to_b0', 'T1_to_b0' )
 
     eNode.addLink('T1Reg.FNIRT.T1_volume', 'T1_volume')
     eNode.addLink('T1Reg.FNIRT.b0_volume', 'ExtractB0.b0_volume')

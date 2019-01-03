@@ -53,7 +53,7 @@ def interactiveBrainExtraction(context, data_path, bet_output, f='0.3'):
 
         val = os.popen(' '.join([configuration.FSL.fsl_commands_prefix + 'fslstats', bet_output, '-r'])).read()
         if viewers[0]:
-            os.system(' '.join(['fsleyes', data_path, bet_output]))
+            os.system(' '.join(['fsleyes', data_path, bet_output, '-a 50', '-dr 0 60000', '-cm red-yellow']))
         else:
             os.system(' '.join(['fslview', data_path, bet_output, '-l Red-Yellow', '-b 0,' + val.split()[1]]))
     	
